@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import * as dates from '../../utils/dates'
-import { getSlotAtX, pointInBox } from '../../utils/selection'
+import * as dates from 'utils/dates'
+import { getSlotAtX, pointInBox } from 'utils/selection'
 import { findDOMNode } from 'react-dom'
 
-import { eventSegments } from '../../utils/eventLevels'
-import Selection, { getBoundsForNode } from '../../Selection'
-import EventRow from '../../EventRow'
+import { eventSegments } from 'utils/eventLevels'
+import Selection, { getBoundsForNode } from 'components/selection'
+import EventRow from 'components/event-row'
 import { dragAccessors } from './common'
 
 const propTypes = {}

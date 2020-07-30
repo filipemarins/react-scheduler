@@ -6,10 +6,10 @@ import { findDOMNode } from 'react-dom'
 import Selection, {
   getBoundsForNode,
   getEventNodeFromPoint,
-} from '../../Selection'
-import TimeGridEvent from '../../TimeGridEvent'
+} from 'components/selection'
+import TimeGridEvent from 'components/time-grid-event'
 import { dragAccessors } from './common'
-import NoopWrapper from '../../NoopWrapper'
+import NoopWrapper from 'components/noop-wrapper'
 
 const pointInColumn = (bounds, { x, y }) => {
   const { left, right, top } = bounds
