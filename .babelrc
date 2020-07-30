@@ -1,7 +1,13 @@
 {
   "presets": ["jason"],
   "plugins": [
-    ["transform-react-remove-prop-types", { "mode": "wrap" }]
+    ["transform-react-remove-prop-types", { "mode": "wrap" }],
+    ["module-resolver", {
+      "alias": {
+        "components": "./src/components",
+        "utils": "./src/utils"
+      }
+    }]
   ],
   "env": {
     "esm": {
