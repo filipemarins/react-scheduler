@@ -19,7 +19,7 @@ import DateHeader from 'components/date-header';
 
 import { inRange, sortEvents } from 'utils/eventLevels';
 
-let eventsForWeek = (evts, start, end, accessors) =>
+const eventsForWeek = (evts, start, end, accessors) =>
   evts.filter((e) => inRange(e, start, end, accessors));
 
 class MonthView extends React.Component {
@@ -73,9 +73,9 @@ class MonthView extends React.Component {
   };
 
   render() {
-    let { date, localizer, className } = this.props,
-      month = dates.visibleDays(date, localizer),
-      weeks = chunk(month, 7);
+    const { date, localizer, className } = this.props;
+    const month = dates.visibleDays(date, localizer);
+    const weeks = chunk(month, 7);
 
     this._weekCount = weeks.length;
 
@@ -138,13 +138,13 @@ class MonthView extends React.Component {
   };
 
   readerDateHeading = ({ date, className, ...props }) => {
-    let { date: currentDate, getDrilldownView, localizer } = this.props;
+    const { date: currentDate, getDrilldownView, localizer } = this.props;
 
-    let isOffRange = dates.month(date) !== dates.month(currentDate);
-    let isCurrent = dates.eq(date, currentDate, 'day');
-    let drilldownView = getDrilldownView(date);
-    let label = localizer.format(date, 'dateFormat');
-    let DateHeaderComponent = this.props.components.dateHeader || DateHeader;
+    const isOffRange = dates.month(date) !== dates.month(currentDate);
+    const isCurrent = dates.eq(date, currentDate, 'day');
+    const drilldownView = getDrilldownView(date);
+    const label = localizer.format(date, 'dateFormat');
+    const DateHeaderComponent = this.props.components.dateHeader || DateHeader;
 
     return (
       <div
@@ -163,13 +163,13 @@ class MonthView extends React.Component {
   };
 
   renderHeaders(row) {
-    let { localizer, components } = this.props;
-    let first = row[0];
-    let last = row[row.length - 1];
-    let HeaderComponent = components.header || Header;
+    const { localizer, components } = this.props;
+    const first = row[0];
+    const last = row[row.length - 1];
+    const HeaderComponent = components.header || Header;
 
     return dates.range(first, last, 'day').map((day, idx) => (
-      <div key={'header_' + idx} className="rbc-header">
+      <div key={`header_${idx}`} className="rbc-header">
         <HeaderComponent
           date={day}
           localizer={localizer}
@@ -180,8 +180,8 @@ class MonthView extends React.Component {
   }
 
   renderOverlay() {
-    let overlay = (this.state && this.state.overlay) || {};
-    let { accessors, localizer, components, getters, selected, popupOffset } = this.props;
+    const overlay = (this.state && this.state.overlay) || {};
+    const { accessors, localizer, components, getters, selected, popupOffset } = this.props;
 
     return (
       <Overlay
@@ -246,11 +246,11 @@ class MonthView extends React.Component {
 
   handleShowMore = (events, date, cell, slot, target) => {
     const { popup, onDrillDown, onShowMore, getDrilldownView } = this.props;
-    //cancel any pending selections so only the event click goes through.
+    // cancel any pending selections so only the event click goes through.
     this.clearSelection();
 
     if (popup) {
-      let position = getPosition(cell, findDOMNode(this));
+      const position = getPosition(cell, findDOMNode(this));
 
       this.setState({
         overlay: { date, events, position, target },
@@ -269,7 +269,7 @@ class MonthView extends React.Component {
   };
 
   selectDates(slotInfo) {
-    let slots = this._pendingSelection.slice();
+    const slots = this._pendingSelection.slice();
 
     this._pendingSelection = [];
 
@@ -335,8 +335,8 @@ MonthView.propTypes = {
 };
 
 MonthView.range = (date, { localizer }) => {
-  let start = dates.firstVisibleDay(date, localizer);
-  let end = dates.lastVisibleDay(date, localizer);
+  const start = dates.firstVisibleDay(date, localizer);
+  const end = dates.lastVisibleDay(date, localizer);
   return { start, end };
 };
 

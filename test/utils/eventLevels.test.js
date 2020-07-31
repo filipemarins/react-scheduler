@@ -533,7 +533,7 @@ describe('sortEvents', () => {
         });
 
         test('it returns zero when both events start at the same time', () => {
-          const otherEarlierEvent = Object.assign({}, earlierEvent);
+          const otherEarlierEvent = { ...earlierEvent };
           const result = sortEvents(earlierEvent, otherEarlierEvent, accessors);
 
           expect(result).toBe(0);

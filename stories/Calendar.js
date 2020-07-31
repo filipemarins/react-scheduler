@@ -1,16 +1,16 @@
-import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
+import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 
-import moment from 'moment'
-import React from 'react'
+import moment from 'moment';
+import React from 'react';
 
-import '../src/sass/styles.scss'
-import '../src/addons/dragAndDrop/styles.scss'
-import demoEvents from '../examples/events'
-import createEvents from './helpers/createEvents'
-import customComponents from './helpers/customComponents'
+import '../src/sass/styles.scss';
+import '../src/addons/dragAndDrop/styles.scss';
+import demoEvents from '../examples/events';
+import createEvents from './helpers/createEvents';
+import customComponents from './helpers/customComponents';
 
-import { events, Views, Calendar } from './helpers'
+import { events, Views, Calendar } from './helpers';
 
 storiesOf('Big Calendar', module)
   .add('demo', () => (
@@ -32,7 +32,7 @@ storiesOf('Big Calendar', module)
         onSelectEvent={action('event selected')}
         defaultDate={new Date()}
       />
-    )
+    );
   })
 
   .add('selectable', () => {
@@ -47,7 +47,7 @@ storiesOf('Big Calendar', module)
         onSelectSlot={action('slot selected')}
         defaultDate={new Date()}
       />
-    )
+    );
   })
   .add('add custom date header', () => {
     return (
@@ -56,13 +56,11 @@ storiesOf('Big Calendar', module)
         events={events}
         components={{
           month: {
-            dateHeader: ({ label }) => (
-              <span>{label} - Custom date header</span>
-            ),
+            dateHeader: ({ label }) => <span>{label} - Custom date header</span>,
           },
         }}
       />
-    )
+    );
   })
   .add('complex day view layout', () => {
     return (
@@ -72,7 +70,7 @@ storiesOf('Big Calendar', module)
         events={createEvents(1)}
         step={30}
       />
-    )
+    );
   })
   .add('multi-day', () => {
     return (
@@ -80,10 +78,7 @@ storiesOf('Big Calendar', module)
       <Calendar
         showMultiDayTimes
         defaultDate={new Date(2016, 11, 4)}
-        max={moment()
-          .endOf('day')
-          .add(-1, 'hours')
-          .toDate()}
+        max={moment().endOf('day').add(-1, 'hours').toDate()}
         events={[
           {
             title: 'start of the week',
@@ -107,20 +102,20 @@ storiesOf('Big Calendar', module)
           },
         ]}
       />
-    )
+    );
   })
   .add('agenda view - with length prop', () => {
     return (
       /* should display as title toolbar (from now to now + 14 days) */
       <Calendar defaultView={Views.AGENDA} events={events} length={14} />
-    )
+    );
   })
   .add('custom now is the first of the month', () => {
     const customNow = () => {
-      let now = new Date()
-      now.setDate(1)
-      return now
-    }
+      const now = new Date();
+      now.setDate(1);
+      return now;
+    };
     return (
       <Calendar
         defaultView={Views.WEEK}
@@ -131,11 +126,11 @@ storiesOf('Big Calendar', module)
         onSelectEvent={action('event selected')}
         defaultDate={new Date()}
       />
-    )
+    );
   })
 
   .add('custom time gutter header', () => {
-    const TimeGutter = () => <p>Custom gutter text</p>
+    const TimeGutter = () => <p>Custom gutter text</p>;
 
     return (
       <Calendar
@@ -149,7 +144,7 @@ storiesOf('Big Calendar', module)
           timeGutterHeader: TimeGutter,
         }}
       />
-    )
+    );
   })
   .add('add custom dateCellWrapper', () => {
     return (
@@ -160,7 +155,7 @@ storiesOf('Big Calendar', module)
           dateCellWrapper: customComponents.dateCellWrapper,
         }}
       />
-    )
+    );
   })
   .add('add custom timeSlotWrapper', () => {
     return (
@@ -171,7 +166,7 @@ storiesOf('Big Calendar', module)
           timeSlotWrapper: customComponents.timeSlotWrapper,
         }}
       />
-    )
+    );
   })
   .add('add custom eventWrapper', () => {
     return (
@@ -182,7 +177,7 @@ storiesOf('Big Calendar', module)
           eventWrapper: customComponents.eventWrapper,
         }}
       />
-    )
+    );
   })
   .add('add custom no agenda events label', () => {
     return (
@@ -190,11 +185,10 @@ storiesOf('Big Calendar', module)
         defaultView={Views.AGENDA}
         events={events}
         messages={{
-          noEventsInRange:
-            'There are no special events in this range [test message]',
+          noEventsInRange: 'There are no special events in this range [test message]',
         }}
       />
-    )
+    );
   })
   .add('add custom timeSlotWrapper', () => {
     return (
@@ -205,5 +199,5 @@ storiesOf('Big Calendar', module)
           timeSlotWrapper: customComponents.timeSlotWrapper,
         }}
       />
-    )
-  })
+    );
+  });

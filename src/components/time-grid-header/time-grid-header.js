@@ -16,7 +16,7 @@ class TimeGridHeader extends React.Component {
   };
 
   renderHeaderCells(range) {
-    let {
+    const {
       localizer,
       getDrilldownView,
       getNow,
@@ -27,12 +27,12 @@ class TimeGridHeader extends React.Component {
     const today = getNow();
 
     return range.map((date, i) => {
-      let drilldownView = getDrilldownView(date);
-      let label = localizer.format(date, 'dayFormat');
+      const drilldownView = getDrilldownView(date);
+      const label = localizer.format(date, 'dayFormat');
 
       const { className, style } = dayProp(date);
 
-      let header = <HeaderComponent date={date} label={label} localizer={localizer} />;
+      const header = <HeaderComponent date={date} label={label} localizer={localizer} />;
 
       return (
         <div
@@ -51,8 +51,9 @@ class TimeGridHeader extends React.Component {
       );
     });
   }
+
   renderRow = (resource) => {
-    let {
+    const {
       events,
       rtl,
       selectable,
@@ -65,7 +66,7 @@ class TimeGridHeader extends React.Component {
     } = this.props;
 
     const resourceId = accessors.resourceId(resource);
-    let eventsToDisplay = resource
+    const eventsToDisplay = resource
       ? events.filter((event) => accessors.resource(event) === resourceId)
       : events;
 
@@ -94,7 +95,7 @@ class TimeGridHeader extends React.Component {
   };
 
   render() {
-    let {
+    const {
       width,
       rtl,
       resources,
@@ -114,7 +115,7 @@ class TimeGridHeader extends React.Component {
       },
     } = this.props;
 
-    let style = {};
+    const style = {};
     if (isOverflowing) {
       style[rtl ? 'marginLeft' : 'marginRight'] = `${scrollbarSize()}px`;
     }

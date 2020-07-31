@@ -34,21 +34,25 @@ class EventWrapper extends React.Component {
     e.stopPropagation();
     this.context.draggable.onBeginAction(this.props.event, 'resize', 'UP');
   };
+
   handleResizeDown = (e) => {
     if (e.button !== 0) return;
     e.stopPropagation();
     this.context.draggable.onBeginAction(this.props.event, 'resize', 'DOWN');
   };
+
   handleResizeLeft = (e) => {
     if (e.button !== 0) return;
     e.stopPropagation();
     this.context.draggable.onBeginAction(this.props.event, 'resize', 'LEFT');
   };
+
   handleResizeRight = (e) => {
     if (e.button !== 0) return;
     e.stopPropagation();
     this.context.draggable.onBeginAction(this.props.event, 'resize', 'RIGHT');
   };
+
   handleStartDragging = (e) => {
     if (e.button === 0) {
       this.context.draggable.onBeginAction(this.props.event, 'move');

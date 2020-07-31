@@ -1,9 +1,9 @@
-import React from 'react'
-import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
+import React from 'react';
+import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 
-import { events, Calendar, Views, DragAndDropCalendar } from './helpers'
-import customComponents from './helpers/customComponents'
+import { events, Calendar, Views, DragAndDropCalendar } from './helpers';
+import customComponents from './helpers/customComponents';
 
 storiesOf('Drag and Drop', module)
   .add('draggable and resizable', () => {
@@ -16,7 +16,7 @@ storiesOf('Drag and Drop', module)
         onEventDrop={action('event dropped')}
         onEventResize={action('event resized')}
       />
-    )
+    );
   })
   .add('draggable and resizable with non-default steps and timeslots', () => {
     return (
@@ -30,7 +30,7 @@ storiesOf('Drag and Drop', module)
         onEventDrop={action('event dropped')}
         onEventResize={action('event resized')}
       />
-    )
+    );
   })
   .add('draggable and resizable with showMultiDayTimes', () => {
     return (
@@ -43,7 +43,7 @@ storiesOf('Drag and Drop', module)
         onEventDrop={action('event dropped')}
         onEventResize={action('event resized')}
       />
-    )
+    );
   })
   .add('draggable and resizable with custom dateCellWrapper', () => {
     return (
@@ -59,7 +59,7 @@ storiesOf('Drag and Drop', module)
         onEventDrop={action('event dropped')}
         onEventResize={action('event resized')}
       />
-    )
+    );
   })
   .add('draggable and resizable with custom timeSlotWrapper', () => {
     return (
@@ -75,7 +75,7 @@ storiesOf('Drag and Drop', module)
         onEventDrop={action('event dropped')}
         onEventResize={action('event resized')}
       />
-    )
+    );
   })
   .add('draggable and resizable with custom eventWrapper', () => {
     return (
@@ -91,5 +91,5 @@ storiesOf('Drag and Drop', module)
         onEventDrop={action('event dropped')}
         onEventResize={action('event resized')}
       />
-    )
-  })
+    );
+  });

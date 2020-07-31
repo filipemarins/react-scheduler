@@ -1,9 +1,9 @@
-import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
-import moment from 'moment'
-import React from 'react'
+import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
+import moment from 'moment';
+import React from 'react';
 
-import { events, Calendar } from './helpers'
+import { events, Calendar } from './helpers';
 /* eslint-disable react/prop-types */
 
 storiesOf('Timeslots', module)
@@ -21,7 +21,7 @@ storiesOf('Timeslots', module)
         onSelectSlot={action('slot selected')}
         defaultDate={new Date()}
       />
-    )
+    );
   })
   .add('selectable, step 10, 6 timeslots', () => {
     return (
@@ -37,7 +37,7 @@ storiesOf('Timeslots', module)
         onSelectSlot={action('slot selected')}
         defaultDate={new Date()}
       />
-    )
+    );
   })
   .add('selectable, step 5, 6 timeslots', () => {
     return (
@@ -53,7 +53,7 @@ storiesOf('Timeslots', module)
         onSelectSlot={action('slot selected')}
         defaultDate={new Date()}
       />
-    )
+    );
   })
   .add('selectable, 3 timeslots', () => {
     return (
@@ -69,5 +69,5 @@ storiesOf('Timeslots', module)
         onSelectSlot={action('slot selected')}
         defaultDate={new Date()}
       />
-    )
-  })
+    );
+  });

@@ -12,7 +12,7 @@ import { dragAccessors } from './common';
 const propTypes = {};
 
 const eventTimes = (event, accessors) => {
-  let start = accessors.start(event);
+  const start = accessors.start(event);
   let end = accessors.end(event);
 
   const isZeroDuration = dates.eq(start, end, 'minutes') && start.getMinutes() === 0;
@@ -85,7 +85,7 @@ class WeekWrapper extends React.Component {
 
     if (!event) return;
 
-    let rowBox = getBoundsForNode(node);
+    const rowBox = getBoundsForNode(node);
 
     if (!pointInBox(rowBox, { x, y })) {
       this.reset();
@@ -93,12 +93,12 @@ class WeekWrapper extends React.Component {
     }
 
     // Make sure to maintain the time of the start date while moving it to the new slot
-    let start = dates.merge(
+    const start = dates.merge(
       metrics.getDateForSlot(getSlotAtX(rowBox, x, false, metrics.slots)),
       accessors.start(event)
     );
 
-    let end = dates.add(
+    const end = dates.add(
       start,
       dates.diff(accessors.start(event), accessors.end(event), 'minutes'),
       'minutes'
@@ -111,7 +111,7 @@ class WeekWrapper extends React.Component {
     if (!this.context.draggable.onDropFromOutside) return;
     const { slotMetrics: metrics } = this.props;
 
-    let start = metrics.getDateForSlot(getSlotAtX(rowBox, point.x, false, metrics.slots));
+    const start = metrics.getDateForSlot(getSlotAtX(rowBox, point.x, false, metrics.slots));
 
     this.context.draggable.onDropFromOutside({
       start,
@@ -132,8 +132,8 @@ class WeekWrapper extends React.Component {
 
     let { start, end } = eventTimes(event, accessors);
 
-    let rowBox = getBoundsForNode(node);
-    let cursorInRow = pointInBox(rowBox, point);
+    const rowBox = getBoundsForNode(node);
+    const cursorInRow = pointInBox(rowBox, point);
 
     if (direction === 'RIGHT') {
       if (cursorInRow) {
@@ -178,10 +178,10 @@ class WeekWrapper extends React.Component {
   }
 
   _selectable = () => {
-    let node = findDOMNode(this).closest('.rbc-month-row, .rbc-allday-cell');
-    let container = node.closest('.rbc-month-view, .rbc-time-view');
+    const node = findDOMNode(this).closest('.rbc-month-row, .rbc-allday-cell');
+    const container = node.closest('.rbc-month-view, .rbc-time-view');
 
-    let selector = (this._selector = new Selection(() => container));
+    const selector = (this._selector = new Selection(() => container));
 
     selector.on('beforeSelect', (point) => {
       const { isAllDay } = this.props;
@@ -258,7 +258,7 @@ class WeekWrapper extends React.Component {
   render() {
     const { children, accessors } = this.props;
 
-    let { segment } = this.state;
+    const { segment } = this.state;
 
     return (
       <div className="rbc-addons-dnd-row-body">

@@ -1,25 +1,25 @@
 import * as dates from 'utils/dates';
 import { DateLocalizer } from 'utils/localizer';
 
-let dateRangeFormat = ({ start, end }, culture, local) =>
+const dateRangeFormat = ({ start, end }, culture, local) =>
   `${local.format(start, 'P', culture)} – ${local.format(end, 'P', culture)}`;
 
-let timeRangeFormat = ({ start, end }, culture, local) =>
+const timeRangeFormat = ({ start, end }, culture, local) =>
   `${local.format(start, 'p', culture)} – ${local.format(end, 'p', culture)}`;
 
-let timeRangeStartFormat = ({ start }, culture, local) =>
+const timeRangeStartFormat = ({ start }, culture, local) =>
   `${local.format(start, 'h:mma', culture)} – `;
 
-let timeRangeEndFormat = ({ end }, culture, local) => ` – ${local.format(end, 'h:mma', culture)}`;
+const timeRangeEndFormat = ({ end }, culture, local) => ` – ${local.format(end, 'h:mma', culture)}`;
 
-let weekRangeFormat = ({ start, end }, culture, local) =>
+const weekRangeFormat = ({ start, end }, culture, local) =>
   `${local.format(start, 'MMMM dd', culture)} – ${local.format(
     end,
     dates.eq(start, end, 'month') ? 'dd' : 'MMMM dd',
     culture
   )}`;
 
-export let formats = {
+export const formats = {
   dateFormat: 'dd',
   dayFormat: 'dd eee',
   weekdayFormat: 'cccc',

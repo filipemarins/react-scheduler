@@ -1,8 +1,8 @@
-import React from 'react'
-import { storiesOf } from '@storybook/react'
-import moment from 'moment'
+import React from 'react';
+import { storiesOf } from '@storybook/react';
+import moment from 'moment';
 
-import { Calendar, Views, DragableCalendar } from './helpers'
+import { Calendar, Views, DragableCalendar } from './helpers';
 
 storiesOf('Event Durations', module)
   .add('Daylight savings starts', () => {
@@ -33,7 +33,7 @@ storiesOf('Event Durations', module)
         ]}
         defaultDate={new Date(2017, 2, 12)}
       />
-    )
+    );
   })
   .add('Daylight savings ends', () => {
     return (
@@ -63,7 +63,7 @@ storiesOf('Event Durations', module)
         ]}
         defaultDate={new Date(2017, 10, 5)}
       />
-    )
+    );
   })
   .add('Daylight savings starts, after 2am', () => {
     return (
@@ -81,7 +81,7 @@ storiesOf('Event Durations', module)
         ]}
         defaultDate={new Date(2017, 2, 12)}
       />
-    )
+    );
   })
   .add('Daylight savings ends, after 2am', () => {
     return (
@@ -99,5 +99,5 @@ storiesOf('Event Durations', module)
         ]}
         defaultDate={new Date(2017, 10, 5)}
       />
-    )
-  })
+    );
+  });

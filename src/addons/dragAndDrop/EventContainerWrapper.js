@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import * as dates from '../../utils/dates';
 import { findDOMNode } from 'react-dom';
 
 import Selection, { getBoundsForNode, getEventNodeFromPoint } from 'components/selection';
 import TimeGridEvent from 'components/time-grid-event';
-import { dragAccessors } from './common';
 import NoopWrapper from 'components/noop-wrapper';
+import { dragAccessors } from './common';
+import * as dates from '../../utils/dates';
 
 const pointInColumn = (bounds, { x, y }) => {
   const { left, right, top } = bounds;
@@ -74,24 +74,25 @@ class EventContainerWrapper extends React.Component {
       return;
     }
 
-    let currentSlot = slotMetrics.closestSlotFromPoint(
+    const currentSlot = slotMetrics.closestSlotFromPoint(
       { y: point.y - this.eventOffsetTop, x: point.x },
       boundaryBox
     );
 
-    let eventStart = accessors.start(event);
-    let eventEnd = accessors.end(event);
-    let end = dates.add(currentSlot, dates.diff(eventStart, eventEnd, 'minutes'), 'minutes');
+    const eventStart = accessors.start(event);
+    const eventEnd = accessors.end(event);
+    const end = dates.add(currentSlot, dates.diff(eventStart, eventEnd, 'minutes'), 'minutes');
 
     this.update(event, slotMetrics.getRange(currentSlot, end, false, true));
   };
 
   handleResize(point, boundaryBox) {
-    let start, end;
+    let start;
+    let end;
     const { accessors, slotMetrics } = this.props;
     const { event, direction } = this.context.draggable.dragAndDropAction;
 
-    let currentSlot = slotMetrics.closestSlotFromPoint(point, boundaryBox);
+    const currentSlot = slotMetrics.closestSlotFromPoint(point, boundaryBox);
     if (direction === 'UP') {
       end = accessors.end(event);
       start = dates.min(currentSlot, slotMetrics.closestSlotFromDate(end, -1));
@@ -106,7 +107,7 @@ class EventContainerWrapper extends React.Component {
   handleDropFromOutside = (point, boundaryBox) => {
     const { slotMetrics, resource } = this.props;
 
-    let start = slotMetrics.closestSlotFromPoint({ y: point.y, x: point.x }, boundaryBox);
+    const start = slotMetrics.closestSlotFromPoint({ y: point.y, x: point.x }, boundaryBox);
 
     this.context.draggable.onDropFromOutside({
       start,
@@ -117,9 +118,9 @@ class EventContainerWrapper extends React.Component {
   };
 
   _selectable = () => {
-    let node = findDOMNode(this);
+    const node = findDOMNode(this);
     let isBeingDragged = false;
-    let selector = (this._selector = new Selection(() => node.closest('.rbc-time-view')));
+    const selector = (this._selector = new Selection(() => node.closest('.rbc-time-view')));
 
     selector.on('beforeSelect', (point) => {
       const { dragAndDropAction } = this.context.draggable;
@@ -206,7 +207,7 @@ class EventContainerWrapper extends React.Component {
   render() {
     const { children, accessors, components, getters, slotMetrics, localizer } = this.props;
 
-    let { event, top, height } = this.state;
+    const { event, top, height } = this.state;
 
     if (!event) return children;
 
@@ -227,7 +228,7 @@ class EventContainerWrapper extends React.Component {
 
     return React.cloneElement(children, {
       children: (
-        <React.Fragment>
+        <>
           {events}
 
           {event && (
@@ -243,7 +244,7 @@ class EventContainerWrapper extends React.Component {
               continuesLater={startsAfterDay}
             />
           )}
-        </React.Fragment>
+        </>
       ),
     });
   }

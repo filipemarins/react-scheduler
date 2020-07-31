@@ -1,6 +1,6 @@
 import invariant from 'invariant';
-import { navigate } from './constants';
 import VIEWS from 'components/views';
+import { navigate } from './constants';
 
 export default function moveDate(View, { action, date, today, ...props }) {
   View = typeof View === 'string' ? VIEWS[View] : View;

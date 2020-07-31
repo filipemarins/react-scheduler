@@ -11,15 +11,16 @@ import { isSelected } from 'utils/selection';
 
 class Popup extends React.Component {
   componentDidMount() {
-    let { popupOffset = 5, popperRef } = this.props,
-      { top, left, width, height } = getOffset(popperRef.current),
-      viewBottom = window.innerHeight + getScrollTop(window),
-      viewRight = window.innerWidth + getScrollLeft(window),
-      bottom = top + height,
-      right = left + width;
+    const { popupOffset = 5, popperRef } = this.props;
+    const { top, left, width, height } = getOffset(popperRef.current);
+    const viewBottom = window.innerHeight + getScrollTop(window);
+    const viewRight = window.innerWidth + getScrollLeft(window);
+    const bottom = top + height;
+    const right = left + width;
 
     if (bottom > viewBottom || right > viewRight) {
-      let topOffset, leftOffset;
+      let topOffset;
+      let leftOffset;
 
       if (bottom > viewBottom)
         topOffset = bottom - viewBottom + (popupOffset.y || +popupOffset || 0);
@@ -30,7 +31,7 @@ class Popup extends React.Component {
   }
 
   render() {
-    let {
+    const {
       events,
       selected,
       getters,
@@ -44,11 +45,11 @@ class Popup extends React.Component {
       popperRef,
     } = this.props;
 
-    let { width } = this.props.position,
-      topOffset = (this.state || {}).topOffset || 0,
-      leftOffset = (this.state || {}).leftOffset || 0;
+    const { width } = this.props.position;
+    const topOffset = (this.state || {}).topOffset || 0;
+    const leftOffset = (this.state || {}).leftOffset || 0;
 
-    let style = {
+    const style = {
       top: -topOffset,
       left: -leftOffset,
       minWidth: width + width / 2,
@@ -72,7 +73,7 @@ class Popup extends React.Component {
             slotStart={slotStart}
             slotEnd={slotEnd}
             selected={isSelected(event, selected)}
-            draggable={true}
+            draggable
             onDragStart={() => this.props.handleDragStart(event)}
             onDragEnd={() => this.props.show()}
           />

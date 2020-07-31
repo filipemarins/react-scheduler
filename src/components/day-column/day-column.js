@@ -16,6 +16,7 @@ import { DayLayoutAlgorithmPropType } from 'utils/propTypes';
 
 class DayColumn extends React.Component {
   state = { selecting: false, timeIndicatorPosition: null };
+
   intervalTriggered = false;
 
   constructor(...args) {
@@ -113,10 +114,10 @@ class DayColumn extends React.Component {
       components: { eventContainerWrapper: EventContainer, ...components },
     } = this.props;
 
-    let { slotMetrics } = this;
-    let { selecting, top, height, startDate, endDate } = this.state;
+    const { slotMetrics } = this;
+    const { selecting, top, height, startDate, endDate } = this.state;
 
-    let selectDates = { start: startDate, end: endDate };
+    const selectDates = { start: startDate, end: endDate };
 
     const { className, style } = dayProp(max);
 
@@ -168,7 +169,7 @@ class DayColumn extends React.Component {
   }
 
   renderEvents = () => {
-    let {
+    const {
       events,
       rtl,
       selected,
@@ -184,7 +185,7 @@ class DayColumn extends React.Component {
     const { slotMetrics } = this;
     const { messages } = localizer;
 
-    let styledEvents = DayEventLayout.getStyledEvents({
+    const styledEvents = DayEventLayout.getStyledEvents({
       events,
       accessors,
       slotMetrics,
@@ -193,8 +194,8 @@ class DayColumn extends React.Component {
     });
 
     return styledEvents.map(({ event, style }, idx) => {
-      let end = accessors.end(event);
-      let start = accessors.start(event);
+      const end = accessors.end(event);
+      const start = accessors.start(event);
       let format = 'eventTimeRangeFormat';
       let label;
 
@@ -207,15 +208,15 @@ class DayColumn extends React.Component {
       if (startsBeforeDay && startsAfterDay) label = messages.allDay;
       else label = localizer.format({ start, end }, format);
 
-      let continuesEarlier = startsBeforeDay || slotMetrics.startsBefore(start);
-      let continuesLater = startsAfterDay || slotMetrics.startsAfter(end);
+      const continuesEarlier = startsBeforeDay || slotMetrics.startsBefore(start);
+      const continuesLater = startsAfterDay || slotMetrics.startsAfter(end);
 
       return (
         <TimeGridEvent
           style={style}
           event={event}
           label={label}
-          key={'evt_' + idx}
+          key={`evt_${idx}`}
           getters={getters}
           rtl={rtl}
           components={components}
@@ -231,16 +232,16 @@ class DayColumn extends React.Component {
   };
 
   _selectable = () => {
-    let node = findDOMNode(this);
-    let selector = (this._selector = new Selection(() => findDOMNode(this), {
+    const node = findDOMNode(this);
+    const selector = (this._selector = new Selection(() => findDOMNode(this), {
       longPressThreshold: this.props.longPressThreshold,
     }));
 
-    let maybeSelect = (box) => {
-      let onSelecting = this.props.onSelecting;
-      let current = this.state || {};
-      let state = selectionState(box);
-      let { startDate: start, endDate: end } = state;
+    const maybeSelect = (box) => {
+      const { onSelecting } = this.props;
+      const current = this.state || {};
+      const state = selectionState(box);
+      const { startDate: start, endDate: end } = state;
 
       if (onSelecting) {
         if (
@@ -288,7 +289,7 @@ class DayColumn extends React.Component {
       };
     };
 
-    let selectorClicksHandler = (box, actionType) => {
+    const selectorClicksHandler = (box, actionType) => {
       if (!isEvent(findDOMNode(this), box)) {
         const { startDate, endDate } = selectionState(box);
         this._selectSlot({
@@ -335,8 +336,8 @@ class DayColumn extends React.Component {
   };
 
   _selectSlot = ({ startDate, endDate, action, bounds, box }) => {
-    let current = startDate,
-      slots = [];
+    let current = startDate;
+    const slots = [];
 
     while (dates.lte(current, endDate)) {
       slots.push(current);

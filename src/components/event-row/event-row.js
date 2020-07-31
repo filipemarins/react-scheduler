@@ -6,7 +6,7 @@ import EventRowMixin from 'components/event-row-mixin';
 
 class EventRow extends React.Component {
   render() {
-    let {
+    const {
       segments,
       slotMetrics: { slots },
       className,
@@ -17,10 +17,10 @@ class EventRow extends React.Component {
     return (
       <div className={clsx(className, 'rbc-row')}>
         {segments.reduce((row, { event, left, right, span }, li) => {
-          let key = '_lvl_' + li;
-          let gap = left - lastEnd;
+          const key = `_lvl_${li}`;
+          const gap = left - lastEnd;
 
-          let content = EventRowMixin.renderEvent(this.props, event);
+          const content = EventRowMixin.renderEvent(this.props, event);
 
           if (gap) row.push(EventRowMixin.renderSpan(slots, gap, `${key}_gap`));
 

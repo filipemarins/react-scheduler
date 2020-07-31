@@ -1,6 +1,6 @@
-import './Calendar'
-import './DragAndDrop'
-import './Resources'
-import './Timeslots'
-import './Layout'
-import './Durations'
+import './Calendar';
+import './DragAndDrop';
+import './Resources';
+import './Timeslots';
+import './Layout';
+import './Durations';

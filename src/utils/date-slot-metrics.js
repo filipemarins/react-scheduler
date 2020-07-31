@@ -2,18 +2,18 @@ import memoize from 'memoize-one';
 import * as dates from './dates';
 import { eventSegments, endOfRange, eventLevels } from './eventLevels';
 
-let isSegmentInSlot = (seg, slot) => seg.left <= slot && seg.right >= slot;
+const isSegmentInSlot = (seg, slot) => seg.left <= slot && seg.right >= slot;
 
 const isEqual = (a, b) => a[0].range === b[0].range && a[0].events === b[0].events;
 
 export function getSlotMetrics() {
   return memoize((options) => {
     const { range, events, maxRows, minRows, accessors } = options;
-    let { first, last } = endOfRange(range);
+    const { first, last } = endOfRange(range);
 
-    let segments = events.map((evt) => eventSegments(evt, range, accessors));
+    const segments = events.map((evt) => eventSegments(evt, range, accessors));
 
-    let { levels, extra } = eventLevels(segments, Math.max(maxRows - 1, 1));
+    const { levels, extra } = eventLevels(segments, Math.max(maxRows - 1, 1));
     while (levels.length < minRows) levels.push([]);
 
     return {

@@ -84,7 +84,7 @@ export function getSlotMetrics({ min: start, max: end, step, timeslots }) {
     },
 
     closestSlotFromPoint(point, boundaryRect) {
-      let range = Math.abs(boundaryRect.top - boundaryRect.bottom);
+      const range = Math.abs(boundaryRect.top - boundaryRect.bottom);
       return this.closestSlotToPosition((point.y - boundaryRect.top) / range);
     },
 

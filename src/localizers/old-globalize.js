@@ -1,22 +1,25 @@
 import * as dates from 'utils/dates';
 import { DateLocalizer } from 'utils/localizer';
 
-let dateRangeFormat = ({ start, end }, culture, local) =>
-  local.format(start, 'd', culture) + ' – ' + local.format(end, 'd', culture);
+const dateRangeFormat = ({ start, end }, culture, local) =>
+  `${local.format(start, 'd', culture)} – ${local.format(end, 'd', culture)}`;
 
-let timeRangeFormat = ({ start, end }, culture, local) =>
-  local.format(start, 't', culture) + ' – ' + local.format(end, 't', culture);
+const timeRangeFormat = ({ start, end }, culture, local) =>
+  `${local.format(start, 't', culture)} – ${local.format(end, 't', culture)}`;
 
-let timeRangeStartFormat = ({ start }, culture, local) => local.format(start, 't', culture) + ' – ';
+const timeRangeStartFormat = ({ start }, culture, local) =>
+  `${local.format(start, 't', culture)} – `;
 
-let timeRangeEndFormat = ({ end }, culture, local) => ' – ' + local.format(end, 't', culture);
+const timeRangeEndFormat = ({ end }, culture, local) => ` – ${local.format(end, 't', culture)}`;
 
-let weekRangeFormat = ({ start, end }, culture, local) =>
-  local.format(start, 'MMM dd', culture) +
-  ' – ' +
-  local.format(end, dates.eq(start, end, 'month') ? 'dd' : 'MMM dd', culture);
+const weekRangeFormat = ({ start, end }, culture, local) =>
+  `${local.format(start, 'MMM dd', culture)} – ${local.format(
+    end,
+    dates.eq(start, end, 'month') ? 'dd' : 'MMM dd',
+    culture
+  )}`;
 
-export let formats = {
+export const formats = {
   dateFormat: 'dd',
   dayFormat: 'ddd dd/MM',
   weekdayFormat: 'ddd',

@@ -6,7 +6,7 @@ import { navigate } from 'utils/constants';
 
 class Toolbar extends React.Component {
   render() {
-    let {
+    const {
       localizer: { messages },
       label,
     } = this.props;
@@ -41,8 +41,8 @@ class Toolbar extends React.Component {
   };
 
   viewNamesGroup(messages) {
-    let viewNames = this.props.views;
-    const view = this.props.view;
+    const viewNames = this.props.views;
+    const { view } = this.props;
 
     if (viewNames.length > 1) {
       return viewNames.map((name) => (

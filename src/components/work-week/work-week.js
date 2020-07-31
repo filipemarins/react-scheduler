@@ -10,8 +10,8 @@ function workWeekRange(date, options) {
 
 class WorkWeek extends React.Component {
   render() {
-    let { date, ...props } = this.props;
-    let range = workWeekRange(date, this.props);
+    const { date, ...props } = this.props;
+    const range = workWeekRange(date, this.props);
 
     return <TimeGrid {...props} range={range} eventOffset={15} />;
   }
@@ -28,7 +28,7 @@ WorkWeek.range = workWeekRange;
 WorkWeek.navigate = Week.navigate;
 
 WorkWeek.title = (date, { localizer }) => {
-  let [start, ...rest] = workWeekRange(date, { localizer });
+  const [start, ...rest] = workWeekRange(date, { localizer });
 
   return localizer.format({ start, end: rest.pop() }, 'dayRangeHeaderFormat');
 };

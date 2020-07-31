@@ -4,7 +4,7 @@ import invariant from 'invariant';
 const localePropType = PropTypes.oneOfType([PropTypes.string, PropTypes.func]);
 
 function _format(localizer, formatter, value, format, culture) {
-  let result =
+  const result =
     typeof format === 'function'
       ? format(value, culture, localizer)
       : formatter.call(localizer, value, format, culture);

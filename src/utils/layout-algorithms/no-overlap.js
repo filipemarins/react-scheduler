@@ -24,7 +24,7 @@ export default function ({ events, minimumStartDifference, slotMetrics, accessor
     a = a.style;
     b = b.style;
     if (a.top !== b.top) return a.top > b.top ? 1 : -1;
-    else return a.top + a.height < b.top + b.height ? 1 : -1;
+    return a.top + a.height < b.top + b.height ? 1 : -1;
   });
 
   for (let i = 0; i < styledEvents.length; ++i) {

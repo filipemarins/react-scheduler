@@ -7,8 +7,8 @@ import TimeGrid from 'components/time-grid';
 
 class Day extends React.Component {
   render() {
-    let { date, ...props } = this.props;
-    let range = Day.range(date);
+    const { date, ...props } = this.props;
+    const range = Day.range(date);
 
     return <TimeGrid {...props} range={range} eventOffset={10} />;
   }

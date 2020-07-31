@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import { views as Views } from './constants';
 
-let viewNames = Object.keys(Views).map((k) => Views[k]);
+const viewNames = Object.keys(Views).map((k) => Views[k]);
 
-export let accessor = PropTypes.oneOfType([PropTypes.string, PropTypes.func]);
+export const accessor = PropTypes.oneOfType([PropTypes.string, PropTypes.func]);
 
-export let dateFormat = PropTypes.any;
+export const dateFormat = PropTypes.any;
 
-export let dateRangeFormat = PropTypes.func;
+export const dateRangeFormat = PropTypes.func;
 
 /**
  * accepts either an array of builtin view names:
@@ -27,15 +27,14 @@ export let dateRangeFormat = PropTypes.func;
  * ```
  */
 
-export let views = PropTypes.oneOfType([
+export const views = PropTypes.oneOfType([
   PropTypes.arrayOf(PropTypes.oneOf(viewNames)),
   PropTypes.objectOf((prop, key, ...args) => {
-    let isBuiltinView = viewNames.indexOf(key) !== -1 && typeof prop[key] === 'boolean';
+    const isBuiltinView = viewNames.indexOf(key) !== -1 && typeof prop[key] === 'boolean';
     if (isBuiltinView) {
       return null;
-    } else {
-      return PropTypes.elementType(prop, key, ...args);
     }
+    return PropTypes.elementType(prop, key, ...args);
   }),
 ]);
 

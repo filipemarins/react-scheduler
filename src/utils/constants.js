@@ -1,11 +1,11 @@
-export let navigate = {
+export const navigate = {
   PREVIOUS: 'PREV',
   NEXT: 'NEXT',
   TODAY: 'TODAY',
   DATE: 'DATE',
 };
 
-export let views = {
+export const views = {
   MONTH: 'month',
   WEEK: 'week',
   WORK_WEEK: 'work_week',

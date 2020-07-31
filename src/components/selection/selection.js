@@ -11,7 +11,7 @@ function isOverContainer(container, x, y) {
 }
 
 export function getEventNodeFromPoint(node, { clientX, clientY }) {
-  let target = document.elementFromPoint(clientX, clientY);
+  const target = document.elementFromPoint(clientX, clientY);
   return closest(target, '.rbc-event', node);
 }
 
@@ -64,13 +64,13 @@ class Selection {
   }
 
   on(type, handler) {
-    let handlers = this._listeners[type] || (this._listeners[type] = []);
+    const handlers = this._listeners[type] || (this._listeners[type] = []);
 
     handlers.push(handler);
 
     return {
       remove() {
-        let idx = handlers.indexOf(handler);
+        const idx = handlers.indexOf(handler);
         if (idx !== -1) handlers.splice(idx, 1);
       },
     };
@@ -78,7 +78,7 @@ class Selection {
 
   emit(type, ...args) {
     let result;
-    let handlers = this._listeners[type] || [];
+    const handlers = this._listeners[type] || [];
     handlers.forEach((fn) => {
       if (result === undefined) result = fn(...args);
     });
@@ -99,7 +99,7 @@ class Selection {
   }
 
   isSelected(node) {
-    let box = this._selectRect;
+    const box = this._selectRect;
 
     if (!box || !this.selecting) return false;
 
@@ -107,9 +107,9 @@ class Selection {
   }
 
   filter(items) {
-    let box = this._selectRect;
+    const box = this._selectRect;
 
-    //not selecting
+    // not selecting
     if (!box || !this.selecting) return [];
 
     return items.filter(this.isSelected, this);
@@ -181,8 +181,8 @@ class Selection {
     this.emit('dropFromOutside', {
       x: pageX,
       y: pageY,
-      clientX: clientX,
-      clientY: clientY,
+      clientX,
+      clientY,
     });
 
     e.preventDefault();
@@ -194,8 +194,8 @@ class Selection {
     this.emit('dragOverFromOutside', {
       x: pageX,
       y: pageY,
-      clientX: clientX,
-      clientY: clientY,
+      clientX,
+      clientY,
     });
 
     e.preventDefault();
@@ -207,15 +207,15 @@ class Selection {
     }
 
     const { clientX, clientY, pageX, pageY } = getEventCoordinates(e);
-    let node = this.container(),
-      collides,
-      offsetData;
+    const node = this.container();
+    let collides;
+    let offsetData;
 
     // Right clicks
     if (e.which === 3 || e.button === 2 || !isOverContainer(node, clientX, clientY)) return;
 
     if (!this.globalMouse && node && !contains(node, e.target)) {
-      let { top, left, bottom, right } = normalizeDistance(0);
+      const { top, left, bottom, right } = normalizeDistance(0);
 
       offsetData = getBoundsForNode(node);
 
@@ -232,7 +232,7 @@ class Selection {
       if (!collides) return;
     }
 
-    let result = this.emit(
+    const result = this.emit(
       'beforeSelect',
       (this._initialEventData = {
         isTouch: /^touch/.test(e.type),
@@ -271,9 +271,9 @@ class Selection {
 
     if (!this._initialEventData) return;
 
-    let inRoot = !this.container || contains(this.container(), e.target);
-    let bounds = this._selectRect;
-    let click = this.isClick(pageX, pageY);
+    const inRoot = !this.container || contains(this.container(), e.target);
+    const bounds = this._selectRect;
+    const click = this.isClick(pageX, pageY);
 
     this._initialEventData = null;
 
@@ -303,8 +303,8 @@ class Selection {
       return this.emit('doubleClick', {
         x: pageX,
         y: pageY,
-        clientX: clientX,
-        clientY: clientY,
+        clientX,
+        clientY,
       });
     }
 
@@ -315,8 +315,8 @@ class Selection {
     return this.emit('click', {
       x: pageX,
       y: pageY,
-      clientX: clientX,
-      clientY: clientY,
+      clientX,
+      clientY,
     });
   }
 
@@ -325,14 +325,14 @@ class Selection {
       return;
     }
 
-    let { x, y } = this._initialEventData;
+    const { x, y } = this._initialEventData;
     const { pageX, pageY } = getEventCoordinates(e);
-    let w = Math.abs(x - pageX);
-    let h = Math.abs(y - pageY);
+    const w = Math.abs(x - pageX);
+    const h = Math.abs(y - pageY);
 
-    let left = Math.min(pageX, x),
-      top = Math.min(pageY, y),
-      old = this.selecting;
+    const left = Math.min(pageX, x);
+    const top = Math.min(pageY, y);
+    const old = this.selecting;
 
     // Prevent emitting selectStart event until mouse is moved.
     // in Chrome on Windows, mouseMove event may be fired just after mouseDown event.
@@ -364,7 +364,7 @@ class Selection {
   }
 
   isClick(pageX, pageY) {
-    let { x, y, isTouch } = this._initialEventData;
+    const { x, y, isTouch } = this._initialEventData;
     return (
       !isTouch && Math.abs(pageX - x) <= clickTolerance && Math.abs(pageY - y) <= clickTolerance
     );
@@ -395,12 +395,18 @@ function normalizeDistance(distance = 0) {
  * @return {bool}
  */
 export function objectsCollide(nodeA, nodeB, tolerance = 0) {
-  let { top: aTop, left: aLeft, right: aRight = aLeft, bottom: aBottom = aTop } = getBoundsForNode(
-    nodeA
-  );
-  let { top: bTop, left: bLeft, right: bRight = bLeft, bottom: bBottom = bTop } = getBoundsForNode(
-    nodeB
-  );
+  const {
+    top: aTop,
+    left: aLeft,
+    right: aRight = aLeft,
+    bottom: aBottom = aTop,
+  } = getBoundsForNode(nodeA);
+  const {
+    top: bTop,
+    left: bLeft,
+    right: bRight = bLeft,
+    bottom: bBottom = bTop,
+  } = getBoundsForNode(nodeB);
 
   return !(
     // 'a' bottom doesn't touch 'b' top
@@ -424,9 +430,9 @@ export function objectsCollide(nodeA, nodeB, tolerance = 0) {
 export function getBoundsForNode(node) {
   if (!node.getBoundingClientRect) return node;
 
-  let rect = node.getBoundingClientRect(),
-    left = rect.left + pageOffset('left'),
-    top = rect.top + pageOffset('top');
+  const rect = node.getBoundingClientRect();
+  const left = rect.left + pageOffset('left');
+  const top = rect.top + pageOffset('top');
 
   return {
     top,

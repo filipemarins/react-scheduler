@@ -1,4 +1,4 @@
-let defaultMessages = {
+const defaultMessages = {
   date: 'Date',
   time: 'Time',
   event: 'Event',

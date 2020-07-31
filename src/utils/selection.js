@@ -4,8 +4,8 @@ export function isSelected(event, selected) {
 }
 
 export function slotWidth(rowBox, slots) {
-  let rowWidth = rowBox.right - rowBox.left;
-  let cellWidth = rowWidth / slots;
+  const rowWidth = rowBox.right - rowBox.left;
+  const cellWidth = rowWidth / slots;
 
   return cellWidth;
 }
@@ -24,22 +24,22 @@ export function pointInBox(box, { x, y }) {
 export function dateCellSelection(start, rowBox, box, slots, rtl) {
   let startIdx = -1;
   let endIdx = -1;
-  let lastSlotIdx = slots - 1;
+  const lastSlotIdx = slots - 1;
 
-  let cellWidth = slotWidth(rowBox, slots);
+  const cellWidth = slotWidth(rowBox, slots);
 
   // cell under the mouse
-  let currentSlot = getSlotAtX(rowBox, box.x, rtl, slots);
+  const currentSlot = getSlotAtX(rowBox, box.x, rtl, slots);
 
   // Identify row as either the initial row
   // or the row under the current mouse point
-  let isCurrentRow = rowBox.top < box.y && rowBox.bottom > box.y;
-  let isStartRow = rowBox.top < start.y && rowBox.bottom > start.y;
+  const isCurrentRow = rowBox.top < box.y && rowBox.bottom > box.y;
+  const isStartRow = rowBox.top < start.y && rowBox.bottom > start.y;
 
   // this row's position relative to the start point
-  let isAboveStart = start.y > rowBox.bottom;
-  let isBelowStart = rowBox.top > start.y;
-  let isBetween = box.top < rowBox.top && box.bottom > rowBox.bottom;
+  const isAboveStart = start.y > rowBox.bottom;
+  const isBelowStart = rowBox.top > start.y;
+  const isBetween = box.top < rowBox.top && box.bottom > rowBox.bottom;
 
   // this row is between the current and start rows, so entirely selected
   if (isBetween) {
@@ -65,7 +65,7 @@ export function dateCellSelection(start, rowBox, box, slots, rtl) {
 
     if (isCurrentRow) {
       if (currentSlot < startIdx) startIdx = currentSlot;
-      else endIdx = currentSlot; //select current range
+      else endIdx = currentSlot; // select current range
     } else if (start.y < box.y) {
       // the current row is below start row
       // select cells to the right of the start cell

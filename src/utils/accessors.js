@@ -6,7 +6,7 @@
  *    ... otherwise null
  */
 export function accessor(data, field) {
-  var value = null;
+  let value = null;
 
   if (typeof field === 'function') value = field(data);
   else if (typeof field === 'string' && typeof data === 'object' && data != null && field in data)

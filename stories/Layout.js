@@ -1,9 +1,9 @@
-import React from 'react'
-import { storiesOf } from '@storybook/react'
-import moment from 'moment'
+import React from 'react';
+import { storiesOf } from '@storybook/react';
+import moment from 'moment';
 
-import { events, Calendar, Views, DragAndDropCalendar } from './helpers'
-import createEvents from './helpers/createEvents'
+import { events, Calendar, Views, DragAndDropCalendar } from './helpers';
+import createEvents from './helpers/createEvents';
 
 storiesOf('Layout Issues', module)
   .add('event layout', () => {
@@ -14,7 +14,7 @@ storiesOf('Layout Issues', module)
         timeslots={4}
         events={createEvents(1)}
       />
-    )
+    );
   })
   .add('first of the week all-day event', () => {
     return (
@@ -29,7 +29,7 @@ storiesOf('Layout Issues', module)
           },
         ]}
       />
-    )
+    );
   })
   .add('end of the week all-day event', () => {
     return (
@@ -44,7 +44,7 @@ storiesOf('Layout Issues', module)
           },
         ]}
       />
-    )
+    );
   })
   .add('event at end of week', () => {
     return (
@@ -53,18 +53,12 @@ storiesOf('Layout Issues', module)
         events={[
           {
             title: 'has time',
-            start: moment(new Date(2016, 11, 3))
-              .add(1, 'days')
-              .subtract(5, 'hours')
-              .toDate(),
-            end: moment(new Date(2016, 11, 3))
-              .add(1, 'days')
-              .subtract(4, 'hours')
-              .toDate(),
+            start: moment(new Date(2016, 11, 3)).add(1, 'days').subtract(5, 'hours').toDate(),
+            end: moment(new Date(2016, 11, 3)).add(1, 'days').subtract(4, 'hours').toDate(),
           },
         ]}
       />
-    )
+    );
   })
   .add('event at start of week', () => {
     return (
@@ -73,18 +67,12 @@ storiesOf('Layout Issues', module)
         events={[
           {
             title: 'has time',
-            start: moment(new Date(2016, 11, 4))
-              .add(1, 'days')
-              .subtract(5, 'hours')
-              .toDate(),
-            end: moment(new Date(2016, 11, 4))
-              .add(1, 'days')
-              .subtract(4, 'hours')
-              .toDate(),
+            start: moment(new Date(2016, 11, 4)).add(1, 'days').subtract(5, 'hours').toDate(),
+            end: moment(new Date(2016, 11, 4)).add(1, 'days').subtract(4, 'hours').toDate(),
           },
         ]}
       />
-    )
+    );
   })
   .add('events on a constrained day column', () => {
     return (
@@ -94,7 +82,7 @@ storiesOf('Layout Issues', module)
         max={moment('5 pm', 'h a').toDate()}
         events={events}
       />
-    )
+    );
   })
   .add('no duration', () => {
     return (
@@ -119,7 +107,7 @@ storiesOf('Layout Issues', module)
           },
         ]}
       />
-    )
+    );
   })
   .add('Single days should only span one slot, multi-days multiple', () => {
     return (
@@ -158,7 +146,7 @@ storiesOf('Layout Issues', module)
           },
         ]}
       />
-    )
+    );
   })
   .add('zero duration oddities', () => {
     return (
@@ -179,5 +167,5 @@ storiesOf('Layout Issues', module)
           },
         ]}
       />
-    )
-  })
+    );
+  });

@@ -27,7 +27,7 @@ export default {
   },
 
   renderEvent(props, event) {
-    let {
+    const {
       selected,
       isAllDay: _,
       accessors,
@@ -39,8 +39,8 @@ export default {
       components,
     } = props;
 
-    let continuesPrior = slotMetrics.continuesPrior(event);
-    let continuesAfter = slotMetrics.continuesAfter(event);
+    const continuesPrior = slotMetrics.continuesPrior(event);
+    const continuesAfter = slotMetrics.continuesAfter(event);
 
     return (
       <EventCell
@@ -61,7 +61,7 @@ export default {
   },
 
   renderSpan(slots, len, key, content = ' ') {
-    let per = (Math.abs(len) / slots) * 100 + '%';
+    const per = `${(Math.abs(len) / slots) * 100}%`;
 
     return (
       <div

@@ -6,7 +6,7 @@ import * as dates from 'utils/dates';
 
 class EventCell extends React.Component {
   render() {
-    let {
+    const {
       style,
       className,
       event,
@@ -26,15 +26,15 @@ class EventCell extends React.Component {
       ...props
     } = this.props;
 
-    let title = accessors.title(event);
-    let tooltip = accessors.tooltip(event);
-    let end = accessors.end(event);
-    let start = accessors.start(event);
-    let allDay = accessors.allDay(event);
+    const title = accessors.title(event);
+    const tooltip = accessors.tooltip(event);
+    const end = accessors.end(event);
+    const start = accessors.start(event);
+    const allDay = accessors.allDay(event);
 
-    let showAsAllDay = isAllDay || allDay || dates.diff(start, dates.ceil(end, 'day'), 'day') > 1;
+    const showAsAllDay = isAllDay || allDay || dates.diff(start, dates.ceil(end, 'day'), 'day') > 1;
 
-    let userProps = getters.eventProp(event, start, end, selected);
+    const userProps = getters.eventProp(event, start, end, selected);
 
     const content = (
       <div className="rbc-event-content" title={tooltip || undefined}>

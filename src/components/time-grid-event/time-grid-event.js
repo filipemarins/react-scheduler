@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 
 function stringifyPercent(v) {
-  return typeof v === 'string' ? v : v + '%';
+  return typeof v === 'string' ? v : `${v}%`;
 }
 
 /* eslint-disable react/prop-types */
@@ -22,14 +22,14 @@ function TimeGridEvent(props) {
     onDoubleClick,
     components: { event: Event, eventWrapper: EventWrapper },
   } = props;
-  let title = accessors.title(event);
-  let tooltip = accessors.tooltip(event);
-  let end = accessors.end(event);
-  let start = accessors.start(event);
+  const title = accessors.title(event);
+  const tooltip = accessors.tooltip(event);
+  const end = accessors.end(event);
+  const start = accessors.start(event);
 
-  let userProps = getters.eventProp(event, start, end, selected);
+  const userProps = getters.eventProp(event, start, end, selected);
 
-  let { height, top, width, xOffset } = style;
+  const { height, top, width, xOffset } = style;
   const inner = [
     <div key="1" className="rbc-event-label">
       {label}
@@ -51,7 +51,7 @@ function TimeGridEvent(props) {
           width: stringifyPercent(width),
           height: stringifyPercent(height),
         }}
-        title={tooltip ? (typeof label === 'string' ? label + ': ' : '') + tooltip : undefined}
+        title={tooltip ? (typeof label === 'string' ? `${label}: ` : '') + tooltip : undefined}
         className={clsx('rbc-event', className, userProps.className, {
           'rbc-selected': selected,
           'rbc-event-continues-earlier': continuesEarlier,
