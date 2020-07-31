@@ -6,8 +6,7 @@
       "jest/globals": true
   },
   "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended",
+      "airbnb",
       "plugin:prettier/recommended",
       "prettier/react"
   ],
@@ -33,6 +32,16 @@
     }
   },
   "rules": {
+    "import/no-extraneous-dependencies": ["error", {
+      "devDependencies": [
+        "**/stories/**/*.js",
+        "**/test/**/*.js",
+        "**/tests/**/*.js",
+        "**/*.test.js",
+        "**/*.config.js"
+      ]
+    }],
+    "no-template-curly-in-string": 0,
     "no-console": [
       2,
       {
@@ -44,6 +53,28 @@
       "ignoreStrings": true,
       "ignoreTemplateLiterals": true
     }],
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".js"]
+      }
+    ],
+    "react/destructuring-assignment": [
+      2,
+      "always",
+      {
+        "ignoreClassFields": true
+      }
+    ],
+    "react/sort-prop-types": [2, {
+      "callbacksLast": false,
+      "ignoreCase": true,
+      "requiredFirst": false,
+      "sortShapeProp": true,
+      "noSortAlphabetically": false
+    }],
+    "react/jsx-props-no-spreading": 0,
+    "react/state-in-constructor": [1, "never"],
     "react-hooks/rules-of-hooks": "error"
   }
 }
