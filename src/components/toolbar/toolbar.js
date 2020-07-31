@@ -1,35 +1,26 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
+import React from 'react';
+import PropTypes from 'prop-types';
+import clsx from 'clsx';
 
-import { navigate } from 'utils/constants'
+import { navigate } from 'utils/constants';
 
 class Toolbar extends React.Component {
   render() {
     let {
       localizer: { messages },
       label,
-    } = this.props
+    } = this.props;
 
     return (
       <div className="rbc-toolbar">
         <span className="rbc-btn-group">
-          <button
-            type="button"
-            onClick={this.navigate.bind(null, navigate.TODAY)}
-          >
+          <button type="button" onClick={this.navigate.bind(null, navigate.TODAY)}>
             {messages.today}
           </button>
-          <button
-            type="button"
-            onClick={this.navigate.bind(null, navigate.PREVIOUS)}
-          >
+          <button type="button" onClick={this.navigate.bind(null, navigate.PREVIOUS)}>
             {messages.previous}
           </button>
-          <button
-            type="button"
-            onClick={this.navigate.bind(null, navigate.NEXT)}
-          >
+          <button type="button" onClick={this.navigate.bind(null, navigate.NEXT)}>
             {messages.next}
           </button>
         </span>
@@ -38,23 +29,23 @@ class Toolbar extends React.Component {
 
         <span className="rbc-btn-group">{this.viewNamesGroup(messages)}</span>
       </div>
-    )
+    );
   }
 
-  navigate = action => {
-    this.props.onNavigate(action)
-  }
+  navigate = (action) => {
+    this.props.onNavigate(action);
+  };
 
-  view = view => {
-    this.props.onView(view)
-  }
+  view = (view) => {
+    this.props.onView(view);
+  };
 
   viewNamesGroup(messages) {
-    let viewNames = this.props.views
-    const view = this.props.view
+    let viewNames = this.props.views;
+    const view = this.props.view;
 
     if (viewNames.length > 1) {
-      return viewNames.map(name => (
+      return viewNames.map((name) => (
         <button
           type="button"
           key={name}
@@ -63,7 +54,7 @@ class Toolbar extends React.Component {
         >
           {messages[name]}
         </button>
-      ))
+      ));
     }
   }
 }
@@ -75,6 +66,6 @@ Toolbar.propTypes = {
   localizer: PropTypes.object,
   onNavigate: PropTypes.func.isRequired,
   onView: PropTypes.func.isRequired,
-}
+};
 
-export default Toolbar
+export default Toolbar;

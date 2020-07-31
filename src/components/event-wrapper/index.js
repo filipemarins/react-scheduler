@@ -1,1 +1,1 @@
-export { default } from './event-wrapper'
+export { default } from './event-wrapper';

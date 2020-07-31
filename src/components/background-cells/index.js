@@ -1,1 +1,1 @@
-export { default } from './background-cells'
+export { default } from './background-cells';

@@ -1,26 +1,25 @@
-import PropTypes from 'prop-types'
-import React from 'react'
-import * as dates from 'utils/dates'
-import { getSlotAtX, pointInBox } from 'utils/selection'
-import { findDOMNode } from 'react-dom'
+import PropTypes from 'prop-types';
+import React from 'react';
+import * as dates from 'utils/dates';
+import { getSlotAtX, pointInBox } from 'utils/selection';
+import { findDOMNode } from 'react-dom';
 
-import { eventSegments } from 'utils/eventLevels'
-import Selection, { getBoundsForNode } from 'components/selection'
-import EventRow from 'components/event-row'
-import { dragAccessors } from './common'
+import { eventSegments } from 'utils/eventLevels';
+import Selection, { getBoundsForNode } from 'components/selection';
+import EventRow from 'components/event-row';
+import { dragAccessors } from './common';
 
-const propTypes = {}
+const propTypes = {};
 
 const eventTimes = (event, accessors) => {
-  let start = accessors.start(event)
-  let end = accessors.end(event)
+  let start = accessors.start(event);
+  let end = accessors.end(event);
 
-  const isZeroDuration =
-    dates.eq(start, end, 'minutes') && start.getMinutes() === 0
+  const isZeroDuration = dates.eq(start, end, 'minutes') && start.getMinutes() === 0;
   // make zero duration midnight events at least one day long
-  if (isZeroDuration) end = dates.add(end, 1, 'day')
-  return { start, end }
-}
+  if (isZeroDuration) end = dates.add(end, 1, 'day');
+  return { start, end };
+};
 
 class WeekWrapper extends React.Component {
   static propTypes = {
@@ -30,7 +29,7 @@ class WeekWrapper extends React.Component {
     getters: PropTypes.object.isRequired,
     components: PropTypes.object.isRequired,
     resourceId: PropTypes.any,
-  }
+  };
 
   static contextTypes = {
     draggable: PropTypes.shape({
@@ -41,23 +40,23 @@ class WeekWrapper extends React.Component {
       onBeginAction: PropTypes.func,
       dragFromOutsideItem: PropTypes.func,
     }),
-  }
+  };
 
   constructor(...args) {
-    super(...args)
-    this.state = {}
+    super(...args);
+    this.state = {};
   }
 
   componentDidMount() {
-    this._selectable()
+    this._selectable();
   }
 
   componentWillUnmount() {
-    this._teardownSelectable()
+    this._teardownSelectable();
   }
 
   reset() {
-    if (this.state.segment) this.setState({ segment: null })
+    if (this.state.segment) this.setState({ segment: null });
   }
 
   update(event, start, end) {
@@ -65,212 +64,201 @@ class WeekWrapper extends React.Component {
       { ...event, end, start, __isPreview: true },
       this.props.slotMetrics.range,
       dragAccessors
-    )
+    );
 
-    const { segment: lastSegment } = this.state
+    const { segment: lastSegment } = this.state;
     if (
       lastSegment &&
       segment.span === lastSegment.span &&
       segment.left === lastSegment.left &&
       segment.right === lastSegment.right
     ) {
-      return
+      return;
     }
-    this.setState({ segment })
+    this.setState({ segment });
   }
 
   handleMove = ({ x, y }, node, draggedEvent) => {
-    const { event = draggedEvent } = this.context.draggable.dragAndDropAction
-    const metrics = this.props.slotMetrics
-    const { accessors } = this.props
+    const { event = draggedEvent } = this.context.draggable.dragAndDropAction;
+    const metrics = this.props.slotMetrics;
+    const { accessors } = this.props;
 
-    if (!event) return
+    if (!event) return;
 
-    let rowBox = getBoundsForNode(node)
+    let rowBox = getBoundsForNode(node);
 
     if (!pointInBox(rowBox, { x, y })) {
-      this.reset()
-      return
+      this.reset();
+      return;
     }
 
     // Make sure to maintain the time of the start date while moving it to the new slot
     let start = dates.merge(
       metrics.getDateForSlot(getSlotAtX(rowBox, x, false, metrics.slots)),
       accessors.start(event)
-    )
+    );
 
     let end = dates.add(
       start,
       dates.diff(accessors.start(event), accessors.end(event), 'minutes'),
       'minutes'
-    )
+    );
 
-    this.update(event, start, end)
-  }
+    this.update(event, start, end);
+  };
 
   handleDropFromOutside = (point, rowBox) => {
-    if (!this.context.draggable.onDropFromOutside) return
-    const { slotMetrics: metrics } = this.props
+    if (!this.context.draggable.onDropFromOutside) return;
+    const { slotMetrics: metrics } = this.props;
 
-    let start = metrics.getDateForSlot(
-      getSlotAtX(rowBox, point.x, false, metrics.slots)
-    )
+    let start = metrics.getDateForSlot(getSlotAtX(rowBox, point.x, false, metrics.slots));
 
     this.context.draggable.onDropFromOutside({
       start,
       end: dates.add(start, 1, 'day'),
       allDay: false,
-    })
-  }
+    });
+  };
 
   handleDragOverFromOutside = ({ x, y }, node) => {
-    if (!this.context.draggable.dragFromOutsideItem) return
+    if (!this.context.draggable.dragFromOutsideItem) return;
 
-    this.handleMove(
-      { x, y },
-      node,
-      this.context.draggable.dragFromOutsideItem()
-    )
-  }
+    this.handleMove({ x, y }, node, this.context.draggable.dragFromOutsideItem());
+  };
 
   handleResize(point, node) {
-    const { event, direction } = this.context.draggable.dragAndDropAction
-    const { accessors, slotMetrics: metrics } = this.props
+    const { event, direction } = this.context.draggable.dragAndDropAction;
+    const { accessors, slotMetrics: metrics } = this.props;
 
-    let { start, end } = eventTimes(event, accessors)
+    let { start, end } = eventTimes(event, accessors);
 
-    let rowBox = getBoundsForNode(node)
-    let cursorInRow = pointInBox(rowBox, point)
+    let rowBox = getBoundsForNode(node);
+    let cursorInRow = pointInBox(rowBox, point);
 
     if (direction === 'RIGHT') {
       if (cursorInRow) {
-        if (metrics.last < start) return this.reset()
+        if (metrics.last < start) return this.reset();
         // add min
         end = dates.add(
-          metrics.getDateForSlot(
-            getSlotAtX(rowBox, point.x, false, metrics.slots)
-          ),
+          metrics.getDateForSlot(getSlotAtX(rowBox, point.x, false, metrics.slots)),
           1,
           'day'
-        )
+        );
       } else if (
         dates.inRange(start, metrics.first, metrics.last) ||
         (rowBox.bottom < point.y && +metrics.first > +start)
       ) {
-        end = dates.add(metrics.last, 1, 'milliseconds')
+        end = dates.add(metrics.last, 1, 'milliseconds');
       } else {
-        this.setState({ segment: null })
-        return
+        this.setState({ segment: null });
+        return;
       }
 
-      end = dates.max(end, dates.add(start, 1, 'day'))
+      end = dates.max(end, dates.add(start, 1, 'day'));
     } else if (direction === 'LEFT') {
       // inbetween Row
       if (cursorInRow) {
-        if (metrics.first > end) return this.reset()
+        if (metrics.first > end) return this.reset();
 
-        start = metrics.getDateForSlot(
-          getSlotAtX(rowBox, point.x, false, metrics.slots)
-        )
+        start = metrics.getDateForSlot(getSlotAtX(rowBox, point.x, false, metrics.slots));
       } else if (
         dates.inRange(end, metrics.first, metrics.last) ||
         (rowBox.top > point.y && +metrics.last < +end)
       ) {
-        start = dates.add(metrics.first, -1, 'milliseconds')
+        start = dates.add(metrics.first, -1, 'milliseconds');
       } else {
-        this.reset()
-        return
+        this.reset();
+        return;
       }
 
-      start = dates.min(dates.add(end, -1, 'day'), start)
+      start = dates.min(dates.add(end, -1, 'day'), start);
     }
 
-    this.update(event, start, end)
+    this.update(event, start, end);
   }
 
   _selectable = () => {
-    let node = findDOMNode(this).closest('.rbc-month-row, .rbc-allday-cell')
-    let container = node.closest('.rbc-month-view, .rbc-time-view')
+    let node = findDOMNode(this).closest('.rbc-month-row, .rbc-allday-cell');
+    let container = node.closest('.rbc-month-view, .rbc-time-view');
 
-    let selector = (this._selector = new Selection(() => container))
+    let selector = (this._selector = new Selection(() => container));
 
-    selector.on('beforeSelect', point => {
-      const { isAllDay } = this.props
-      const { action } = this.context.draggable.dragAndDropAction
+    selector.on('beforeSelect', (point) => {
+      const { isAllDay } = this.props;
+      const { action } = this.context.draggable.dragAndDropAction;
 
       return (
         action === 'move' ||
-        (action === 'resize' &&
-          (!isAllDay || pointInBox(getBoundsForNode(node), point)))
-      )
-    })
+        (action === 'resize' && (!isAllDay || pointInBox(getBoundsForNode(node), point)))
+      );
+    });
 
-    selector.on('selecting', box => {
-      const bounds = getBoundsForNode(node)
-      const { dragAndDropAction } = this.context.draggable
+    selector.on('selecting', (box) => {
+      const bounds = getBoundsForNode(node);
+      const { dragAndDropAction } = this.context.draggable;
 
-      if (dragAndDropAction.action === 'move') this.handleMove(box, bounds)
-      if (dragAndDropAction.action === 'resize') this.handleResize(box, bounds)
-    })
+      if (dragAndDropAction.action === 'move') this.handleMove(box, bounds);
+      if (dragAndDropAction.action === 'resize') this.handleResize(box, bounds);
+    });
 
-    selector.on('selectStart', () => this.context.draggable.onStart())
-    selector.on('select', point => {
-      const bounds = getBoundsForNode(node)
+    selector.on('selectStart', () => this.context.draggable.onStart());
+    selector.on('select', (point) => {
+      const bounds = getBoundsForNode(node);
 
-      if (!this.state.segment || !pointInBox(bounds, point)) return
-      this.handleInteractionEnd()
-    })
+      if (!this.state.segment || !pointInBox(bounds, point)) return;
+      this.handleInteractionEnd();
+    });
 
-    selector.on('dropFromOutside', point => {
-      if (!this.context.draggable.onDropFromOutside) return
+    selector.on('dropFromOutside', (point) => {
+      if (!this.context.draggable.onDropFromOutside) return;
 
-      const bounds = getBoundsForNode(node)
+      const bounds = getBoundsForNode(node);
 
-      if (!pointInBox(bounds, point)) return
+      if (!pointInBox(bounds, point)) return;
 
-      this.handleDropFromOutside(point, bounds)
-    })
+      this.handleDropFromOutside(point, bounds);
+    });
 
-    selector.on('dragOverFromOutside', point => {
-      if (!this.context.draggable.dragFromOutsideItem) return
+    selector.on('dragOverFromOutside', (point) => {
+      if (!this.context.draggable.dragFromOutsideItem) return;
 
-      const bounds = getBoundsForNode(node)
+      const bounds = getBoundsForNode(node);
 
-      this.handleDragOverFromOutside(point, bounds)
-    })
+      this.handleDragOverFromOutside(point, bounds);
+    });
 
-    selector.on('click', () => this.context.draggable.onEnd(null))
+    selector.on('click', () => this.context.draggable.onEnd(null));
 
     selector.on('reset', () => {
-      this.reset()
-      this.context.draggable.onEnd(null)
-    })
-  }
+      this.reset();
+      this.context.draggable.onEnd(null);
+    });
+  };
 
   handleInteractionEnd = () => {
-    const { resourceId, isAllDay } = this.props
-    const { event } = this.state.segment
+    const { resourceId, isAllDay } = this.props;
+    const { event } = this.state.segment;
 
-    this.reset()
+    this.reset();
 
     this.context.draggable.onEnd({
       start: event.start,
       end: event.end,
       resourceId,
       isAllDay,
-    })
-  }
+    });
+  };
 
   _teardownSelectable = () => {
-    if (!this._selector) return
-    this._selector.teardown()
-    this._selector = null
-  }
+    if (!this._selector) return;
+    this._selector.teardown();
+    this._selector = null;
+  };
 
   render() {
-    const { children, accessors } = this.props
+    const { children, accessors } = this.props;
 
-    let { segment } = this.state
+    let { segment } = this.state;
 
     return (
       <div className="rbc-addons-dnd-row-body">
@@ -289,10 +277,10 @@ class WeekWrapper extends React.Component {
           />
         )}
       </div>
-    )
+    );
   }
 }
 
-WeekWrapper.propTypes = propTypes
+WeekWrapper.propTypes = propTypes;
 
-export default WeekWrapper
+export default WeekWrapper;

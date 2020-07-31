@@ -1,1 +1,1 @@
-export { default } from './time-gutter'
+export { default } from './time-gutter';

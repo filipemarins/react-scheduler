@@ -1,1 +1,1 @@
-export { default } from './time-slot-group'
+export { default } from './time-slot-group';

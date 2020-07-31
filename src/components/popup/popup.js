@@ -1,13 +1,13 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import getOffset from 'dom-helpers/offset'
-import getScrollTop from 'dom-helpers/scrollTop'
-import getScrollLeft from 'dom-helpers/scrollLeft'
+import React from 'react';
+import PropTypes from 'prop-types';
+import getOffset from 'dom-helpers/offset';
+import getScrollTop from 'dom-helpers/scrollTop';
+import getScrollLeft from 'dom-helpers/scrollLeft';
 
-import * as dates from 'utils/dates'
+import * as dates from 'utils/dates';
 
-import EventCell from 'components/event-cell'
-import { isSelected } from 'utils/selection'
+import EventCell from 'components/event-cell';
+import { isSelected } from 'utils/selection';
 
 class Popup extends React.Component {
   componentDidMount() {
@@ -16,15 +16,14 @@ class Popup extends React.Component {
       viewBottom = window.innerHeight + getScrollTop(window),
       viewRight = window.innerWidth + getScrollLeft(window),
       bottom = top + height,
-      right = left + width
+      right = left + width;
 
     if (bottom > viewBottom || right > viewRight) {
-      let topOffset, leftOffset
+      let topOffset, leftOffset;
 
       if (bottom > viewBottom)
-        topOffset = bottom - viewBottom + (popupOffset.y || +popupOffset || 0)
-      if (right > viewRight)
-        leftOffset = right - viewRight + (popupOffset.x || +popupOffset || 0)
+        topOffset = bottom - viewBottom + (popupOffset.y || +popupOffset || 0);
+      if (right > viewRight) leftOffset = right - viewRight + (popupOffset.x || +popupOffset || 0);
 
       this.setState({ topOffset, leftOffset }) //eslint-disable-line
     }
@@ -43,27 +42,21 @@ class Popup extends React.Component {
       slotEnd,
       localizer,
       popperRef,
-    } = this.props
+    } = this.props;
 
     let { width } = this.props.position,
       topOffset = (this.state || {}).topOffset || 0,
-      leftOffset = (this.state || {}).leftOffset || 0
+      leftOffset = (this.state || {}).leftOffset || 0;
 
     let style = {
       top: -topOffset,
       left: -leftOffset,
       minWidth: width + width / 2,
-    }
+    };
 
     return (
-      <div
-        style={{ ...this.props.style, ...style }}
-        className="rbc-overlay"
-        ref={popperRef}
-      >
-        <div className="rbc-overlay-header">
-          {localizer.format(slotStart, 'dayHeaderFormat')}
-        </div>
+      <div style={{ ...this.props.style, ...style }} className="rbc-overlay" ref={popperRef}>
+        <div className="rbc-overlay-header">{localizer.format(slotStart, 'dayHeaderFormat')}</div>
         {events.map((event, idx) => (
           <EventCell
             key={idx}
@@ -85,7 +78,7 @@ class Popup extends React.Component {
           />
         ))}
       </div>
-    )
+    );
   }
 }
 
@@ -111,16 +104,11 @@ Popup.propTypes = {
   show: PropTypes.func,
   slotStart: PropTypes.instanceOf(Date),
   slotEnd: PropTypes.number,
-  popperRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.Element }),
-  ]),
-}
+  popperRef: PropTypes.oneOfType([PropTypes.func, PropTypes.shape({ current: PropTypes.Element })]),
+};
 
 /**
  * The Overlay component, of react-overlays, creates a ref that is passed to the Popup, and
  * requires proper ref forwarding to be used without error
  */
-export default React.forwardRef((props, ref) => (
-  <Popup popperRef={ref} {...props} />
-))
+export default React.forwardRef((props, ref) => <Popup popperRef={ref} {...props} />);

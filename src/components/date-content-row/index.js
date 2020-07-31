@@ -1,1 +1,1 @@
-export { default } from './date-content-row'
+export { default } from './date-content-row';

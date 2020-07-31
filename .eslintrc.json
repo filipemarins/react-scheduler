@@ -19,10 +19,17 @@
       "ecmaVersion": 2020,
       "sourceType": "module"
   },
-  "plugins": ["jest"],
+  "parser": "babel-eslint",
+  "plugins": [
+    "jest",
+    "react-hooks"
+  ],
   "settings": {
     "import/resolver": {
       "babel-module": {}
+    },
+    "react": {
+      "version": "detect"
     }
   },
   "rules": {

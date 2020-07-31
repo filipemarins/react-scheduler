@@ -1,24 +1,23 @@
-import * as dates from 'utils/dates'
-import { DateLocalizer } from 'utils/localizer'
+import * as dates from 'utils/dates';
+import { DateLocalizer } from 'utils/localizer';
 
 let dateRangeFormat = ({ start, end }, culture, local) =>
-  `${local.format(start, 'P', culture)} – ${local.format(end, 'P', culture)}`
+  `${local.format(start, 'P', culture)} – ${local.format(end, 'P', culture)}`;
 
 let timeRangeFormat = ({ start, end }, culture, local) =>
-  `${local.format(start, 'p', culture)} – ${local.format(end, 'p', culture)}`
+  `${local.format(start, 'p', culture)} – ${local.format(end, 'p', culture)}`;
 
 let timeRangeStartFormat = ({ start }, culture, local) =>
-  `${local.format(start, 'h:mma', culture)} – `
+  `${local.format(start, 'h:mma', culture)} – `;
 
-let timeRangeEndFormat = ({ end }, culture, local) =>
-  ` – ${local.format(end, 'h:mma', culture)}`
+let timeRangeEndFormat = ({ end }, culture, local) => ` – ${local.format(end, 'h:mma', culture)}`;
 
 let weekRangeFormat = ({ start, end }, culture, local) =>
   `${local.format(start, 'MMMM dd', culture)} – ${local.format(
     end,
     dates.eq(start, end, 'month') ? 'dd' : 'MMMM dd',
     culture
-  )}`
+  )}`;
 
 export let formats = {
   dateFormat: 'dd',
@@ -40,26 +39,21 @@ export let formats = {
   agendaDateFormat: 'ccc MMM dd',
   agendaTimeFormat: 'p',
   agendaTimeRangeFormat: timeRangeFormat,
-}
+};
 
-const dateFnsLocalizer = function({
-  startOfWeek,
-  getDay,
-  format: _format,
-  locales,
-}) {
+const dateFnsLocalizer = function ({ startOfWeek, getDay, format: _format, locales }) {
   return new DateLocalizer({
     formats,
     firstOfWeek(culture) {
-      return getDay(startOfWeek(new Date(), { locale: locales[culture] }))
+      return getDay(startOfWeek(new Date(), { locale: locales[culture] }));
     },
 
     format(value, formatString, culture) {
       return _format(new Date(value), formatString, {
         locale: locales[culture],
-      })
+      });
     },
-  })
-}
+  });
+};
 
-export default dateFnsLocalizer
+export default dateFnsLocalizer;

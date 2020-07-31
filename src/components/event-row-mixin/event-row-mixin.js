@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import EventCell from 'components/event-cell'
-import { isSelected } from 'utils/selection'
+import EventCell from 'components/event-cell';
+import { isSelected } from 'utils/selection';
 
 /* eslint-disable react/prop-types */
 export default {
@@ -37,10 +37,10 @@ export default {
       localizer,
       slotMetrics,
       components,
-    } = props
+    } = props;
 
-    let continuesPrior = slotMetrics.continuesPrior(event)
-    let continuesAfter = slotMetrics.continuesAfter(event)
+    let continuesPrior = slotMetrics.continuesPrior(event);
+    let continuesAfter = slotMetrics.continuesAfter(event);
 
     return (
       <EventCell
@@ -57,11 +57,11 @@ export default {
         slotEnd={slotMetrics.last}
         selected={isSelected(event, selected)}
       />
-    )
+    );
   },
 
   renderSpan(slots, len, key, content = ' ') {
-    let per = (Math.abs(len) / slots) * 100 + '%'
+    let per = (Math.abs(len) / slots) * 100 + '%';
 
     return (
       <div
@@ -72,6 +72,6 @@ export default {
       >
         {content}
       </div>
-    )
+    );
   },
-}
+};

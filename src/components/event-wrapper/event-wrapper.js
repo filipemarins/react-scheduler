@@ -1,3 +1,3 @@
-import NoopWrapper from 'components/noop-wrapper'
+import NoopWrapper from 'components/noop-wrapper';
 
-export default NoopWrapper
+export default NoopWrapper;

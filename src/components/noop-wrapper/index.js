@@ -1,1 +1,1 @@
-export { default } from './noop-wrapper'
+export { default } from './noop-wrapper';

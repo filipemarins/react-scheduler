@@ -1,1 +1,1 @@
-export { default } from './day-column'
+export { default } from './day-column';

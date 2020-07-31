@@ -1,1 +1,1 @@
-export { default } from './date-header'
+export { default } from './date-header';

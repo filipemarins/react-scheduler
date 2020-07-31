@@ -1,5 +1,5 @@
 function NoopWrapper(props) {
-  return props.children
+  return props.children;
 }
 
-export default NoopWrapper
+export default NoopWrapper;

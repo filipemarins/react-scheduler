@@ -1,42 +1,42 @@
-import clsx from 'clsx'
-import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+import clsx from 'clsx';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
-import * as TimeSlotUtils from 'utils/time-slots'
-import TimeSlotGroup from 'components/time-slot-group'
+import * as TimeSlotUtils from 'utils/time-slots';
+import TimeSlotGroup from 'components/time-slot-group';
 
 export default class TimeGutter extends Component {
   constructor(...args) {
-    super(...args)
+    super(...args);
 
-    const { min, max, timeslots, step } = this.props
+    const { min, max, timeslots, step } = this.props;
     this.slotMetrics = TimeSlotUtils.getSlotMetrics({
       min,
       max,
       timeslots,
       step,
-    })
+    });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { min, max, timeslots, step } = nextProps
-    this.slotMetrics = this.slotMetrics.update({ min, max, timeslots, step })
+    const { min, max, timeslots, step } = nextProps;
+    this.slotMetrics = this.slotMetrics.update({ min, max, timeslots, step });
   }
 
   renderSlot = (value, idx) => {
-    if (idx !== 0) return null
-    const { localizer, getNow } = this.props
+    if (idx !== 0) return null;
+    const { localizer, getNow } = this.props;
 
-    const isNow = this.slotMetrics.dateIsInGroup(getNow(), idx)
+    const isNow = this.slotMetrics.dateIsInGroup(getNow(), idx);
     return (
       <span className={clsx('rbc-label', isNow && 'rbc-now')}>
         {localizer.format(value, 'timeGutterFormat')}
       </span>
-    )
-  }
+    );
+  };
 
   render() {
-    const { resource, components, getters } = this.props
+    const { resource, components, getters } = this.props;
 
     return (
       <div className="rbc-time-gutter rbc-time-column">
@@ -50,10 +50,10 @@ export default class TimeGutter extends Component {
               renderSlot={this.renderSlot}
               getters={getters}
             />
-          )
+          );
         })}
       </div>
-    )
+    );
   }
 }
 
@@ -68,4 +68,4 @@ TimeGutter.propTypes = {
 
   localizer: PropTypes.object.isRequired,
   resource: PropTypes.string,
-}
+};

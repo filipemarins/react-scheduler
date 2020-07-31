@@ -1,1 +1,1 @@
-export { default } from './time-grid'
+export { default } from './time-grid';

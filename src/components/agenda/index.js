@@ -1,1 +1,1 @@
-export { default } from './agenda'
+export { default } from './agenda';

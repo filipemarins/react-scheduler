@@ -1,29 +1,29 @@
-import contains from 'dom-helpers/contains'
-import closest from 'dom-helpers/closest'
-import listen from 'dom-helpers/listen'
+import contains from 'dom-helpers/contains';
+import closest from 'dom-helpers/closest';
+import listen from 'dom-helpers/listen';
 
 function addEventListener(type, handler, target = document) {
-  return listen(target, type, handler, { passive: false })
+  return listen(target, type, handler, { passive: false });
 }
 
 function isOverContainer(container, x, y) {
-  return !container || contains(container, document.elementFromPoint(x, y))
+  return !container || contains(container, document.elementFromPoint(x, y));
 }
 
 export function getEventNodeFromPoint(node, { clientX, clientY }) {
-  let target = document.elementFromPoint(clientX, clientY)
-  return closest(target, '.rbc-event', node)
+  let target = document.elementFromPoint(clientX, clientY);
+  return closest(target, '.rbc-event', node);
 }
 
 export function isEvent(node, bounds) {
-  return !!getEventNodeFromPoint(node, bounds)
+  return !!getEventNodeFromPoint(node, bounds);
 }
 
 function getEventCoordinates(e) {
-  let target = e
+  let target = e;
 
   if (e.touches && e.touches.length) {
-    target = e.touches[0]
+    target = e.touches[0];
   }
 
   return {
@@ -31,219 +31,193 @@ function getEventCoordinates(e) {
     clientY: target.clientY,
     pageX: target.pageX,
     pageY: target.pageY,
-  }
+  };
 }
 
-const clickTolerance = 5
-const clickInterval = 250
+const clickTolerance = 5;
+const clickInterval = 250;
 
 class Selection {
   constructor(node, { global = false, longPressThreshold = 250 } = {}) {
-    this.isDetached = false
-    this.container = node
-    this.globalMouse = !node || global
-    this.longPressThreshold = longPressThreshold
+    this.isDetached = false;
+    this.container = node;
+    this.globalMouse = !node || global;
+    this.longPressThreshold = longPressThreshold;
 
-    this._listeners = Object.create(null)
+    this._listeners = Object.create(null);
 
-    this._handleInitialEvent = this._handleInitialEvent.bind(this)
-    this._handleMoveEvent = this._handleMoveEvent.bind(this)
-    this._handleTerminatingEvent = this._handleTerminatingEvent.bind(this)
-    this._keyListener = this._keyListener.bind(this)
-    this._dropFromOutsideListener = this._dropFromOutsideListener.bind(this)
-    this._dragOverFromOutsideListener = this._dragOverFromOutsideListener.bind(
-      this
-    )
+    this._handleInitialEvent = this._handleInitialEvent.bind(this);
+    this._handleMoveEvent = this._handleMoveEvent.bind(this);
+    this._handleTerminatingEvent = this._handleTerminatingEvent.bind(this);
+    this._keyListener = this._keyListener.bind(this);
+    this._dropFromOutsideListener = this._dropFromOutsideListener.bind(this);
+    this._dragOverFromOutsideListener = this._dragOverFromOutsideListener.bind(this);
 
     // Fixes an iOS 10 bug where scrolling could not be prevented on the window.
     // https://github.com/metafizzy/flickity/issues/457#issuecomment-254501356
-    this._removeTouchMoveWindowListener = addEventListener(
-      'touchmove',
-      () => {},
-      window
-    )
-    this._removeKeyDownListener = addEventListener('keydown', this._keyListener)
-    this._removeKeyUpListener = addEventListener('keyup', this._keyListener)
-    this._removeDropFromOutsideListener = addEventListener(
-      'drop',
-      this._dropFromOutsideListener
-    )
-    this._onDragOverfromOutisde = addEventListener(
-      'dragover',
-      this._dragOverFromOutsideListener
-    )
-    this._addInitialEventListener()
+    this._removeTouchMoveWindowListener = addEventListener('touchmove', () => {}, window);
+    this._removeKeyDownListener = addEventListener('keydown', this._keyListener);
+    this._removeKeyUpListener = addEventListener('keyup', this._keyListener);
+    this._removeDropFromOutsideListener = addEventListener('drop', this._dropFromOutsideListener);
+    this._onDragOverfromOutisde = addEventListener('dragover', this._dragOverFromOutsideListener);
+    this._addInitialEventListener();
   }
 
   on(type, handler) {
-    let handlers = this._listeners[type] || (this._listeners[type] = [])
+    let handlers = this._listeners[type] || (this._listeners[type] = []);
 
-    handlers.push(handler)
+    handlers.push(handler);
 
     return {
       remove() {
-        let idx = handlers.indexOf(handler)
-        if (idx !== -1) handlers.splice(idx, 1)
+        let idx = handlers.indexOf(handler);
+        if (idx !== -1) handlers.splice(idx, 1);
       },
-    }
+    };
   }
 
   emit(type, ...args) {
-    let result
-    let handlers = this._listeners[type] || []
-    handlers.forEach(fn => {
-      if (result === undefined) result = fn(...args)
-    })
-    return result
+    let result;
+    let handlers = this._listeners[type] || [];
+    handlers.forEach((fn) => {
+      if (result === undefined) result = fn(...args);
+    });
+    return result;
   }
 
   teardown() {
-    this.isDetached = true
-    this.listeners = Object.create(null)
-    this._removeTouchMoveWindowListener && this._removeTouchMoveWindowListener()
-    this._removeInitialEventListener && this._removeInitialEventListener()
-    this._removeEndListener && this._removeEndListener()
-    this._onEscListener && this._onEscListener()
-    this._removeMoveListener && this._removeMoveListener()
-    this._removeKeyUpListener && this._removeKeyUpListener()
-    this._removeKeyDownListener && this._removeKeyDownListener()
-    this._removeDropFromOutsideListener && this._removeDropFromOutsideListener()
+    this.isDetached = true;
+    this.listeners = Object.create(null);
+    this._removeTouchMoveWindowListener && this._removeTouchMoveWindowListener();
+    this._removeInitialEventListener && this._removeInitialEventListener();
+    this._removeEndListener && this._removeEndListener();
+    this._onEscListener && this._onEscListener();
+    this._removeMoveListener && this._removeMoveListener();
+    this._removeKeyUpListener && this._removeKeyUpListener();
+    this._removeKeyDownListener && this._removeKeyDownListener();
+    this._removeDropFromOutsideListener && this._removeDropFromOutsideListener();
   }
 
   isSelected(node) {
-    let box = this._selectRect
+    let box = this._selectRect;
 
-    if (!box || !this.selecting) return false
+    if (!box || !this.selecting) return false;
 
-    return objectsCollide(box, getBoundsForNode(node))
+    return objectsCollide(box, getBoundsForNode(node));
   }
 
   filter(items) {
-    let box = this._selectRect
+    let box = this._selectRect;
 
     //not selecting
-    if (!box || !this.selecting) return []
+    if (!box || !this.selecting) return [];
 
-    return items.filter(this.isSelected, this)
+    return items.filter(this.isSelected, this);
   }
 
   // Adds a listener that will call the handler only after the user has pressed on the screen
   // without moving their finger for 250ms.
   _addLongPressListener(handler, initialEvent) {
-    let timer = null
-    let removeTouchMoveListener = null
-    let removeTouchEndListener = null
-    const handleTouchStart = initialEvent => {
+    let timer = null;
+    let removeTouchMoveListener = null;
+    let removeTouchEndListener = null;
+    const handleTouchStart = (initialEvent) => {
       timer = setTimeout(() => {
-        cleanup()
-        handler(initialEvent)
-      }, this.longPressThreshold)
-      removeTouchMoveListener = addEventListener('touchmove', () => cleanup())
-      removeTouchEndListener = addEventListener('touchend', () => cleanup())
-    }
-    const removeTouchStartListener = addEventListener(
-      'touchstart',
-      handleTouchStart
-    )
+        cleanup();
+        handler(initialEvent);
+      }, this.longPressThreshold);
+      removeTouchMoveListener = addEventListener('touchmove', () => cleanup());
+      removeTouchEndListener = addEventListener('touchend', () => cleanup());
+    };
+    const removeTouchStartListener = addEventListener('touchstart', handleTouchStart);
     const cleanup = () => {
       if (timer) {
-        clearTimeout(timer)
+        clearTimeout(timer);
       }
       if (removeTouchMoveListener) {
-        removeTouchMoveListener()
+        removeTouchMoveListener();
       }
       if (removeTouchEndListener) {
-        removeTouchEndListener()
+        removeTouchEndListener();
       }
 
-      timer = null
-      removeTouchMoveListener = null
-      removeTouchEndListener = null
-    }
+      timer = null;
+      removeTouchMoveListener = null;
+      removeTouchEndListener = null;
+    };
 
     if (initialEvent) {
-      handleTouchStart(initialEvent)
+      handleTouchStart(initialEvent);
     }
 
     return () => {
-      cleanup()
-      removeTouchStartListener()
-    }
+      cleanup();
+      removeTouchStartListener();
+    };
   }
 
   // Listen for mousedown and touchstart events. When one is received, disable the other and setup
   // future event handling based on the type of event.
   _addInitialEventListener() {
-    const removeMouseDownListener = addEventListener('mousedown', e => {
-      this._removeInitialEventListener()
-      this._handleInitialEvent(e)
-      this._removeInitialEventListener = addEventListener(
-        'mousedown',
-        this._handleInitialEvent
-      )
-    })
-    const removeTouchStartListener = addEventListener('touchstart', e => {
-      this._removeInitialEventListener()
-      this._removeInitialEventListener = this._addLongPressListener(
-        this._handleInitialEvent,
-        e
-      )
-    })
+    const removeMouseDownListener = addEventListener('mousedown', (e) => {
+      this._removeInitialEventListener();
+      this._handleInitialEvent(e);
+      this._removeInitialEventListener = addEventListener('mousedown', this._handleInitialEvent);
+    });
+    const removeTouchStartListener = addEventListener('touchstart', (e) => {
+      this._removeInitialEventListener();
+      this._removeInitialEventListener = this._addLongPressListener(this._handleInitialEvent, e);
+    });
 
     this._removeInitialEventListener = () => {
-      removeMouseDownListener()
-      removeTouchStartListener()
-    }
+      removeMouseDownListener();
+      removeTouchStartListener();
+    };
   }
 
   _dropFromOutsideListener(e) {
-    const { pageX, pageY, clientX, clientY } = getEventCoordinates(e)
+    const { pageX, pageY, clientX, clientY } = getEventCoordinates(e);
 
     this.emit('dropFromOutside', {
       x: pageX,
       y: pageY,
       clientX: clientX,
       clientY: clientY,
-    })
+    });
 
-    e.preventDefault()
+    e.preventDefault();
   }
 
   _dragOverFromOutsideListener(e) {
-    const { pageX, pageY, clientX, clientY } = getEventCoordinates(e)
+    const { pageX, pageY, clientX, clientY } = getEventCoordinates(e);
 
     this.emit('dragOverFromOutside', {
       x: pageX,
       y: pageY,
       clientX: clientX,
       clientY: clientY,
-    })
+    });
 
-    e.preventDefault()
+    e.preventDefault();
   }
 
   _handleInitialEvent(e) {
     if (this.isDetached) {
-      return
+      return;
     }
 
-    const { clientX, clientY, pageX, pageY } = getEventCoordinates(e)
+    const { clientX, clientY, pageX, pageY } = getEventCoordinates(e);
     let node = this.container(),
       collides,
-      offsetData
+      offsetData;
 
     // Right clicks
-    if (
-      e.which === 3 ||
-      e.button === 2 ||
-      !isOverContainer(node, clientX, clientY)
-    )
-      return
+    if (e.which === 3 || e.button === 2 || !isOverContainer(node, clientX, clientY)) return;
 
     if (!this.globalMouse && node && !contains(node, e.target)) {
-      let { top, left, bottom, right } = normalizeDistance(0)
+      let { top, left, bottom, right } = normalizeDistance(0);
 
-      offsetData = getBoundsForNode(node)
+      offsetData = getBoundsForNode(node);
 
       collides = objectsCollide(
         {
@@ -253,9 +227,9 @@ class Selection {
           right: offsetData.right + right,
         },
         { top: pageY, left: pageX }
-      )
+      );
 
-      if (!collides) return
+      if (!collides) return;
     }
 
     let result = this.emit(
@@ -267,124 +241,106 @@ class Selection {
         clientX,
         clientY,
       })
-    )
+    );
 
-    if (result === false) return
+    if (result === false) return;
 
     switch (e.type) {
       case 'mousedown':
-        this._removeEndListener = addEventListener(
-          'mouseup',
-          this._handleTerminatingEvent
-        )
-        this._onEscListener = addEventListener(
-          'keydown',
-          this._handleTerminatingEvent
-        )
-        this._removeMoveListener = addEventListener(
-          'mousemove',
-          this._handleMoveEvent
-        )
-        break
+        this._removeEndListener = addEventListener('mouseup', this._handleTerminatingEvent);
+        this._onEscListener = addEventListener('keydown', this._handleTerminatingEvent);
+        this._removeMoveListener = addEventListener('mousemove', this._handleMoveEvent);
+        break;
       case 'touchstart':
-        this._handleMoveEvent(e)
-        this._removeEndListener = addEventListener(
-          'touchend',
-          this._handleTerminatingEvent
-        )
-        this._removeMoveListener = addEventListener(
-          'touchmove',
-          this._handleMoveEvent
-        )
-        break
+        this._handleMoveEvent(e);
+        this._removeEndListener = addEventListener('touchend', this._handleTerminatingEvent);
+        this._removeMoveListener = addEventListener('touchmove', this._handleMoveEvent);
+        break;
       default:
-        break
+        break;
     }
   }
 
   _handleTerminatingEvent(e) {
-    const { pageX, pageY } = getEventCoordinates(e)
+    const { pageX, pageY } = getEventCoordinates(e);
 
-    this.selecting = false
+    this.selecting = false;
 
-    this._removeEndListener && this._removeEndListener()
-    this._removeMoveListener && this._removeMoveListener()
+    this._removeEndListener && this._removeEndListener();
+    this._removeMoveListener && this._removeMoveListener();
 
-    if (!this._initialEventData) return
+    if (!this._initialEventData) return;
 
-    let inRoot = !this.container || contains(this.container(), e.target)
-    let bounds = this._selectRect
-    let click = this.isClick(pageX, pageY)
+    let inRoot = !this.container || contains(this.container(), e.target);
+    let bounds = this._selectRect;
+    let click = this.isClick(pageX, pageY);
 
-    this._initialEventData = null
+    this._initialEventData = null;
 
     if (e.key === 'Escape') {
-      return this.emit('reset')
+      return this.emit('reset');
     }
 
     if (!inRoot) {
-      return this.emit('reset')
+      return this.emit('reset');
     }
 
     if (click && inRoot) {
-      return this._handleClickEvent(e)
+      return this._handleClickEvent(e);
     }
 
     // User drag-clicked in the Selectable area
-    if (!click) return this.emit('select', bounds)
+    if (!click) return this.emit('select', bounds);
   }
 
   _handleClickEvent(e) {
-    const { pageX, pageY, clientX, clientY } = getEventCoordinates(e)
-    const now = new Date().getTime()
+    const { pageX, pageY, clientX, clientY } = getEventCoordinates(e);
+    const now = new Date().getTime();
 
-    if (
-      this._lastClickData &&
-      now - this._lastClickData.timestamp < clickInterval
-    ) {
+    if (this._lastClickData && now - this._lastClickData.timestamp < clickInterval) {
       // Double click event
-      this._lastClickData = null
+      this._lastClickData = null;
       return this.emit('doubleClick', {
         x: pageX,
         y: pageY,
         clientX: clientX,
         clientY: clientY,
-      })
+      });
     }
 
     // Click event
     this._lastClickData = {
       timestamp: now,
-    }
+    };
     return this.emit('click', {
       x: pageX,
       y: pageY,
       clientX: clientX,
       clientY: clientY,
-    })
+    });
   }
 
   _handleMoveEvent(e) {
     if (this._initialEventData === null || this.isDetached) {
-      return
+      return;
     }
 
-    let { x, y } = this._initialEventData
-    const { pageX, pageY } = getEventCoordinates(e)
-    let w = Math.abs(x - pageX)
-    let h = Math.abs(y - pageY)
+    let { x, y } = this._initialEventData;
+    const { pageX, pageY } = getEventCoordinates(e);
+    let w = Math.abs(x - pageX);
+    let h = Math.abs(y - pageY);
 
     let left = Math.min(pageX, x),
       top = Math.min(pageY, y),
-      old = this.selecting
+      old = this.selecting;
 
     // Prevent emitting selectStart event until mouse is moved.
     // in Chrome on Windows, mouseMove event may be fired just after mouseDown event.
     if (this.isClick(pageX, pageY) && !old && !(w || h)) {
-      return
+      return;
     }
 
-    this.selecting = true
+    this.selecting = true;
     this._selectRect = {
       top,
       left,
@@ -392,28 +348,26 @@ class Selection {
       y: pageY,
       right: left + w,
       bottom: top + h,
-    }
+    };
 
     if (!old) {
-      this.emit('selectStart', this._initialEventData)
+      this.emit('selectStart', this._initialEventData);
     }
 
-    if (!this.isClick(pageX, pageY)) this.emit('selecting', this._selectRect)
+    if (!this.isClick(pageX, pageY)) this.emit('selecting', this._selectRect);
 
-    e.preventDefault()
+    e.preventDefault();
   }
 
   _keyListener(e) {
-    this.ctrl = e.metaKey || e.ctrlKey
+    this.ctrl = e.metaKey || e.ctrlKey;
   }
 
   isClick(pageX, pageY) {
-    let { x, y, isTouch } = this._initialEventData
+    let { x, y, isTouch } = this._initialEventData;
     return (
-      !isTouch &&
-      (Math.abs(pageX - x) <= clickTolerance &&
-        Math.abs(pageY - y) <= clickTolerance)
-    )
+      !isTouch && Math.abs(pageX - x) <= clickTolerance && Math.abs(pageY - y) <= clickTolerance
+    );
   }
 }
 
@@ -428,9 +382,9 @@ function normalizeDistance(distance = 0) {
       left: distance,
       right: distance,
       bottom: distance,
-    }
+    };
 
-  return distance
+  return distance;
 }
 
 /**
@@ -441,29 +395,25 @@ function normalizeDistance(distance = 0) {
  * @return {bool}
  */
 export function objectsCollide(nodeA, nodeB, tolerance = 0) {
-  let {
-    top: aTop,
-    left: aLeft,
-    right: aRight = aLeft,
-    bottom: aBottom = aTop,
-  } = getBoundsForNode(nodeA)
-  let {
-    top: bTop,
-    left: bLeft,
-    right: bRight = bLeft,
-    bottom: bBottom = bTop,
-  } = getBoundsForNode(nodeB)
+  let { top: aTop, left: aLeft, right: aRight = aLeft, bottom: aBottom = aTop } = getBoundsForNode(
+    nodeA
+  );
+  let { top: bTop, left: bLeft, right: bRight = bLeft, bottom: bBottom = bTop } = getBoundsForNode(
+    nodeB
+  );
 
-  return !// 'a' bottom doesn't touch 'b' top
-  (
-    aBottom - tolerance < bTop ||
-    // 'a' top doesn't touch 'b' bottom
-    aTop + tolerance > bBottom ||
-    // 'a' right doesn't touch 'b' left
-    aRight - tolerance < bLeft ||
-    // 'a' left doesn't touch 'b' right
-    aLeft + tolerance > bRight
-  )
+  return !(
+    // 'a' bottom doesn't touch 'b' top
+    (
+      aBottom - tolerance < bTop ||
+      // 'a' top doesn't touch 'b' bottom
+      aTop + tolerance > bBottom ||
+      // 'a' right doesn't touch 'b' left
+      aRight - tolerance < bLeft ||
+      // 'a' left doesn't touch 'b' right
+      aLeft + tolerance > bRight
+    )
+  );
 }
 
 /**
@@ -472,22 +422,22 @@ export function objectsCollide(nodeA, nodeB, tolerance = 0) {
  * @return {Object}
  */
 export function getBoundsForNode(node) {
-  if (!node.getBoundingClientRect) return node
+  if (!node.getBoundingClientRect) return node;
 
   let rect = node.getBoundingClientRect(),
     left = rect.left + pageOffset('left'),
-    top = rect.top + pageOffset('top')
+    top = rect.top + pageOffset('top');
 
   return {
     top,
     left,
     right: (node.offsetWidth || 0) + left,
     bottom: (node.offsetHeight || 0) + top,
-  }
+  };
 }
 
 function pageOffset(dir) {
-  if (dir === 'left') return window.pageXOffset || document.body.scrollLeft || 0
-  if (dir === 'top') return window.pageYOffset || document.body.scrollTop || 0
+  if (dir === 'left') return window.pageXOffset || document.body.scrollLeft || 0;
+  if (dir === 'top') return window.pageYOffset || document.body.scrollTop || 0;
 }
-export default Selection
+export default Selection;

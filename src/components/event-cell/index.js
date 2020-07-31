@@ -1,1 +1,1 @@
-export { default } from './event-cell'
+export { default } from './event-cell';

@@ -1,1 +1,1 @@
-export { default } from './event-ending-row'
+export { default } from './event-ending-row';

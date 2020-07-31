@@ -1,1 +1,1 @@
-export { default } from './resource-header'
+export { default } from './resource-header';

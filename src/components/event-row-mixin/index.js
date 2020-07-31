@@ -1,1 +1,1 @@
-export { default } from './event-row-mixin'
+export { default } from './event-row-mixin';

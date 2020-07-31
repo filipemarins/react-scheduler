@@ -1,1 +1,1 @@
-export { default } from './week'
+export { default } from './week';
