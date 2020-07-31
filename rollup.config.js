@@ -27,7 +27,7 @@ export default [
   {
     input: './src/index.js',
     output: {
-      file: './dist/react-scheduler-material-ui.js',
+      file: './dist/react-scheduler.js',
       format: 'umd',
       name,
       globals,
@@ -46,7 +46,7 @@ export default [
   {
     input: './src/index.js',
     output: {
-      file: './dist/react-scheduler-material-ui.min.js',
+      file: './dist/react-scheduler.min.js',
       format: 'umd',
       name,
       globals,

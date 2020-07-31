@@ -1,19 +1,19 @@
 {
-  "name": "react-big-calendar",
-  "version": "0.23.0",
-  "description": "Calendar! with events",
+  "name": "react-scheduler",
+  "version": "0.0.1",
+  "description": "Scheduler | Calendar",
   "author": {
-    "name": "Jason Quense",
+    "name": "Filipe Marins",
     "email": "monastic.panic@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jquense/react-big-calendar.git"
+    "url": "git+https://github.com/filipemarins/react-scheduler.git"
   },
   "license": "MIT",
-  "main": "dist/react-big-calendar.cjs.js",
-  "module": "dist/react-big-calendar.es.js",
-  "style": "lib/css/react-big-calendar.css",
+  "main": "dist/react-scheduler.cjs.js",
+  "module": "dist/react-scheduler.es.js",
+  "style": "lib/css/react-scheduler.css",
   "files": [
     "lib/",
     "dist/",
@@ -27,11 +27,12 @@
     "react",
     "calendar",
     "events",
-    "full calendar"
+    "calendar",
+    "react big calendar"
   ],
   "scripts": {
     "clean:examples": "rimraf examples/static",
-    "s": "node-sass src/sass/styles.scss ./dist/css/react-big-calendar.css",
+    "s": "node-sass src/sass/styles.scss ./dist/css/react-scheduler.css",
     "sass": "npm run s  && npm run sass-dnd",
     "sass-dnd": "node-sass src/addons/dragAndDrop/styles.scss ./dist/addons/dragAndDrop/styles.css",
     "autoprefixer": "postcss --use autoprefixer -b 'ie >= 10, safari >= 8, last 2 versions' < ./dist/css/react-big/calendar.css | postcss --use autoprefixer -b 'ie >= 10, safari >= 8, last 2 versions' < ./dist/addons/dragAndDrop/styles.css",
@@ -139,8 +140,7 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/jquense/react-big-calendar/issues"
+    "url": "https://github.com/filipemarins/react-scheduler/issues"
   },
-  "homepage": "https://github.com/jquense/react-big-calendar#readme",
-  "_id": "react-big-calendar@0.22.1"
+  "homepage": "https://github.com/filipemarins/react-scheduler#readme"
 }
