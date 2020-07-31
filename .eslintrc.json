@@ -1,0 +1,42 @@
+{
+  "env": {
+      "node": true,
+      "browser": true,
+      "es6": true,
+      "jest/globals": true
+  },
+  "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:prettier/recommended",
+      "prettier/react"
+  ],
+  "globals": {
+      "Atomics": "readonly",
+      "SharedArrayBuffer": "readonly"
+  },
+  "parserOptions": {
+      "ecmaVersion": 2020,
+      "sourceType": "module"
+  },
+  "plugins": ["jest"],
+  "settings": {
+    "import/resolver": {
+      "babel-module": {}
+    }
+  },
+  "rules": {
+    "no-console": [
+      2,
+      {
+        "allow": ["warn", "error"]
+      }
+    ],
+    "max-len": ["error", {
+      "code": 100,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true
+    }],
+    "react-hooks/rules-of-hooks": "error"
+  }
+}

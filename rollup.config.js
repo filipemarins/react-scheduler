@@ -1,12 +1,13 @@
-import nodeResolve from 'rollup-plugin-node-resolve'
-import babel from 'rollup-plugin-babel'
-import commonjs from 'rollup-plugin-commonjs'
-import replace from 'rollup-plugin-replace'
+import resolve from '@rollup/plugin-node-resolve';
+import babel from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import replace from '@rollup/plugin-replace';
+import autoExternal from 'rollup-plugin-auto-external';
 import { sizeSnapshot } from 'rollup-plugin-size-snapshot'
 import { terser } from 'rollup-plugin-terser'
-import pkg from './package.json'
 
-const input = './src/index.js'
+import project from './package.json'
+
 const name = 'ReactBigCalendar'
 const globals = {
   react: 'React',
@@ -15,7 +16,7 @@ const globals = {
 
 const babelOptions = {
   exclude: /node_modules/,
-  runtimeHelpers: true,
+  babelHelpers: 'runtime',
 }
 
 const commonjsOptions = {
@@ -24,47 +25,63 @@ const commonjsOptions = {
 
 export default [
   {
-    input,
+    input: './src/index.js',
     output: {
-      file: './dist/react-big-calendar.js',
+      file: './dist/react-scheduler-material-ui.js',
       format: 'umd',
       name,
       globals,
     },
     external: Object.keys(globals),
     plugins: [
-      nodeResolve(),
-      babel(babelOptions),
+      autoExternal(),
+      resolve(),
+      babel({ ...babelOptions, plugins: ['@babel/plugin-transform-runtime'] }),
       commonjs(commonjsOptions),
-      replace({ 'process.env.NODE_ENV': JSON.stringify('development') }),
+      replace({ __buildEnv__: 'development' }),
       sizeSnapshot(),
     ],
   },
 
   {
-    input,
+    input: './src/index.js',
     output: {
-      file: './dist/react-big-calendar.min.js',
+      file: './dist/react-scheduler-material-ui.min.js',
       format: 'umd',
       name,
       globals,
     },
     external: Object.keys(globals),
     plugins: [
-      nodeResolve(),
-      babel(babelOptions),
+      autoExternal(),
+      resolve(),
+      babel({ ...babelOptions, plugins: ['@babel/plugin-transform-runtime'] }),
       commonjs(commonjsOptions),
-      replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
+      replace({ __buildEnv__: 'production' }),
       sizeSnapshot(),
       terser(),
     ],
   },
-
   {
-    input,
-    output: { file: pkg.module, format: 'esm' },
-    // prevent bundling all dependencies
-    external: id => !id.startsWith('.') && !id.startsWith('/'),
-    plugins: [babel(babelOptions), sizeSnapshot()],
+    input: './src/index.js',
+    output: { file: project.main, format: 'cjs' },
+    plugins: [
+      autoExternal(),
+      babel({ ...babelOptions, babelHelpers: 'bundled' }),
+      resolve(),
+      commonjs(commonjsOptions),
+      sizeSnapshot()
+    ],
+  },
+  {
+    input: './src/index.js',
+    output: { file: project.module, format: 'es' },
+    plugins: [
+      autoExternal(),
+      babel({ ...babelOptions, babelHelpers: 'bundled' }),
+      resolve(),
+      commonjs(commonjsOptions),
+      sizeSnapshot()
+    ],
   },
 ]

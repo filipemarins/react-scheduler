@@ -22,5 +22,34 @@
         "code": 64923
       }
     }
+  },
+  "./dist/react-scheduler-material-ui.js": {
+    "bundled": 498777,
+    "minified": 151191,
+    "gzipped": 42592
+  },
+  "./dist/react-scheduler-material-ui.min.js": {
+    "bundled": 498777,
+    "minified": 151191,
+    "gzipped": 42592
+  },
+  "dist/react-big-calendar.cjs.js": {
+    "bundled": 450153,
+    "minified": 173504,
+    "gzipped": 46684
+  },
+  "dist/react-big-calendar.es.js": {
+    "bundled": 447716,
+    "minified": 171139,
+    "gzipped": 46546,
+    "treeshaked": {
+      "rollup": {
+        "code": 122451,
+        "import_statements": 498
+      },
+      "webpack": {
+        "code": 127346
+      }
+    }
   }
 }
