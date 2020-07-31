@@ -3,25 +3,25 @@ import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import autoExternal from 'rollup-plugin-auto-external';
-import { sizeSnapshot } from 'rollup-plugin-size-snapshot'
-import { terser } from 'rollup-plugin-terser'
+import { sizeSnapshot } from 'rollup-plugin-size-snapshot';
+import { terser } from 'rollup-plugin-terser';
 
-import project from './package.json'
+import project from './package.json';
 
-const name = 'ReactBigCalendar'
+const name = 'ReactBigCalendar';
 const globals = {
   react: 'React',
   'react-dom': 'ReactDOM',
-}
+};
 
 const babelOptions = {
   exclude: /node_modules/,
   babelHelpers: 'runtime',
-}
+};
 
 const commonjsOptions = {
   include: /node_modules/,
-}
+};
 
 export default [
   {
@@ -70,7 +70,7 @@ export default [
       babel({ ...babelOptions, babelHelpers: 'bundled' }),
       resolve(),
       commonjs(commonjsOptions),
-      sizeSnapshot()
+      sizeSnapshot(),
     ],
   },
   {
@@ -81,7 +81,7 @@ export default [
       babel({ ...babelOptions, babelHelpers: 'bundled' }),
       resolve(),
       commonjs(commonjsOptions),
-      sizeSnapshot()
+      sizeSnapshot(),
     ],
   },
-]
+];
