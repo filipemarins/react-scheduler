@@ -32,5 +32,8 @@ node_modules
 # Webstorm ide files
 .idea
 
+# Vscode ide files
+.vscode
+
 # Mac OS X
 .DS_Store
