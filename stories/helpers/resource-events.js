@@ -1,7 +1,7 @@
 export default {
   events: [
     {
-      title: 'Rencontre',
+      title: 'Meeting',
       resourceId: 'a',
       start: new Date(2015, 3, 2, 5, 30, 0, 0),
       end: new Date(2015, 3, 2, 10, 30, 0, 0),

@@ -3,7 +3,7 @@ import { storiesOf } from '@storybook/react';
 import moment from 'moment';
 
 import { events, Calendar, Views, DragAndDropCalendar } from './helpers';
-import createEvents from './helpers/createEvents';
+import createEvents from './helpers/create-events';
 
 storiesOf('Layout Issues', module)
   .add('event layout', () => {

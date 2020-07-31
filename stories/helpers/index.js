@@ -20,7 +20,7 @@ addDecorator(function WithHeight(fn) {
 
 const localizer = momentLocalizer(moment);
 
-export { default } from './resourceEvents';
+export { default } from './resource-events';
 
 export const date = (...args) => moment(...args).toDate();
 

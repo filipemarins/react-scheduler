@@ -7,12 +7,12 @@ import React from 'react';
 import '../src/sass/styles.scss';
 import '../src/addons/dragAndDrop/styles.scss';
 import demoEvents from '../examples/events';
-import createEvents from './helpers/createEvents';
-import customComponents from './helpers/customComponents';
+import createEvents from './helpers/create-events';
+import customComponents from './helpers/custom-components';
 
 import { events, Views, Calendar } from './helpers';
 
-storiesOf('Big Calendar', module)
+storiesOf('React Scheduler', module)
   .add('demo', () => (
     <Calendar
       popup
@@ -56,6 +56,7 @@ storiesOf('Big Calendar', module)
         events={events}
         components={{
           month: {
+            // eslint-disable-next-line react/prop-types
             dateHeader: ({ label }) => <span>{label} - Custom date header</span>,
           },
         }}

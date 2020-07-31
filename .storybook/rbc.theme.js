@@ -23,6 +23,6 @@ export default create({
   inputTextColor: 'black',
   inputBorderRadius: 4,
 
-  brandTitle: 'Big Calendar',
-  brandUrl: 'http://intljusticemission.github.io/react-big-calendar/examples',
+  brandTitle: 'React Scheduler',
+  brandUrl: 'https://github.com/filipemarins/react-scheduler',
 })

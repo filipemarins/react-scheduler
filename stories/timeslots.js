@@ -3,8 +3,7 @@ import { action } from '@storybook/addon-actions';
 import moment from 'moment';
 import React from 'react';
 
-import { events, Calendar } from './helpers';
-/* eslint-disable react/prop-types */
+import { events, Calendar, Views } from './helpers';
 
 storiesOf('Timeslots', module)
   .add('selectable, step 15, 4 timeslots', () => {

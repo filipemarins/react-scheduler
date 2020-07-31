@@ -18,25 +18,12 @@ const customComponents = {
     };
     return (
       <div style={style}>
-        {hasAlert && <a onClick={action('custom dateCellWrapper component clicked')}>Click me</a>}
+        {hasAlert && (
+          <button type="button" onClick={action('custom dateCellWrapper component clicked')}>
+            Click me
+          </button>
+        )}
         {dateCellWrapperProps.children}
-      </div>
-    );
-  },
-  timeSlotWrapper: (timeSlotWrapperProps) => {
-    // Show different styles at arbitrary time
-    const hasCustomInfo = timeSlotWrapperProps.value
-      ? timeSlotWrapperProps.value.getHours() === 4
-      : false;
-    const style = {
-      display: 'flex',
-      flex: 1,
-      backgroundColor: hasCustomInfo ? '#f5f5dc' : '#fff',
-    };
-    return (
-      <div style={style}>
-        {hasCustomInfo && 'Custom Day Wrapper'}
-        {timeSlotWrapperProps.children}
       </div>
     );
   },

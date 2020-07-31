@@ -2,8 +2,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { events, Calendar, Views, DragAndDropCalendar } from './helpers';
-import customComponents from './helpers/customComponents';
+import { events, Views, DragAndDropCalendar } from './helpers';
+import customComponents from './helpers/custom-components';
 
 storiesOf('Drag and Drop', module)
   .add('draggable and resizable', () => {
