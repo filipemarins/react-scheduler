@@ -12,8 +12,8 @@
   },
   "license": "MIT",
   "main": "dist/react-scheduler.cjs.js",
-  "module": "dist/react-scheduler.es.js",
-  "style": "lib/css/react-scheduler.css",
+  "module": "dist/react-scheduler.esm.js",
+  "style": "dist/css/react-scheduler.css",
   "files": [
     "lib/",
     "dist/",

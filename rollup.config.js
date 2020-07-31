@@ -75,7 +75,7 @@ export default [
   },
   {
     input: './src/index.js',
-    output: { file: project.module, format: 'es' },
+    output: { file: project.module, format: 'esm' },
     plugins: [
       autoExternal(),
       babel({ ...babelOptions, babelHelpers: 'bundled' }),
