@@ -42,16 +42,13 @@
     "build:examples": "npm run clean:examples && webpack --config examples/webpack.config.js",
     "examples": "npm run clean:examples && webpack-dev-server --config examples/webpack.config.js --mode development",
     "lint": "eslint src test",
+    "lint-staged": "npx lint-staged",
     "storybook": "start-storybook -p 9002",
     "test": "jest",
     "tdd": "jest --watch",
     "release": "rollout",
     "prepublishOnly": "npm run build",
-    "prebuild": "rimraf dist",
-    "precommit": "lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,json,css,md}": "npx eslint --fix"
+    "prebuild": "rimraf dist"
   },
   "peerDependencies": {
     "react": "^16.6.1",
@@ -131,6 +128,15 @@
     "prop-types": "^15.7.2",
     "react-overlays": "^2.0.0-0",
     "uncontrollable": "^7.0.0"
+  },
+  "lint-staged": {
+    "*.js": "npx eslint --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint-staged",
+      "pre-push": "npm test"
+    }
   },
   "bugs": {
     "url": "https://github.com/jquense/react-big-calendar/issues"
