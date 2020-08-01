@@ -5,7 +5,7 @@ import {
   inRange,
   segsOverlap,
   sortEvents,
-} from '../../src/utils/eventLevels';
+} from 'utils/event-levels';
 
 describe('endOfRange', () => {
   test('it adds one day by default', () => {
