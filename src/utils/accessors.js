@@ -16,3 +16,8 @@ export const accessor = (data, field) => {
 };
 
 export const wrapAccessor = (acc) => (data) => accessor(data, acc);
+
+export const dragAccessors = {
+  start: wrapAccessor((e) => e.start),
+  end: wrapAccessor((e) => e.end),
+};

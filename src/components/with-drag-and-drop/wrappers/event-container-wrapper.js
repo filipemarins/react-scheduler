@@ -2,39 +2,17 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 
+import { dragAccessors } from 'utils/accessors';
+import * as dates from 'utils/dates';
 import Selection, { getBoundsForNode, getEventNodeFromPoint } from 'components/selection';
 import TimeGridEvent from 'components/time-grid-event';
 import NoopWrapper from 'components/noop-wrapper';
-import { dragAccessors } from './common';
-import * as dates from '../../utils/dates';
 
 const pointInColumn = (bounds, { x, y }) => {
   const { left, right, top } = bounds;
   return x < right + 10 && x > left && y > top;
 };
-const propTypes = {};
-
 class EventContainerWrapper extends React.Component {
-  static propTypes = {
-    accessors: PropTypes.object.isRequired,
-    components: PropTypes.object.isRequired,
-    getters: PropTypes.object.isRequired,
-    localizer: PropTypes.object.isRequired,
-    slotMetrics: PropTypes.object.isRequired,
-    resource: PropTypes.any,
-  };
-
-  static contextTypes = {
-    draggable: PropTypes.shape({
-      onStart: PropTypes.func,
-      onEnd: PropTypes.func,
-      onDropFromOutside: PropTypes.func,
-      onBeginAction: PropTypes.func,
-      dragAndDropAction: PropTypes.object,
-      dragFromOutsideItem: PropTypes.func,
-    }),
-  };
-
   constructor(...args) {
     super(...args);
     this.state = {};
@@ -134,6 +112,7 @@ class EventContainerWrapper extends React.Component {
       if (!eventNode) return false;
 
       this.eventOffsetTop = point.y - getBoundsForNode(eventNode).top;
+      return false;
     });
 
     selector.on('selecting', (box) => {
@@ -250,6 +229,25 @@ class EventContainerWrapper extends React.Component {
   }
 }
 
-EventContainerWrapper.propTypes = propTypes;
+EventContainerWrapper.propTypes = {
+  accessors: PropTypes.shape({}).isRequired,
+  children: PropTypes.node.isRequired,
+  components: PropTypes.shape({}).isRequired,
+  getters: PropTypes.shape({}).isRequired,
+  localizer: PropTypes.shape({}).isRequired,
+  resource: PropTypes.any,
+  slotMetrics: PropTypes.shape({}).isRequired,
+};
+
+EventContainerWrapper.contextTypes = {
+  draggable: PropTypes.shape({
+    dragAndDropAction: PropTypes.shape({}),
+    dragFromOutsideItem: PropTypes.func,
+    onBeginAction: PropTypes.func,
+    onDropFromOutside: PropTypes.func,
+    onEnd: PropTypes.func,
+    onStart: PropTypes.func,
+  }),
+};
 
 export default EventContainerWrapper;

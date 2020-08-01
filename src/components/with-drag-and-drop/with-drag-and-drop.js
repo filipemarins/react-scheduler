@@ -3,10 +3,10 @@ import React from 'react';
 import clsx from 'clsx';
 
 import { accessor } from 'utils/prop-types';
-import EventWrapper from './EventWrapper';
-import EventContainerWrapper from './EventContainerWrapper';
-import WeekWrapper from './WeekWrapper';
-import { mergeComponents } from './common';
+import mergeComponents from 'utils/merge-components';
+import EventWrapper from './wrappers/event-wrapper';
+import EventContainerWrapper from './wrappers/event-container-wrapper';
+import WeekWrapper from './wrappers/week-wrapper';
 
 /**
  * Creates a higher-order component (HOC) supporting drag & drop and optionally resizing

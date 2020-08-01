@@ -4,10 +4,10 @@ import * as dates from 'utils/dates';
 import { getSlotAtX, pointInBox } from 'utils/selection';
 import { findDOMNode } from 'react-dom';
 
-import { eventSegments } from 'utils/eventLevels';
+import { eventSegments } from 'utils/event-levels';
+import { dragAccessors } from 'utils/accessors';
 import Selection, { getBoundsForNode } from 'components/selection';
 import EventRow from 'components/event-row';
-import { dragAccessors } from './common';
 
 const propTypes = {};
 

@@ -1,12 +1,6 @@
 import { createFactory } from 'react';
-import { wrapAccessor } from 'utils/accessors';
 
-export const dragAccessors = {
-  start: wrapAccessor((e) => e.start),
-  end: wrapAccessor((e) => e.end),
-};
-
-export const nest = (...Components) => {
+const nest = (...Components) => {
   const factories = Components.filter(Boolean).map(createFactory);
   const Nest = ({ children, ...props }) =>
     factories.reduceRight((child, factory) => factory(props, child), children);
@@ -14,7 +8,7 @@ export const nest = (...Components) => {
   return Nest;
 };
 
-export const mergeComponents = (components = {}, addons) => {
+const mergeComponents = (components = {}, addons) => {
   const keys = Object.keys(addons);
   const result = { ...components };
 
@@ -23,3 +17,5 @@ export const mergeComponents = (components = {}, addons) => {
   });
   return result;
 };
+
+export default mergeComponents;

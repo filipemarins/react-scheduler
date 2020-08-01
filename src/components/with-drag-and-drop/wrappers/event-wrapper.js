@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import clsx from 'clsx';
-import { accessor } from '../../utils/propTypes';
-import { accessor as get } from '../../utils/accessors';
+
+import { accessor } from 'utils/prop-types';
+import { accessor as get } from 'utils/accessors';
 
 class EventWrapper extends React.Component {
   static contextTypes = {
