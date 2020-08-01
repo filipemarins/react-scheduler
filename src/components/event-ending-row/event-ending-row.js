@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import EventRowMixin from 'components/event-row-mixin';
-import { eventLevels } from 'utils/eventLevels';
+import { eventLevels } from 'utils/event-levels';
 import range from 'lodash/range';
 
 const isSegmentInSlot = (seg, slot) => seg.left <= slot && seg.right >= slot;

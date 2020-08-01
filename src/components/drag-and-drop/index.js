@@ -1,3 +1,1 @@
-import withDragAndDrop from './withDragAndDrop';
-
-export default withDragAndDrop;
+export { default } from './withDragAndDrop';

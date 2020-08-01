@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import * as TimeSlotUtils from 'utils/time-slots';
+import * as TimeSlotUtils from 'utils/timeslots';
 import TimeSlotGroup from 'components/time-slot-group';
 
 export default class TimeGutter extends Component {

@@ -5,7 +5,7 @@
  *    accessor(data, func)    // => retrieves func(data)
  *    ... otherwise null
  */
-export function accessor(data, field) {
+export const accessor = (data, field) => {
   let value = null;
 
   if (typeof field === 'function') value = field(data);
@@ -13,6 +13,6 @@ export function accessor(data, field) {
     value = data[field];
 
   return value;
-}
+};
 
 export const wrapAccessor = (acc) => (data) => accessor(data, acc);

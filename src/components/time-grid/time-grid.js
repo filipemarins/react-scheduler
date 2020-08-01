@@ -1,20 +1,19 @@
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import * as animationFrame from 'dom-helpers/animationFrame';
-import React, { Component } from 'react';
+import getWidth from 'dom-helpers/width';
 import { findDOMNode } from 'react-dom';
 import memoize from 'memoize-one';
 
+import { DayLayoutAlgorithmPropType } from 'utils/prop-types';
 import * as dates from 'utils/dates';
+import { notify } from 'utils/helpers';
+import { inRange, sortEvents } from 'utils/event-levels';
+import Resources from 'utils/resources';
 import DayColumn from 'components/day-column';
 import TimeGutter from 'components/time-gutter';
-
-import getWidth from 'dom-helpers/width';
 import TimeGridHeader from 'components/time-grid-header';
-import { notify } from 'utils/helpers';
-import { inRange, sortEvents } from 'utils/eventLevels';
-import Resources from 'utils/resources';
-import { DayLayoutAlgorithmPropType } from 'utils/propTypes';
 
 export default class TimeGrid extends Component {
   constructor(props) {

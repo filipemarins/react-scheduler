@@ -1,6 +1,6 @@
 import memoize from 'memoize-one';
 import * as dates from './dates';
-import { eventSegments, endOfRange, eventLevels } from './eventLevels';
+import { eventSegments, endOfRange, eventLevels } from './event-levels';
 
 const isSegmentInSlot = (seg, slot) => seg.left <= slot && seg.right >= slot;
 

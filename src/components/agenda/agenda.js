@@ -7,7 +7,7 @@ import scrollbarSize from 'dom-helpers/scrollbarSize';
 
 import * as dates from 'utils/dates';
 import { navigate } from 'utils/constants';
-import { inRange } from 'utils/eventLevels';
+import { inRange } from 'utils/event-levels';
 import { isSelected } from 'utils/selection';
 
 function Agenda({ selected, getters, accessors, localizer, components, length, date, events }) {

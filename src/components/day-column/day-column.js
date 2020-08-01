@@ -5,14 +5,14 @@ import clsx from 'clsx';
 
 import Selection, { getBoundsForNode, isEvent } from 'components/selection';
 import * as dates from 'utils/dates';
-import * as TimeSlotUtils from 'utils/time-slots';
+import * as TimeSlotUtils from 'utils/timeslots';
 import { isSelected } from 'utils/selection';
 
 import { notify } from 'utils/helpers';
 import * as DayEventLayout from 'utils/day-event-layout';
 import TimeSlotGroup from 'components/time-slot-group';
 import TimeGridEvent from 'components/time-grid-event';
-import { DayLayoutAlgorithmPropType } from 'utils/propTypes';
+import { DayLayoutAlgorithmPropType } from 'utils/prop-types';
 
 class DayColumn extends React.Component {
   state = { selecting: false, timeIndicatorPosition: null };
