@@ -91,7 +91,7 @@
     "font-awesome": "^4.7.0",
     "globalize": "^0.1.1",
     "husky": "^4.2.5",
-    "jest": "^23.6.0",
+    "jest": "^26.2.2",
     "lint-staged": "^10.2.11",
     "markdown-jsx-loader": "^3.0.2",
     "moment": "^2.22.2",
