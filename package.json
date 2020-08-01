@@ -32,10 +32,8 @@
   ],
   "scripts": {
     "clean:examples": "rimraf examples/static",
-    "s": "node-sass src/sass/styles.scss ./dist/css/react-scheduler.css",
-    "sass": "npm run s  && npm run sass-dnd",
-    "sass-dnd": "node-sass src/addons/dragAndDrop/styles.scss ./dist/addons/dragAndDrop/styles.css",
-    "autoprefixer": "postcss --use autoprefixer -b 'ie >= 10, safari >= 8, last 2 versions' < ./dist/css/react-big/calendar.css | postcss --use autoprefixer -b 'ie >= 10, safari >= 8, last 2 versions' < ./dist/addons/dragAndDrop/styles.css",
+    "sass": "node-sass src/sass/styles.scss ./dist/css/react-scheduler.css",
+    "autoprefixer": "postcss --use autoprefixer -b 'ie >= 10, safari >= 8, last 2 versions' < ./dist/css/react-big/calendar.css",
     "build:css": "npm run sass && npm run autoprefixer",
     "assets": "cpy src/sass/* dist/sass && npm run assets-addons",
     "assets-addons": "cpy addons/**/*.scss ../dist/ --cwd=src --parents",
@@ -128,7 +126,7 @@
     "memoize-one": "^5.1.1",
     "prop-types": "^15.7.2",
     "react-overlays": "^2.0.0-0",
-    "uncontrollable": "^7.0.0"
+    "uncontrollable": "^7.1.1"
   },
   "lint-staged": {
     "*.js": "npx eslint --fix"
