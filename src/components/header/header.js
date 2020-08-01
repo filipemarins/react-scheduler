@@ -1,12 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { node } from 'prop-types';
 
 const Header = ({ label }) => {
   return <span>{label}</span>;
 };
 
 Header.propTypes = {
-  label: PropTypes.node,
+  label: node,
+};
+
+Header.defaultProps = {
+  label: null,
 };
 
 export default Header;
