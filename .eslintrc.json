@@ -51,7 +51,8 @@
     "max-len": ["error", {
       "code": 100,
       "ignoreStrings": true,
-      "ignoreTemplateLiterals": true
+      "ignoreTemplateLiterals": true,
+      "ignoreComments": true
     }],
     "react/jsx-filename-extension": [
       1,
