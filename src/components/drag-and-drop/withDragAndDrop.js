@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import clsx from 'clsx';
 
-import { accessor } from '../../utils/propTypes';
+import { accessor } from 'utils/prop-types';
 import EventWrapper from './EventWrapper';
 import EventContainerWrapper from './EventContainerWrapper';
 import WeekWrapper from './WeekWrapper';
@@ -40,7 +40,7 @@ import { mergeComponents } from './common';
  * resizing them horizontally because they are displayed in row format, their
  * times are preserved, only their date is changed.
  *
- * If you care about these corner cases, you can examine the `allDay` param suppled
+ * If you care about these corner cases, you can examine the `allDay` param supplied
  * in the callback to determine how the user dropped or resized the event.
  *
  * Additionally, this HOC adds the callback props `onDropFromOutside` and `onDragOver`.
