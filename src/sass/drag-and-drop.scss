@@ -1,4 +1,4 @@
-@import '../../sass/variables';
+@import './variables';
 
 .rbc-addons-dnd {
   .rbc-addons-dnd-row-body {
@@ -10,7 +10,6 @@
     left: 0;
     right: 0;
   }
-
 
   .rbc-addons-dnd-over {
     background-color: rgba(
