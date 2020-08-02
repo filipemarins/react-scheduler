@@ -5,7 +5,6 @@ import moment from 'moment';
 import React from 'react';
 
 import '../src/sass/styles.scss';
-import '../src/addons/dragAndDrop/styles.scss';
 import demoEvents from '../examples/events';
 import createEvents from './helpers/create-events';
 import customComponents from './helpers/custom-components';
