@@ -1,10 +1,10 @@
+import React, { Component } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
 
 import BackgroundWrapper from 'components/background-wrapper';
 
-export default class TimeSlotGroup extends Component {
+export default class TimeSlot extends Component {
   render() {
     const {
       renderSlot,
@@ -32,7 +32,7 @@ export default class TimeSlotGroup extends Component {
   }
 }
 
-TimeSlotGroup.propTypes = {
+TimeSlot.propTypes = {
   renderSlot: PropTypes.func,
   group: PropTypes.array.isRequired,
   resource: PropTypes.any,

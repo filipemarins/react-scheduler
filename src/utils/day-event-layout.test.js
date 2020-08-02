@@ -1,12 +1,12 @@
 import { getStyledEvents } from 'utils/day-event-layout';
-import { getSlotMetrics } from 'utils/timeslots';
+import getTimeSlotMetrics from 'utils/get-time-slot-metrics';
 import * as dates from 'utils/dates';
 
 describe('getStyledEvents', () => {
   const d = (...args) => new Date(2015, 3, 1, ...args);
   const min = dates.startOf(d(), 'day');
   const max = dates.endOf(d(), 'day');
-  const slotMetrics = getSlotMetrics({ min, max, step: 30, timeslots: 4 });
+  const slotMetrics = getTimeSlotMetrics({ min, max, step: 30, timeslots: 4 });
   const accessors = { start: (e) => e.start, end: (e) => e.end };
   const dayLayoutAlgorithm = 'overlap';
 

@@ -10,12 +10,11 @@ import Overlay from 'react-overlays/Overlay';
 import * as dates from 'utils/dates';
 import { navigate, views } from 'utils/constants';
 import { notify } from 'utils/helpers';
+import { inRange, sortEvents } from 'utils/event-levels';
 import Popup from 'components/popup';
 import DateContentRow from 'components/date-content-row';
 import Header from 'components/header';
 import DateHeader from 'components/date-header';
-
-import { inRange, sortEvents } from 'utils/event-levels';
 
 const eventsForWeek = (evts, start, end, accessors) =>
   evts.filter((e) => inRange(e, start, end, accessors));

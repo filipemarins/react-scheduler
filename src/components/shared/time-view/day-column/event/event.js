@@ -6,7 +6,7 @@ function stringifyPercent(v) {
 }
 
 /* eslint-disable react/prop-types */
-function TimeGridEvent(props) {
+function Event(props) {
   const {
     style,
     className,
@@ -64,4 +64,4 @@ function TimeGridEvent(props) {
   );
 }
 
-export default TimeGridEvent;
+export default Event;

@@ -3,7 +3,7 @@ import React from 'react';
 
 import * as dates from 'utils/dates';
 import { navigate } from 'utils/constants';
-import TimeGrid from 'components/time-grid';
+import TimeGrid from 'components/shared/time-view';
 
 class Day extends React.Component {
   render() {

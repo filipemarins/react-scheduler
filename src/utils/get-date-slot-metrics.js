@@ -6,7 +6,7 @@ const isSegmentInSlot = (seg, slot) => seg.left <= slot && seg.right >= slot;
 
 const isEqual = (a, b) => a[0].range === b[0].range && a[0].events === b[0].events;
 
-export function getSlotMetrics() {
+const getDateSlotMetrics = () => {
   return memoize((options) => {
     const { range, events, maxRows, minRows, accessors } = options;
     const { first, last } = endOfRange(range);
@@ -26,7 +26,7 @@ export function getSlotMetrics() {
       slots: range.length,
 
       clone(args) {
-        const metrics = getSlotMetrics();
+        const metrics = getDateSlotMetrics();
         return metrics({ ...options, ...args });
       },
 
@@ -56,4 +56,6 @@ export function getSlotMetrics() {
       },
     };
   }, isEqual);
-}
+};
+
+export default getDateSlotMetrics;

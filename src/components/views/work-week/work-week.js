@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import Week from 'components/week';
-import TimeGrid from 'components/time-grid';
+import TimeGrid from 'components/shared/time-view';
+import Week from '../week';
 
 function workWeekRange(date, options) {
   return Week.range(date, options).filter((d) => [6, 0].indexOf(d.getDay()) === -1);

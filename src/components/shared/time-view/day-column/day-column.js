@@ -3,16 +3,16 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 import clsx from 'clsx';
 
-import Selection, { getBoundsForNode, isEvent } from 'components/selection';
 import * as dates from 'utils/dates';
-import * as TimeSlotUtils from 'utils/timeslots';
+import getTimeSlotMetrics from 'utils/get-time-slot-metrics';
 import { isSelected } from 'utils/selection';
-
 import { notify } from 'utils/helpers';
-import * as DayEventLayout from 'utils/day-event-layout';
-import TimeSlotGroup from 'components/time-slot-group';
-import TimeGridEvent from 'components/time-grid-event';
 import { DayLayoutAlgorithmPropType } from 'utils/prop-types';
+import * as DayEventLayout from 'utils/day-event-layout';
+
+import Selection, { getBoundsForNode, isEvent } from 'components/selection';
+import TimeSlot from '../time-slot';
+import Event from './event';
 
 class DayColumn extends React.Component {
   state = { selecting: false, timeIndicatorPosition: null };
@@ -22,7 +22,7 @@ class DayColumn extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.slotMetrics = TimeSlotUtils.getSlotMetrics(this.props);
+    this.slotMetrics = getTimeSlotMetrics(this.props);
   }
 
   componentDidMount() {
@@ -134,7 +134,7 @@ class DayColumn extends React.Component {
         )}
       >
         {slotMetrics.groups.map((grp, idx) => (
-          <TimeSlotGroup
+          <TimeSlot
             key={idx}
             group={grp}
             resource={resource}
@@ -212,7 +212,7 @@ class DayColumn extends React.Component {
       const continuesLater = startsAfterDay || slotMetrics.startsAfter(end);
 
       return (
-        <TimeGridEvent
+        <Event
           style={style}
           event={event}
           label={label}

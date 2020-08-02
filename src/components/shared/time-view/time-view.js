@@ -11,11 +11,11 @@ import * as dates from 'utils/dates';
 import { notify } from 'utils/helpers';
 import { inRange, sortEvents } from 'utils/event-levels';
 import Resources from 'utils/resources';
-import DayColumn from 'components/day-column';
-import TimeGutter from 'components/time-gutter';
-import TimeGridHeader from 'components/time-grid-header';
+import DayColumn from './day-column';
+import TimeViewHeader from './header';
+import TimeScale from './time-scale';
 
-export default class TimeGrid extends Component {
+export default class TimeView extends Component {
   constructor(props) {
     super(props);
 
@@ -134,98 +134,6 @@ export default class TimeGrid extends Component {
     );
   }
 
-  render() {
-    let {
-      events,
-      range,
-      width,
-      rtl,
-      selected,
-      getNow,
-      resources,
-      components,
-      accessors,
-      getters,
-      localizer,
-      min,
-      max,
-      showMultiDayTimes,
-      longPressThreshold,
-    } = this.props;
-
-    width = width || this.state.gutterWidth;
-
-    const start = range[0];
-    const end = range[range.length - 1];
-
-    this.slots = range.length;
-
-    const allDayEvents = [];
-    const rangeEvents = [];
-
-    events.forEach((event) => {
-      if (inRange(event, start, end, accessors)) {
-        const eStart = accessors.start(event);
-        const eEnd = accessors.end(event);
-
-        if (
-          accessors.allDay(event) ||
-          (dates.isJustDate(eStart) && dates.isJustDate(eEnd)) ||
-          (!showMultiDayTimes && !dates.eq(eStart, eEnd, 'day'))
-        ) {
-          allDayEvents.push(event);
-        } else {
-          rangeEvents.push(event);
-        }
-      }
-    });
-
-    allDayEvents.sort((a, b) => sortEvents(a, b, accessors));
-
-    return (
-      <div className={clsx('rbc-time-view', resources && 'rbc-time-view-resources')}>
-        <TimeGridHeader
-          range={range}
-          events={allDayEvents}
-          width={width}
-          rtl={rtl}
-          getNow={getNow}
-          localizer={localizer}
-          selected={selected}
-          resources={this.memoizedResources(resources, accessors)}
-          selectable={this.props.selectable}
-          accessors={accessors}
-          getters={getters}
-          components={components}
-          scrollRef={this.scrollRef}
-          isOverflowing={this.state.isOverflowing}
-          longPressThreshold={longPressThreshold}
-          onSelectSlot={this.handleSelectAllDaySlot}
-          onSelectEvent={this.handleSelectAlldayEvent}
-          onDoubleClickEvent={this.props.onDoubleClickEvent}
-          onDrillDown={this.props.onDrillDown}
-          getDrilldownView={this.props.getDrilldownView}
-        />
-        <div ref={this.contentRef} className="rbc-time-content" onScroll={this.handleScroll}>
-          <TimeGutter
-            date={start}
-            ref={this.gutterRef}
-            localizer={localizer}
-            min={dates.merge(start, min)}
-            max={dates.merge(start, max)}
-            step={this.props.step}
-            getNow={this.props.getNow}
-            timeslots={this.props.timeslots}
-            components={components}
-            className="rbc-time-gutter"
-            getters={getters}
-          />
-          {this.renderEvents(range, rangeEvents, getNow())}
-        </div>
-      </div>
-    );
-  }
-
   clearSelection() {
     clearTimeout(this._selectTimer);
     this._pendingSelection = [];
@@ -277,9 +185,101 @@ export default class TimeGrid extends Component {
   };
 
   memoizedResources = memoize((resources, accessors) => Resources(resources, accessors));
+
+  render() {
+    let {
+      events,
+      range,
+      width,
+      rtl,
+      selected,
+      getNow,
+      resources,
+      components,
+      accessors,
+      getters,
+      localizer,
+      min,
+      max,
+      showMultiDayTimes,
+      longPressThreshold,
+    } = this.props;
+
+    width = width || this.state.gutterWidth;
+
+    const start = range[0];
+    const end = range[range.length - 1];
+
+    this.slots = range.length;
+
+    const allDayEvents = [];
+    const rangeEvents = [];
+
+    events.forEach((event) => {
+      if (inRange(event, start, end, accessors)) {
+        const eStart = accessors.start(event);
+        const eEnd = accessors.end(event);
+
+        if (
+          accessors.allDay(event) ||
+          (dates.isJustDate(eStart) && dates.isJustDate(eEnd)) ||
+          (!showMultiDayTimes && !dates.eq(eStart, eEnd, 'day'))
+        ) {
+          allDayEvents.push(event);
+        } else {
+          rangeEvents.push(event);
+        }
+      }
+    });
+
+    allDayEvents.sort((a, b) => sortEvents(a, b, accessors));
+
+    return (
+      <div className={clsx('rbc-time-view', resources && 'rbc-time-view-resources')}>
+        <TimeViewHeader
+          range={range}
+          events={allDayEvents}
+          width={width}
+          rtl={rtl}
+          getNow={getNow}
+          localizer={localizer}
+          selected={selected}
+          resources={this.memoizedResources(resources, accessors)}
+          selectable={this.props.selectable}
+          accessors={accessors}
+          getters={getters}
+          components={components}
+          scrollRef={this.scrollRef}
+          isOverflowing={this.state.isOverflowing}
+          longPressThreshold={longPressThreshold}
+          onSelectSlot={this.handleSelectAllDaySlot}
+          onSelectEvent={this.handleSelectAlldayEvent}
+          onDoubleClickEvent={this.props.onDoubleClickEvent}
+          onDrillDown={this.props.onDrillDown}
+          getDrilldownView={this.props.getDrilldownView}
+        />
+        <div ref={this.contentRef} className="rbc-time-content" onScroll={this.handleScroll}>
+          <TimeScale
+            date={start}
+            ref={this.gutterRef}
+            localizer={localizer}
+            min={dates.merge(start, min)}
+            max={dates.merge(start, max)}
+            step={this.props.step}
+            getNow={this.props.getNow}
+            timeslots={this.props.timeslots}
+            components={components}
+            className="rbc-time-gutter"
+            getters={getters}
+          />
+          {this.renderEvents(range, rangeEvents, getNow())}
+        </div>
+      </div>
+    );
+  }
 }
 
-TimeGrid.propTypes = {
+TimeView.propTypes = {
   events: PropTypes.array.isRequired,
   resources: PropTypes.array,
 
@@ -317,7 +317,7 @@ TimeGrid.propTypes = {
   dayLayoutAlgorithm: DayLayoutAlgorithmPropType,
 };
 
-TimeGrid.defaultProps = {
+TimeView.defaultProps = {
   step: 30,
   timeslots: 2,
   min: dates.startOf(new Date(), 'day'),

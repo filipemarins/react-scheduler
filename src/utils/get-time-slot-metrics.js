@@ -5,7 +5,7 @@ const getDstOffset = (start, end) => start.getTimezoneOffset() - end.getTimezone
 const getKey = (min, max, step, slots) =>
   `${+dates.startOf(min, 'minutes')}` + `${+dates.startOf(max, 'minutes')}` + `${step}-${slots}`;
 
-export function getSlotMetrics({ min: start, max: end, step, timeslots }) {
+const getTimeSlotMetrics = ({ min: start, max: end, step, timeslots }) => {
   const key = getKey(start, end, step, timeslots);
 
   // if the start is on a DST-changing day but *after* the moment of DST
@@ -62,7 +62,7 @@ export function getSlotMetrics({ min: start, max: end, step, timeslots }) {
   return {
     groups,
     update(args) {
-      if (getKey(args) !== key) return getSlotMetrics(args);
+      if (getKey(args) !== key) return getTimeSlotMetrics(args);
       return this;
     },
 
@@ -139,4 +139,6 @@ export function getSlotMetrics({ min: start, max: end, step, timeslots }) {
       return top;
     },
   };
-}
+};
+
+export default getTimeSlotMetrics;

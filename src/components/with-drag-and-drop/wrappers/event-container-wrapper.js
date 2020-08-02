@@ -5,7 +5,7 @@ import { findDOMNode } from 'react-dom';
 import { dragAccessors } from 'utils/accessors';
 import * as dates from 'utils/dates';
 import Selection, { getBoundsForNode, getEventNodeFromPoint } from 'components/selection';
-import TimeGridEvent from 'components/time-grid-event';
+import Event from 'components/shared/time-view/day-column/event';
 import NoopWrapper from 'components/noop-wrapper';
 
 const pointInColumn = (bounds, { x, y }) => {
@@ -211,7 +211,7 @@ class EventContainerWrapper extends React.Component {
           {events}
 
           {event && (
-            <TimeGridEvent
+            <Event
               event={event}
               label={label}
               className="rbc-addons-dnd-drag-preview"

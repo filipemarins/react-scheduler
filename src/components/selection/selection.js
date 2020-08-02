@@ -34,6 +34,72 @@ function getEventCoordinates(e) {
   };
 }
 
+const pageOffset = (dir) => {
+  if (dir === 'left') {
+    return window.pageXOffset || document.body.scrollLeft || 0;
+  }
+  if (dir === 'top') {
+    return window.pageYOffset || document.body.scrollTop || 0;
+  }
+
+  return null;
+};
+
+/**
+ * Given a node, get everything needed to calculate its boundaries
+ * @param  {HTMLElement} node
+ * @return {Object}
+ */
+export function getBoundsForNode(node) {
+  if (!node.getBoundingClientRect) return node;
+
+  const rect = node.getBoundingClientRect();
+  const left = rect.left + pageOffset('left');
+  const top = rect.top + pageOffset('top');
+
+  return {
+    top,
+    left,
+    right: (node.offsetWidth || 0) + left,
+    bottom: (node.offsetHeight || 0) + top,
+  };
+}
+
+/**
+ * Given two objects containing "top", "left", "offsetWidth" and "offsetHeight"
+ * properties, determine if they collide.
+ * @param  {Object|HTMLElement} a
+ * @param  {Object|HTMLElement} b
+ * @return {bool}
+ */
+export function objectsCollide(nodeA, nodeB, tolerance = 0) {
+  const {
+    top: aTop,
+    left: aLeft,
+    right: aRight = aLeft,
+    bottom: aBottom = aTop,
+  } = getBoundsForNode(nodeA);
+  const {
+    top: bTop,
+    left: bLeft,
+    right: bRight = bLeft,
+    bottom: bBottom = bTop,
+  } = getBoundsForNode(nodeB);
+
+  return !(
+    // 'a' bottom doesn't touch 'b' top
+    (
+      aBottom - tolerance < bTop ||
+      // 'a' top doesn't touch 'b' bottom
+      aTop + tolerance > bBottom ||
+      // 'a' right doesn't touch 'b' left
+      aRight - tolerance < bLeft ||
+      // 'a' left doesn't touch 'b' right
+      aLeft + tolerance > bRight
+    )
+  );
+}
+
 const clickTolerance = 5;
 const clickInterval = 250;
 
@@ -387,63 +453,4 @@ function normalizeDistance(distance = 0) {
   return distance;
 }
 
-/**
- * Given two objects containing "top", "left", "offsetWidth" and "offsetHeight"
- * properties, determine if they collide.
- * @param  {Object|HTMLElement} a
- * @param  {Object|HTMLElement} b
- * @return {bool}
- */
-export function objectsCollide(nodeA, nodeB, tolerance = 0) {
-  const {
-    top: aTop,
-    left: aLeft,
-    right: aRight = aLeft,
-    bottom: aBottom = aTop,
-  } = getBoundsForNode(nodeA);
-  const {
-    top: bTop,
-    left: bLeft,
-    right: bRight = bLeft,
-    bottom: bBottom = bTop,
-  } = getBoundsForNode(nodeB);
-
-  return !(
-    // 'a' bottom doesn't touch 'b' top
-    (
-      aBottom - tolerance < bTop ||
-      // 'a' top doesn't touch 'b' bottom
-      aTop + tolerance > bBottom ||
-      // 'a' right doesn't touch 'b' left
-      aRight - tolerance < bLeft ||
-      // 'a' left doesn't touch 'b' right
-      aLeft + tolerance > bRight
-    )
-  );
-}
-
-/**
- * Given a node, get everything needed to calculate its boundaries
- * @param  {HTMLElement} node
- * @return {Object}
- */
-export function getBoundsForNode(node) {
-  if (!node.getBoundingClientRect) return node;
-
-  const rect = node.getBoundingClientRect();
-  const left = rect.left + pageOffset('left');
-  const top = rect.top + pageOffset('top');
-
-  return {
-    top,
-    left,
-    right: (node.offsetWidth || 0) + left,
-    bottom: (node.offsetHeight || 0) + top,
-  };
-}
-
-function pageOffset(dir) {
-  if (dir === 'left') return window.pageXOffset || document.body.scrollLeft || 0;
-  if (dir === 'top') return window.pageYOffset || document.body.scrollTop || 0;
-}
 export default Selection;

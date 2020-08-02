@@ -1,9 +1,9 @@
 import { views } from 'utils/constants';
-import Month from 'components/month';
-import Day from 'components/day';
-import Week from 'components/week';
-import WorkWeek from 'components/work-week';
-import Agenda from 'components/agenda';
+import Month from './month';
+import Day from './day';
+import Week from './week';
+import WorkWeek from './work-week';
+import Agenda from './agenda';
 
 const VIEWS = {
   [views.MONTH]: Month,

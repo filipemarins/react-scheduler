@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import * as dates from 'utils/dates';
 import { navigate } from 'utils/constants';
-import TimeGrid from 'components/time-grid';
+import TimeGrid from 'components/shared/time-view';
 
 class Week extends React.Component {
   render() {

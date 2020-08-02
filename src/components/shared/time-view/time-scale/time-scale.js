@@ -2,15 +2,15 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 
-import * as TimeSlotUtils from 'utils/timeslots';
-import TimeSlotGroup from 'components/time-slot-group';
+import getTimeSlotMetrics from 'utils/get-time-slot-metrics';
+import TimeSlot from '../time-slot';
 
 export default class TimeGutter extends Component {
   constructor(...args) {
     super(...args);
 
     const { min, max, timeslots, step } = this.props;
-    this.slotMetrics = TimeSlotUtils.getSlotMetrics({
+    this.slotMetrics = getTimeSlotMetrics({
       min,
       max,
       timeslots,
@@ -42,7 +42,7 @@ export default class TimeGutter extends Component {
       <div className="rbc-time-gutter rbc-time-column">
         {this.slotMetrics.groups.map((grp, idx) => {
           return (
-            <TimeSlotGroup
+            <TimeSlot
               key={idx}
               group={grp}
               resource={resource}

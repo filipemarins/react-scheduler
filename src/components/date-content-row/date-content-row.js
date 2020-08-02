@@ -6,7 +6,7 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 
 import * as dates from 'utils/dates';
-import * as DateSlotMetrics from 'utils/date-slot-metrics';
+import getDateSlotMetrics from 'utils/get-date-slot-metrics';
 import BackgroundCells from 'components/background-cells';
 import EventRow from 'components/event-row';
 import EventEndingRow from 'components/event-ending-row';
@@ -15,7 +15,7 @@ class DateContentRow extends React.Component {
   constructor(...args) {
     super(...args);
 
-    this.slotMetrics = DateSlotMetrics.getSlotMetrics();
+    this.slotMetrics = getDateSlotMetrics();
   }
 
   handleSelectSlot = (slot) => {
