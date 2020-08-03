@@ -6,7 +6,7 @@ export const components = {
   dateCellWrapper: NoopWrapper,
 };
 
-export { default as Calendar } from 'components/calendar';
+export { default as Scheduler } from 'components/scheduler';
 export { DateLocalizer } from 'utils/localizer';
 export { default as momentLocalizer } from './localizers/moment';
 export { default as globalizeLocalizer } from './localizers/globalize';

@@ -7,10 +7,9 @@ For bugs, please include the following if possible:
 
   - A CodeSandbox that minimally reproduces the issue.
   - An image or GIF showing the issue.
-  - Information about your browser, react-big-calendar version, etc.
+  - Information about your browser, react-scheduler version, etc.
 
 http://recordit.co/
-https://codesandbox.io/s/l9jwl0kj6m
 -->
 
 #### What's the expected behavior?
