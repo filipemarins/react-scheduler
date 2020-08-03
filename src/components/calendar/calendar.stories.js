@@ -4,14 +4,14 @@ import { storiesOf, addDecorator } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import 'sass/styles.scss';
-import BaseCalendar from 'components/calendar';
 import momentLocalizer from 'localizers/moment';
 import { views } from 'utils/constants';
-
 import { eventsWithCustomSize, fakeEvents } from 'tests/fixtures/events';
 import resources from 'tests/fixtures/resources';
 import { dateCellWrapper, timeSlotWrapper, eventWrapper } from 'tests/fixtures/custom-components';
 import createEvents from 'tests/fixtures/create-events';
+
+import BaseCalendar from './calendar';
 
 const localizer = momentLocalizer(moment);
 

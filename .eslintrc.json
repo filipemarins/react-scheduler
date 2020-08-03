@@ -34,9 +34,9 @@
   "rules": {
     "import/no-extraneous-dependencies": ["error", {
       "devDependencies": [
-        "**/stories/**/*.js",
         "**/test/**/*.js",
         "**/tests/**/*.js",
+        "**/*.stories.js",
         "**/*.test.js",
         "**/*.config.js"
       ]
