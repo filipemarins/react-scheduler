@@ -16,7 +16,6 @@ export default create({
 
   // Toolbar default and active colors
   barTextColor: 'white',
-  barBg: 'rgb(49, 116, 173)',
 
   // Form colors
   inputBg: 'white',
