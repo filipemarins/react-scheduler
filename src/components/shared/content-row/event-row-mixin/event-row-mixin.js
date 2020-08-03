@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import EventCell from 'components/event-cell';
 import { isSelected } from 'utils/selection';
+
+import EventCell from './event-cell';
 
 /* eslint-disable react/prop-types */
 export default {

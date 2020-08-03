@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
-import EventRowMixin from 'components/event-row-mixin';
+import EventRowMixin from '../event-row-mixin';
 
 class EventRow extends React.Component {
   render() {

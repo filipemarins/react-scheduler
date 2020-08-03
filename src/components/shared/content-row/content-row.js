@@ -7,8 +7,8 @@ import { findDOMNode } from 'react-dom';
 
 import * as dates from 'utils/dates';
 import getDateSlotMetrics from 'utils/get-date-slot-metrics';
-import EventRow from 'components/event-row';
-import EventEndingRow from 'components/event-ending-row';
+import EventRow from './event-row';
+import EventEndingRow from './event-ending-row';
 import Cells from './cells';
 
 class DateContentRow extends React.Component {
