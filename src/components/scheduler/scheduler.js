@@ -36,23 +36,23 @@ function isValidView(view, { views: _views }) {
 }
 
 /**
- * react-big-calendar is a full featured Calendar component for managing events and dates. It uses
+ * react-scheduler is a full featured scheduler component for managing events and dates. It uses
  * modern `flexbox` for layout, making it super responsive and performant. Leaving most of the layout heavy lifting
  * to the browser. __note:__ The default styles use `height: 100%` which means your container must set an explicit
  * height (feel free to adjust the styles to suit your specific needs).
  *
- * Big Calendar is unopiniated about editing and moving events, preferring to let you implement it in a way that makes
+ * Scheduler is unopiniated about editing and moving events, preferring to let you implement it in a way that makes
  * the most sense to your app. It also tries not to be prescriptive about your event data structures, just tell it
  * how to find the start and end datetimes and you can pass it whatever you want.
  *
- * One thing to note is that, `react-big-calendar` treats event start/end dates as an _exclusive_ range.
+ * One thing to note is that, `react-scheduler` treats event start/end dates as an _exclusive_ range.
  * which means that the event spans up to, but not including, the end date. In the case
  * of displaying events on whole days, end dates are rounded _up_ to the next day. So an
  * event ending on `Apr 8th 12:00:00 am` will not appear on the 8th, whereas one ending
  * on `Apr 8th 12:01:00 am` will. If you want _inclusive_ ranges consider providing a
  * function `endAccessor` that returns the end date + 1 day for those events that end at midnight.
  */
-class Calendar extends React.Component {
+class Scheduler extends React.Component {
   constructor(...args) {
     super(...args);
     this.state = {
@@ -291,17 +291,17 @@ class Calendar extends React.Component {
   }
 }
 
-Calendar.propTypes = {
+Scheduler.propTypes = {
   localizer: PropTypes.shape({}).isRequired,
 
   /**
-   * Props passed to main calendar `<div>`.
+   * Props passed to main scheduler `<div>`.
    *
    */
   elementProps: PropTypes.shape({}),
 
   /**
-   * The current date value of the calendar. Determines the visible view range.
+   * The current date value of the scheduler. Determines the visible view range.
    * If `date` is omitted then the result of `getNow` is used; otherwise the
    * current date is used.
    *
@@ -310,7 +310,7 @@ Calendar.propTypes = {
   date: PropTypes.instanceOf(Date),
 
   /**
-   * The current view of the calendar.
+   * The current view of the scheduler.
    *
    * @default 'month'
    * @controllable onView
@@ -318,15 +318,15 @@ Calendar.propTypes = {
   view: PropTypes.string,
 
   /**
-   * The initial view set for the Calendar.
-   * @type Calendar.Views ('month'|'week'|'work_week'|'day'|'agenda')
+   * The initial view set for the scheduler.
+   * @type Scheduler.Views ('month'|'week'|'work_week'|'day'|'agenda')
    * @default 'month'
    */
   defaultView: PropTypes.string,
 
   /**
-   * An array of event objects to display on the calendar. Events objects
-   * can be any shape, as long as the Calendar knows how to retrieve the
+   * An array of event objects to display on the scheduler. Events objects
+   * can be any shape, as long as the scheduler knows how to retrieve the
    * following details of the event:
    *
    *  - start time
@@ -532,7 +532,7 @@ Calendar.propTypes = {
   onSelectSlot: PropTypes.func,
 
   /**
-   * Callback fired when a calendar event is selected.
+   * Callback fired when a scheduler event is selected.
    *
    * ```js
    * (event: Object, e: SyntheticEvent) => any
@@ -543,7 +543,7 @@ Calendar.propTypes = {
   onSelectEvent: PropTypes.func,
 
   /**
-   * Callback fired when a calendar event is clicked twice.
+   * Callback fired when a scheduler event is clicked twice.
    *
    * ```js
    * (event: Object, e: SyntheticEvent) => void
@@ -577,7 +577,7 @@ Calendar.propTypes = {
   selected: PropTypes.object,
 
   /**
-   * An array of built-in view names to allow the calendar to display.
+   * An array of built-in view names to allow the scheduler to display.
    * accepts either an array of builtin view names,
    *
    * ```jsx
@@ -617,7 +617,7 @@ Calendar.propTypes = {
    * Set to `null` to disable drill-down actions.
    *
    * ```js
-   * <Calendar
+   * <Scheduler
    *   drilldownView="agenda"
    * />
    * ```
@@ -632,7 +632,7 @@ Calendar.propTypes = {
    * Return `null` to disable drill-down actions.
    *
    * ```js
-   * <Calendar
+   * <Scheduler
    *   getDrilldownView={(targetDate, currentViewName, configuredViewNames) =>
    *     if (currentViewName === 'month' && configuredViewNames.includes('week'))
    *       return 'week'
@@ -686,7 +686,7 @@ Calendar.propTypes = {
   timeslots: PropTypes.number,
 
   /**
-   *Switch the calendar to a `right-to-left` read direction.
+   *Switch the scheduler to a `right-to-left` read direction.
    */
   rtl: PropTypes.bool,
 
@@ -708,7 +708,7 @@ Calendar.propTypes = {
   /**
    * Optionally provide a function that returns an object of className or style props
    * to be applied to the time-slot node. Caution! Styles that change layout or
-   * position may break the calendar in unexpected ways.
+   * position may break the scheduler in unexpected ways.
    *
    * ```js
    * (date: Date, resourceId: (number|string)) => { className?: string, style?: Object }
@@ -728,7 +728,7 @@ Calendar.propTypes = {
   /**
    * Optionally provide a function that returns an object of className or style props
    * to be applied to the the day background. Caution! Styles that change layout or
-   * position may break the calendar in unexpected ways.
+   * position may break the scheduler in unexpected ways.
    *
    * ```js
    * (date: Date) => { className?: string, style?: Object }
@@ -740,7 +740,7 @@ Calendar.propTypes = {
    * Support to show multi-day events with specific start and end times in the
    * main time grid (rather than in the all day header).
    *
-   * **Note: This may cause calendars with several events to look very busy in
+   * **Note: This may cause schedulers with several events to look very busy in
    * the week and day views.**
    */
   showMultiDayTimes: PropTypes.bool,
@@ -761,14 +761,14 @@ Calendar.propTypes = {
   scrollToTime: PropTypes.instanceOf(Date),
 
   /**
-   * Specify a specific culture code for the Calendar.
+   * Specify a specific culture code for the scheduler.
    *
    * **Note: it's generally better to handle this globally via your i18n library.**
    */
   culture: PropTypes.string,
 
   /**
-   * Localizer specific formats, tell the Calendar how to format and display dates.
+   * Localizer specific formats, tell the scheduler how to format and display dates.
    *
    * `format` types are dependent on the configured localizer; both Moment and Globalize
    * accept strings of tokens according to their own specification, such as: `'DD mm yyyy'`.
@@ -785,7 +785,7 @@ Calendar.propTypes = {
    *     localizer.format(end, { date: 'short' }, culture)
    * }
    *
-   * <Calendar formats={formats} />
+   * <Scheduler formats={formats} />
    * ```
    *
    * All localizers accept a function of
@@ -864,8 +864,8 @@ Calendar.propTypes = {
   }),
 
   /**
-   * Customize how different sections of the calendar render by providing custom Components.
-   * In particular the `Event` component can be specified for the entire calendar, or you can
+   * Customize how different sections of the scheduler render by providing custom Components.
+   * In particular the `Event` component can be specified for the entire scheduler, or you can
    * provide an individual component for each view type.
    *
    * ```jsx
@@ -896,7 +896,7 @@ Calendar.propTypes = {
    *     event: MyMonthEvent,
    *   }
    * }
-   * <Calendar components={components} />
+   * <Scheduler components={components} />
    * ```
    */
   components: PropTypes.shape({
@@ -959,7 +959,7 @@ Calendar.propTypes = {
   dayLayoutAlgorithm: DayLayoutAlgorithmPropType,
 };
 
-Calendar.defaultProps = {
+Scheduler.defaultProps = {
   elementProps: {},
   toolbar: true,
   view: views.MONTH,
@@ -984,7 +984,7 @@ Calendar.defaultProps = {
   dayLayoutAlgorithm: 'overlap',
 };
 
-export default uncontrollable(Calendar, {
+export default uncontrollable(Scheduler, {
   view: 'onView',
   date: 'onNavigate',
   selected: 'onSelectEvent',
