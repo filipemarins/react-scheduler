@@ -6,7 +6,7 @@ function stringifyPercent(v) {
 }
 
 /* eslint-disable react/prop-types */
-function Event(props) {
+const Event = (props) => {
   const {
     style,
     className,
@@ -62,6 +62,6 @@ function Event(props) {
       </div>
     </EventWrapper>
   );
-}
+};
 
 export default Event;
