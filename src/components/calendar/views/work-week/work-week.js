@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import TimeGrid from 'components/shared/time-view';
+import TimeView from 'components/shared/time-view';
 import Week from '../week';
 
 function workWeekRange(date, options) {
@@ -13,7 +13,7 @@ class WorkWeek extends React.Component {
     const { date, ...props } = this.props;
     const range = workWeekRange(date, this.props);
 
-    return <TimeGrid {...props} range={range} eventOffset={15} />;
+    return <TimeView {...props} range={range} eventOffset={15} />;
   }
 }
 
@@ -21,7 +21,7 @@ WorkWeek.propTypes = {
   date: PropTypes.instanceOf(Date).isRequired,
 };
 
-WorkWeek.defaultProps = TimeGrid.defaultProps;
+WorkWeek.defaultProps = TimeView.defaultProps;
 
 WorkWeek.range = workWeekRange;
 

@@ -5,6 +5,32 @@ import clsx from 'clsx';
 import { navigate } from 'utils/constants';
 
 class Toolbar extends React.Component {
+  navigate = (action) => {
+    this.props.onNavigate(action);
+  };
+
+  view = (view) => {
+    this.props.onView(view);
+  };
+
+  viewNamesGroup(messages) {
+    const viewNames = this.props.views;
+    const { view } = this.props;
+
+    if (viewNames.length > 1) {
+      return viewNames.map((name) => (
+        <button
+          type="button"
+          key={name}
+          className={clsx({ 'rbc-active': view === name })}
+          onClick={this.view.bind(null, name)}
+        >
+          {messages[name]}
+        </button>
+      ));
+    }
+  }
+
   render() {
     const {
       localizer: { messages },
@@ -30,32 +56,6 @@ class Toolbar extends React.Component {
         <span className="rbc-btn-group">{this.viewNamesGroup(messages)}</span>
       </div>
     );
-  }
-
-  navigate = (action) => {
-    this.props.onNavigate(action);
-  };
-
-  view = (view) => {
-    this.props.onView(view);
-  };
-
-  viewNamesGroup(messages) {
-    const viewNames = this.props.views;
-    const { view } = this.props;
-
-    if (viewNames.length > 1) {
-      return viewNames.map((name) => (
-        <button
-          type="button"
-          key={name}
-          className={clsx({ 'rbc-active': view === name })}
-          onClick={this.view.bind(null, name)}
-        >
-          {messages[name]}
-        </button>
-      ));
-    }
   }
 }
 

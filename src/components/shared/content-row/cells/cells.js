@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import * as dates from 'utils/dates';
 import { notify } from 'utils/helpers';
 import { dateCellSelection, getSlotAtX, pointInBox } from 'utils/selection';
-import Selection, { getBoundsForNode, isEvent } from 'components/selection';
+import Selection, { getBoundsForNode, isEvent } from 'components/shared/selection';
 
 class BackgroundCells extends React.Component {
   constructor(props, context) {
@@ -29,44 +29,6 @@ class BackgroundCells extends React.Component {
     if (nextProps.selectable && !this.props.selectable) this._selectable();
 
     if (!nextProps.selectable && this.props.selectable) this._teardownSelectable();
-  }
-
-  render() {
-    const {
-      range,
-      getNow,
-      getters,
-      date: currentDate,
-      components: { dateCellWrapper: Wrapper },
-    } = this.props;
-    const { selecting, startIdx, endIdx } = this.state;
-    const current = getNow();
-
-    return (
-      <div className="rbc-row-bg">
-        {range.map((date, index) => {
-          const selected = selecting && index >= startIdx && index <= endIdx;
-          const { className, style } = getters.dayProp(date);
-
-          return (
-            <Wrapper key={index} value={date} range={range}>
-              <div
-                style={style}
-                className={clsx(
-                  'rbc-day-bg',
-                  className,
-                  selected && 'rbc-selected-cell',
-                  dates.eq(date, current, 'day') && 'rbc-today',
-                  currentDate &&
-                    dates.month(currentDate) !== dates.month(date) &&
-                    'rbc-off-range-bg'
-                )}
-              />
-            </Wrapper>
-          );
-        })}
-      </div>
-    );
   }
 
   _selectable() {
@@ -143,7 +105,7 @@ class BackgroundCells extends React.Component {
   }
 
   _selectSlot({ endIdx, startIdx, action, bounds, box }) {
-    if (endIdx !== -1 && startIdx !== -1)
+    if (endIdx !== -1 && startIdx !== -1) {
       this.props.onSelectSlot &&
         this.props.onSelectSlot({
           start: startIdx,
@@ -152,6 +114,45 @@ class BackgroundCells extends React.Component {
           bounds,
           box,
         });
+    }
+  }
+
+  render() {
+    const {
+      range,
+      getNow,
+      getters,
+      date: currentDate,
+      components: { dateCellWrapper: Wrapper },
+    } = this.props;
+    const { selecting, startIdx, endIdx } = this.state;
+    const current = getNow();
+
+    return (
+      <div className="rbc-row-bg">
+        {range.map((date, index) => {
+          const selected = selecting && index >= startIdx && index <= endIdx;
+          const { className, style } = getters.dayProp(date);
+
+          return (
+            <Wrapper key={index} value={date} range={range}>
+              <div
+                style={style}
+                className={clsx(
+                  'rbc-day-bg',
+                  className,
+                  selected && 'rbc-selected-cell',
+                  dates.eq(date, current, 'day') && 'rbc-today',
+                  currentDate &&
+                    dates.month(currentDate) !== dates.month(date) &&
+                    'rbc-off-range-bg'
+                )}
+              />
+            </Wrapper>
+          );
+        })}
+      </div>
+    );
   }
 }
 

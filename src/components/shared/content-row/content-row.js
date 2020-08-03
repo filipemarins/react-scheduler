@@ -7,9 +7,9 @@ import { findDOMNode } from 'react-dom';
 
 import * as dates from 'utils/dates';
 import getDateSlotMetrics from 'utils/get-date-slot-metrics';
-import BackgroundCells from 'components/background-cells';
 import EventRow from 'components/event-row';
 import EventEndingRow from 'components/event-ending-row';
+import Cells from './cells';
 
 class DateContentRow extends React.Component {
   constructor(...args) {
@@ -136,7 +136,7 @@ class DateContentRow extends React.Component {
 
     return (
       <div className={className}>
-        <BackgroundCells
+        <Cells
           date={date}
           getNow={getNow}
           rtl={rtl}

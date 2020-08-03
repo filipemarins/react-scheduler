@@ -20,11 +20,11 @@ import { navigate, views } from 'utils/constants';
 import { mergeWithDefaults } from 'utils/localizer';
 import message from 'utils/messages';
 import moveDate from 'utils/move';
-import VIEWS from 'components/views';
-import Toolbar from 'components/toolbar';
-import NoopWrapper from 'components/noop-wrapper';
-
 import { wrapAccessor } from 'utils/accessors';
+
+import NoopWrapper from 'components/shared/noop-wrapper';
+import VIEWS from 'components/views';
+import Toolbar from './toolbar';
 
 function viewNames(_views) {
   return !Array.isArray(_views) ? Object.keys(_views) : _views;
@@ -64,6 +64,7 @@ class Calendar extends React.Component {
     this.setState({ context: this.getContext(nextProps) });
   }
 
+  // eslint-disable-next-line class-methods-use-this
   getContext({
     startAccessor,
     endAccessor,
@@ -145,7 +146,9 @@ class Calendar extends React.Component {
   getDrilldownView = (date) => {
     const { view, drilldownView, getDrilldownView } = this.props;
 
-    if (!getDrilldownView) return drilldownView;
+    if (!getDrilldownView) {
+      return drilldownView;
+    }
 
     return getDrilldownView(date, view, Object.keys(this.getViews()));
   };
@@ -653,24 +656,6 @@ Calendar.propTypes = {
   toolbar: PropTypes.bool,
 
   /**
-   * Show truncated events in an overlay when you click the "+_x_ more" link.
-   */
-  popup: PropTypes.bool,
-
-  /**
-   * Distance in pixels, from the edges of the viewport, the "show more" overlay should be positioned.
-   *
-   * ```jsx
-   * <Calendar popupOffset={30}/>
-   * <Calendar popupOffset={{x: 30, y: 20}}/>
-   * ```
-   */
-  popupOffset: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.shape({ x: PropTypes.number, y: PropTypes.number }),
-  ]),
-
-  /**
    * Allows mouse selection of ranges of dates/times.
    *
    * The 'ignoreEvents' option prevents selection code from running when a
@@ -884,7 +869,7 @@ Calendar.propTypes = {
    * provide an individual component for each view type.
    *
    * ```jsx
-   * let components = {
+   * const components = {
    *   event: MyEvent, // used by each view (Month, Day, Week)
    *   eventWrapper: MyEventWrapper,
    *   eventContainerWrapper: MyEventContainerWrapper,
@@ -976,7 +961,6 @@ Calendar.propTypes = {
 
 Calendar.defaultProps = {
   elementProps: {},
-  popup: false,
   toolbar: true,
   view: views.MONTH,
   views: [views.MONTH, views.WEEK, views.DAY, views.AGENDA],

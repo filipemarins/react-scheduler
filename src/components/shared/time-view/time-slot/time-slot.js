@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import BackgroundWrapper from 'components/background-wrapper';
+import NoopWrapper from 'components/shared/noop-wrapper';
 
 export default class TimeSlot extends Component {
   render() {
@@ -11,7 +11,7 @@ export default class TimeSlot extends Component {
       resource,
       group,
       getters,
-      components: { timeSlotWrapper: Wrapper = BackgroundWrapper } = {},
+      components: { timeSlotWrapper: Wrapper = NoopWrapper } = {},
     } = this.props;
 
     const groupProps = getters ? getters.slotGroupProp() : {};

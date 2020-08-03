@@ -1,15 +1,14 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import scrollbarSize from 'dom-helpers/scrollbarSize';
-import React from 'react';
 
 import * as dates from 'utils/dates';
-import DateContentRow from 'components/date-content-row';
-import Header from 'components/header';
-import ResourceHeader from 'components/resource-header';
+import ContentRow from 'components/shared/content-row';
+import NoopWrapper from 'components/shared/noop-wrapper';
 import { notify } from 'utils/helpers';
 
-class TimeGridHeader extends React.Component {
+class Header extends React.Component {
   handleHeaderClick = (date, view, e) => {
     e.preventDefault();
     notify(this.props.onDrillDown, [date, view]);
@@ -21,7 +20,7 @@ class TimeGridHeader extends React.Component {
       getDrilldownView,
       getNow,
       getters: { dayProp },
-      components: { header: HeaderComponent = Header },
+      components: { header: HeaderComponent = NoopWrapper },
     } = this.props;
 
     const today = getNow();
@@ -32,7 +31,11 @@ class TimeGridHeader extends React.Component {
 
       const { className, style } = dayProp(date);
 
-      const header = <HeaderComponent date={date} label={label} localizer={localizer} />;
+      const header = (
+        <HeaderComponent date={date} localizer={localizer}>
+          {label}
+        </HeaderComponent>
+      );
 
       return (
         <div
@@ -40,13 +43,14 @@ class TimeGridHeader extends React.Component {
           style={style}
           className={clsx('rbc-header', className, dates.eq(date, today, 'day') && 'rbc-today')}
         >
-          {drilldownView ? (
-            <a href="#" onClick={(e) => this.handleHeaderClick(date, drilldownView, e)}>
-              {header}
-            </a>
-          ) : (
-            <span>{header}</span>
-          )}
+          <span
+            onClick={(e) => this.handleHeaderClick(date, drilldownView, e)}
+            onKeyPress={(e) => this.handleHeadingClick(date, drilldownView, e)}
+            role="link"
+            tabIndex="0"
+          >
+            {header}
+          </span>
         </div>
       );
     });
@@ -71,7 +75,7 @@ class TimeGridHeader extends React.Component {
       : events;
 
     return (
-      <DateContentRow
+      <ContentRow
         isAllDay
         rtl={rtl}
         getNow={getNow}
@@ -111,7 +115,7 @@ class TimeGridHeader extends React.Component {
       isOverflowing,
       components: {
         timeGutterHeader: TimeGutterHeader,
-        resourceHeader: ResourceHeaderComponent = ResourceHeader,
+        resourceHeader: ResourceHeaderComponent = NoopWrapper,
       },
     } = this.props;
 
@@ -155,7 +159,7 @@ class TimeGridHeader extends React.Component {
             >
               {this.renderHeaderCells(range)}
             </div>
-            <DateContentRow
+            <ContentRow
               isAllDay
               rtl={rtl}
               getNow={getNow}
@@ -182,7 +186,7 @@ class TimeGridHeader extends React.Component {
   }
 }
 
-TimeGridHeader.propTypes = {
+Header.propTypes = {
   range: PropTypes.array.isRequired,
   events: PropTypes.array.isRequired,
   resources: PropTypes.object,
@@ -209,4 +213,4 @@ TimeGridHeader.propTypes = {
   scrollRef: PropTypes.any,
 };
 
-export default TimeGridHeader;
+export default Header;

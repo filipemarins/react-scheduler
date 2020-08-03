@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 
 import * as dates from 'utils/dates';
 import { navigate } from 'utils/constants';
-import TimeGrid from 'components/shared/time-view';
+import TimeView from 'components/shared/time-view';
 
 class Week extends React.Component {
   render() {
     const { date, ...props } = this.props;
     const range = Week.range(date, this.props);
 
-    return <TimeGrid {...props} range={range} eventOffset={15} />;
+    return <TimeView {...props} range={range} eventOffset={15} />;
   }
 }
 
@@ -18,7 +18,7 @@ Week.propTypes = {
   date: PropTypes.instanceOf(Date).isRequired,
 };
 
-Week.defaultProps = TimeGrid.defaultProps;
+Week.defaultProps = TimeView.defaultProps;
 
 Week.navigate = (date, action) => {
   switch (action) {

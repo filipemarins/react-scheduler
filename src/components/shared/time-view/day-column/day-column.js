@@ -10,7 +10,7 @@ import { notify } from 'utils/helpers';
 import { DayLayoutAlgorithmPropType } from 'utils/prop-types';
 import * as DayEventLayout from 'utils/day-event-layout';
 
-import Selection, { getBoundsForNode, isEvent } from 'components/selection';
+import Selection, { getBoundsForNode, isEvent } from 'components/shared/selection';
 import TimeSlot from '../time-slot';
 import Event from './event';
 

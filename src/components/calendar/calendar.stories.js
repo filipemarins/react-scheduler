@@ -22,8 +22,6 @@ const Calendar = (props) => <BaseCalendar localizer={localizer} {...props} />;
 storiesOf('Basic Usage', module)
   .add('demo', () => (
     <Calendar
-      popup
-      popupOffset={{ x: -10, y: -20 }}
       events={fakeEvents}
       onSelectEvent={action('event selected')}
       defaultDate={new Date(2015, 3, 1)}
@@ -49,18 +47,6 @@ storiesOf('Basic Usage', module)
       onSelectEvent={action('event selected')}
       onSelectSlot={action('slot selected')}
       defaultDate={new Date()}
-    />
-  ))
-  .add('add custom date header', () => (
-    <Calendar
-      defaultView={views.MONTH}
-      events={eventsWithCustomSize}
-      components={{
-        month: {
-          // eslint-disable-next-line react/prop-types
-          dateHeader: ({ label }) => <span>{label} - Custom date header</span>,
-        },
-      }}
     />
   ))
   .add('complex day view layout', () => (
@@ -118,12 +104,47 @@ storiesOf('Basic Usage', module)
       />
     );
   })
+  .add('add custom date header', () => (
+    <Calendar
+      defaultView={views.MONTH}
+      events={eventsWithCustomSize}
+      components={{
+        month: {
+          // eslint-disable-next-line react/prop-types
+          dateHeader: ({ children }) => <span>{children} - custom date header</span>,
+        },
+      }}
+    />
+  ))
+  .add('add custom week header', () => (
+    <Calendar
+      defaultView={views.WEEK}
+      events={eventsWithCustomSize}
+      components={{
+        week: {
+          // eslint-disable-next-line react/prop-types
+          header: ({ children }) => <span>{children} - custom week header</span>,
+        },
+      }}
+    />
+  ))
+  .add('add custom toolbar', () => (
+    <Calendar
+      defaultView={views.WEEK}
+      events={eventsWithCustomSize}
+      components={{
+        week: {
+          // eslint-disable-next-line react/prop-types
+          toolbar: ({ children }) => <span>{children} - xablau</span>,
+        },
+      }}
+    />
+  ))
   .add('custom time gutter header', () => {
     // Should rename to TimeScaleHeader
     const TimeGutter = () => <p>Custom gutter text</p>;
     return (
       <Calendar
-        popup
         events={fakeEvents}
         onSelectEvent={action('event selected')}
         defaultDate={new Date(2015, 3, 1)}

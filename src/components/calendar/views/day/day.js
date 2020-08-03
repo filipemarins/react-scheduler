@@ -3,14 +3,14 @@ import React from 'react';
 
 import * as dates from 'utils/dates';
 import { navigate } from 'utils/constants';
-import TimeGrid from 'components/shared/time-view';
+import TimeView from 'components/shared/time-view';
 
 class Day extends React.Component {
   render() {
     const { date, ...props } = this.props;
     const range = Day.range(date);
 
-    return <TimeGrid {...props} range={range} eventOffset={10} />;
+    return <TimeView {...props} range={range} eventOffset={10} />;
   }
 }
 
