@@ -1,10 +1,9 @@
-import EventWrapper from 'components/event-wrapper';
-import BackgroundWrapper from 'components/background-wrapper';
+import NoopWrapper from 'components/shared/noop-wrapper';
 
 export const components = {
-  eventWrapper: EventWrapper,
-  timeSlotWrapper: BackgroundWrapper,
-  dateCellWrapper: BackgroundWrapper,
+  eventWrapper: NoopWrapper,
+  timeSlotWrapper: NoopWrapper,
+  dateCellWrapper: NoopWrapper,
 };
 
 export { default as Calendar } from 'components/calendar';
