@@ -13,4 +13,4 @@ export { default as momentLocalizer } from './localizers/moment';
 export { default as globalizeLocalizer } from './localizers/globalize';
 export { default as dateFnsLocalizer } from './localizers/date-fns';
 export { default as move } from 'utils/move';
-export { views as Views, navigate as Navigate } from 'utils/constants';
+export { views, navigate } from 'utils/constants';
