@@ -11,13 +11,13 @@ import resources from 'tests/fixtures/resources';
 import { dateCellWrapper, timeSlotWrapper, eventWrapper } from 'tests/fixtures/custom-components';
 import createEvents from 'tests/fixtures/create-events';
 
-import BaseCalendar from './calendar';
+import BaseScheduler from './scheduler';
 
 const localizer = momentLocalizer(moment);
 
 addDecorator((fn) => <div style={{ height: 600 }}>{fn()}</div>);
 
-const Calendar = (props) => <BaseCalendar localizer={localizer} {...props} />;
+const Calendar = (props) => <BaseScheduler localizer={localizer} {...props} />;
 
 storiesOf('Basic Usage', module)
   .add('demo', () => (
