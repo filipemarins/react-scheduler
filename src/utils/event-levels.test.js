@@ -3,9 +3,9 @@ import {
   eventSegments,
   eventLevels,
   inRange,
-  segsOverlap,
+  segmentsOverlap,
   sortEvents,
-} from 'utils/event-levels';
+} from './event-levels';
 
 describe('endOfRange', () => {
   test('it adds one day by default', () => {
@@ -355,7 +355,7 @@ describe('inRange', () => {
   });
 });
 
-describe('segsOverlap', () => {
+describe('segmentsOverlap', () => {
   const segment = { left: 2, right: 3 };
 
   describe('when at least one segment overlaps', () => {
@@ -365,7 +365,7 @@ describe('segsOverlap', () => {
       const overlappingSegment = { left: 1, right: 2 };
       const otherSegments = [nonOverlappingSegment, overlappingSegment];
 
-      const result = segsOverlap(segment, otherSegments);
+      const result = segmentsOverlap(segment, otherSegments);
 
       expect(result).toBeTruthy();
     });
@@ -374,7 +374,7 @@ describe('segsOverlap', () => {
       const overlappingSegment = { left: 3, right: 3 };
       const otherSegments = [nonOverlappingSegment, overlappingSegment];
 
-      const result = segsOverlap(segment, otherSegments);
+      const result = segmentsOverlap(segment, otherSegments);
 
       expect(result).toBeTruthy();
     });
@@ -383,7 +383,7 @@ describe('segsOverlap', () => {
       const overlappingSegment = { left: 1, right: 4 };
       const otherSegments = [nonOverlappingSegment, overlappingSegment];
 
-      const result = segsOverlap(segment, otherSegments);
+      const result = segmentsOverlap(segment, otherSegments);
 
       expect(result).toBeTruthy();
     });
@@ -392,7 +392,7 @@ describe('segsOverlap', () => {
       const overlappingSegment = { left: 2, right: 3 };
       const otherSegments = [nonOverlappingSegment, overlappingSegment];
 
-      const result = segsOverlap(segment, otherSegments);
+      const result = segmentsOverlap(segment, otherSegments);
 
       expect(result).toBeTruthy();
     });
@@ -403,7 +403,7 @@ describe('segsOverlap', () => {
     const segmentToTheRight = { left: 4, right: 5 };
     const otherSegments = [segmentToTheLeft, segmentToTheRight];
 
-    const result = segsOverlap(segment, otherSegments);
+    const result = segmentsOverlap(segment, otherSegments);
 
     expect(result).toBeFalsy();
   });

@@ -1,4 +1,5 @@
 /* eslint no-unused-vars: "off" */
+import { isFunction } from 'lodash-es';
 
 import overlap from './layout-algorithms/overlap';
 import noOverlap from './layout-algorithms/no-overlap';
@@ -7,10 +8,6 @@ const DefaultAlgorithms = {
   overlap,
   'no-overlap': noOverlap,
 };
-
-function isFunction(a) {
-  return !!(a && a.constructor && a.call && a.apply);
-}
 
 //
 export function getStyledEvents({

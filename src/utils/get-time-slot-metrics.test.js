@@ -1,4 +1,4 @@
-import * as dates from 'utils/dates';
+import * as dates from './dates';
 import getTimeSlotMetrics from './get-time-slot-metrics';
 
 describe('getTimeSlotMetrics', () => {

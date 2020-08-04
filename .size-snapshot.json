@@ -1,30 +1,30 @@
 {
   "react-scheduler.js": {
-    "bundled": 499178,
-    "minified": 153060,
-    "gzipped": 43102
+    "bundled": 220284,
+    "minified": 92952,
+    "gzipped": 22687
   },
   "react-scheduler.min.js": {
-    "bundled": 499178,
-    "minified": 153060,
-    "gzipped": 43102
+    "bundled": 220284,
+    "minified": 92952,
+    "gzipped": 22687
   },
   "react-scheduler.cjs.js": {
-    "bundled": 450552,
-    "minified": 175553,
-    "gzipped": 47578
+    "bundled": 193501,
+    "minified": 94839,
+    "gzipped": 23039
   },
-  "react-scheduler.es.js": {
-    "bundled": 448115,
-    "minified": 173188,
-    "gzipped": 47451,
+  "react-scheduler.esm.js": {
+    "bundled": 191274,
+    "minified": 92677,
+    "gzipped": 22941,
     "treeshaked": {
       "rollup": {
-        "code": 123952,
-        "import_statements": 498
+        "code": 66403,
+        "import_statements": 593
       },
       "webpack": {
-        "code": 127597
+        "code": 69511
       }
     }
   }
