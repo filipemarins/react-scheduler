@@ -3,10 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { uncontrollable } from 'uncontrollable';
 import clsx from 'clsx';
-import omit from 'lodash/omit';
-import defaults from 'lodash/defaults';
-import transform from 'lodash/transform';
-import mapValues from 'lodash/mapValues';
+import { omit, defaults, transform, mapValues } from 'lodash-es';
 
 import {
   accessor,

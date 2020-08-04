@@ -1,14 +1,13 @@
-import findIndex from 'lodash/findIndex';
+import { findIndex } from 'lodash-es';
+
 import * as dates from './dates';
 
-export function endOfRange(dateRange, unit = 'day') {
-  return {
-    first: dateRange[0],
-    last: dates.add(dateRange[dateRange.length - 1], 1, unit),
-  };
-}
+export const endOfRange = (dateRange, unit = 'day') => ({
+  first: dateRange[0],
+  last: dates.add(dateRange[dateRange.length - 1], 1, unit),
+});
 
-export function eventSegments(event, range, accessors) {
+export const eventSegments = (event, range, accessors) => {
   const { first, last } = endOfRange(range);
 
   const slots = dates.diff(first, last, 'day');
@@ -27,9 +26,12 @@ export function eventSegments(event, range, accessors) {
     left: padding + 1,
     right: Math.max(padding + span, 1),
   };
-}
+};
 
-export function eventLevels(rowSegments, limit = Infinity) {
+export const segmentsOverlap = (seg, otherSegments) =>
+  otherSegments.some((otherSeg) => otherSeg.left <= seg.right && otherSeg.right >= seg.left);
+
+export const eventLevels = (rowSegments, limit = Infinity) => {
   let i;
   let j;
   let seg;
@@ -39,7 +41,7 @@ export function eventLevels(rowSegments, limit = Infinity) {
   for (i = 0; i < rowSegments.length; i++) {
     seg = rowSegments[i];
 
-    for (j = 0; j < levels.length; j++) if (!segsOverlap(seg, levels[j])) break;
+    for (j = 0; j < levels.length; j++) if (!segmentsOverlap(seg, levels[j])) break;
 
     if (j >= limit) {
       extra.push(seg);
@@ -53,9 +55,9 @@ export function eventLevels(rowSegments, limit = Infinity) {
   }
 
   return { levels, extra };
-}
+};
 
-export function inRange(e, start, end, accessors) {
+export const inRange = (e, start, end, accessors) => {
   const eStart = dates.startOf(accessors.start(e), 'day');
   const eEnd = accessors.end(e);
 
@@ -66,13 +68,9 @@ export function inRange(e, start, end, accessors) {
     : dates.gte(eEnd, start, 'minutes');
 
   return startsBeforeEnd && endsAfterStart;
-}
+};
 
-export function segsOverlap(seg, otherSegs) {
-  return otherSegs.some((otherSeg) => otherSeg.left <= seg.right && otherSeg.right >= seg.left);
-}
-
-export function sortEvents(evtA, evtB, accessors) {
+export const sortEvents = (evtA, evtB, accessors) => {
   const startSort =
     +dates.startOf(accessors.start(evtA), 'day') - +dates.startOf(accessors.start(evtB), 'day');
 
@@ -86,4 +84,4 @@ export function sortEvents(evtA, evtB, accessors) {
     !!accessors.allDay(evtB) - !!accessors.allDay(evtA) || // then allDay single day events
     +accessors.start(evtA) - +accessors.start(evtB)
   ); // then sort by start time
-}
+};

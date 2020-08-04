@@ -113,7 +113,6 @@
     "date-arithmetic": "^4.1.0",
     "dom-helpers": "^5.1.4",
     "invariant": "^2.2.4",
-    "lodash": "^4.17.19",
     "lodash-es": "^4.17.15",
     "memoize-one": "^5.1.1",
     "prop-types": "^15.7.2",

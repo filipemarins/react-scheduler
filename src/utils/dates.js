@@ -1,4 +1,3 @@
-/* eslint no-fallthrough: off */
 import * as dates from 'date-arithmetic';
 
 export {

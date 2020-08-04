@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { findDOMNode } from 'react-dom';
 import clsx from 'clsx';
 import * as animationFrame from 'dom-helpers/animationFrame';
-import chunk from 'lodash/chunk';
+import { chunk } from 'lodash-es';
 
 import * as dates from 'utils/dates';
 import { navigate, views } from 'utils/constants';
