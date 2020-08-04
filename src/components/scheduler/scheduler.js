@@ -51,9 +51,6 @@ class Scheduler extends React.Component {
     allDayAccessor,
     tooltipAccessor,
     titleAccessor,
-    resourceAccessor,
-    resourceIdAccessor,
-    resourceTitleAccessor,
     appointmentPropGetter,
     slotPropGetter,
     slotGroupPropGetter,
@@ -91,9 +88,6 @@ class Scheduler extends React.Component {
         allDay: wrapAccessor(allDayAccessor),
         tooltip: wrapAccessor(tooltipAccessor),
         title: wrapAccessor(titleAccessor),
-        resource: wrapAccessor(resourceAccessor),
-        resourceId: wrapAccessor(resourceIdAccessor),
-        resourceTitle: wrapAccessor(resourceTitleAccessor),
       },
     };
   }
@@ -314,7 +308,6 @@ Scheduler.propTypes = {
    *  - end time
    *  - title
    *  - whether its an "all day" appointment or not
-   *  - any resource the appointment may be related to
    *
    * Each of these properties can be customized or generated dynamically by
    * setting the various "accessor" props. Without any configuration the default
@@ -326,7 +319,6 @@ Scheduler.propTypes = {
    *   start: Date,
    *   end: Date,
    *   allDay?: boolean
-   *   resource?: any,
    * }
    * ```
    */
@@ -391,48 +383,6 @@ Scheduler.propTypes = {
   endAccessor: accessor,
 
   /**
-   * Returns the id of the `resource` that the appointment is a member of. This
-   * id should match at least one resource in the `resources` array.
-   *
-   * ```js
-   * string | (appointment: Object) => Date
-   * ```
-   *
-   * @type {(func|string)}
-   */
-  resourceAccessor: accessor,
-
-  /**
-   * An array of resource objects that map appointments to a specific resource.
-   * Resource objects, like appointments, can be any shape or have any properties,
-   * but should be uniquly identifiable via the `resourceIdAccessor`, as
-   * well as a "title" or name as provided by the `resourceTitleAccessor` prop.
-   */
-  resources: PropTypes.arrayOf(PropTypes.object),
-
-  /**
-   * Provides a unique identifier for each resource in the `resources` array
-   *
-   * ```js
-   * string | (resource: Object) => any
-   * ```
-   *
-   * @type {(func|string)}
-   */
-  resourceIdAccessor: accessor,
-
-  /**
-   * Provides a human readable name for the resource object, used in headers.
-   *
-   * ```js
-   * string | (resource: Object) => any
-   * ```
-   *
-   * @type {(func|string)}
-   */
-  resourceTitleAccessor: accessor,
-
-  /**
    * Determines the current date/time which is highlighted in the views.
    *
    * The value affects which day is shaded and which time is shown as
@@ -489,7 +439,6 @@ Scheduler.propTypes = {
    *   slotInfo: {
    *     start: Date,
    *     end: Date,
-   *     resourceId:  (number|string),
    *     slots: Array<Date>,
    *     action: "select" | "click" | "doubleClick",
    *     bounds: ?{ // For "select" action
@@ -538,7 +487,7 @@ Scheduler.propTypes = {
    * Returning `false` from the handler will prevent a selection.
    *
    * ```js
-   * (range: { start: Date, end: Date, resourceId: (number|string) }) => ?boolean
+   * (range: { start: Date, end: Date }) => ?boolean
    * ```
    */
   onSelecting: PropTypes.func,
@@ -692,7 +641,7 @@ Scheduler.propTypes = {
    * position may break the scheduler in unexpected ways.
    *
    * ```js
-   * (date: Date, resourceId: (number|string)) => { className?: string, style?: Object }
+   * (date: Date) => { className?: string, style?: Object }
    * ```
    */
   slotPropGetter: PropTypes.func,
@@ -887,8 +836,6 @@ Scheduler.propTypes = {
     dateCellWrapper: PropTypes.elementType,
     timeSlotWrapper: PropTypes.elementType,
     timeGutterHeader: PropTypes.elementType,
-    resourceHeader: PropTypes.elementType,
-
     toolbar: PropTypes.elementType,
 
     agenda: PropTypes.shape({
@@ -955,10 +902,6 @@ Scheduler.defaultProps = {
   allDayAccessor: 'allDay',
   startAccessor: 'start',
   endAccessor: 'end',
-  resourceAccessor: 'resourceId',
-
-  resourceIdAccessor: 'id',
-  resourceTitleAccessor: 'title',
 
   longPressThreshold: 250,
   getNow: () => new Date(),

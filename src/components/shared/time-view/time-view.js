@@ -4,20 +4,16 @@ import clsx from 'clsx';
 import * as animationFrame from 'dom-helpers/animationFrame';
 import getWidth from 'dom-helpers/width';
 import { findDOMNode } from 'react-dom';
-import memoize from 'memoize-one';
 
 import { DayLayoutAlgorithmPropType } from 'utils/prop-types';
 import * as dates from 'utils/dates';
 import { notify } from 'utils/helpers';
 import { inRange, sortAppointments } from 'utils/appointment-levels';
-import Resources from 'utils/resources';
 import DayColumn from './day-column';
 import TimeViewHeader from './header';
 import TimeScale from './time-scale';
 
 export default class TimeView extends Component {
-  memoizedResources = memoize((resources, accessors) => Resources(resources, accessors));
-
   constructor(props) {
     super(props);
 
@@ -158,32 +154,25 @@ export default class TimeView extends Component {
   renderAppointments(range, appointments, now) {
     const { min, max, components, accessors, localizer, dayLayoutAlgorithm } = this.props;
 
-    const resources = this.memoizedResources(this.props.resources, accessors);
-    const groupedAppointments = resources.groupAppointments(appointments);
-
-    return resources.map(([id, resource], i) =>
-      range.map((date, jj) => {
-        const daysAppointments = (groupedAppointments.get(id) || []).filter((appointment) =>
-          dates.inRange(date, accessors.start(appointment), accessors.end(appointment), 'day')
-        );
-
-        return (
-          <DayColumn
-            {...this.props}
-            localizer={localizer}
-            min={dates.merge(date, min)}
-            max={dates.merge(date, max)}
-            resource={resource && id}
-            components={components}
-            isNow={dates.eq(date, now, 'day')}
-            key={`${i}-${jj}`}
-            date={date}
-            appointments={daysAppointments}
-            dayLayoutAlgorithm={dayLayoutAlgorithm}
-          />
-        );
-      })
-    );
+    return range.map((date) => {
+      const daysAppointments = appointments.filter((appointment) =>
+        dates.inRange(date, accessors.start(appointment), accessors.end(appointment), 'day')
+      );
+      return (
+        <DayColumn
+          {...this.props}
+          localizer={localizer}
+          min={dates.merge(date, min)}
+          max={dates.merge(date, max)}
+          components={components}
+          isNow={dates.eq(date, now, 'day')}
+          key={date}
+          date={date}
+          appointments={daysAppointments}
+          dayLayoutAlgorithm={dayLayoutAlgorithm}
+        />
+      );
+    });
   }
 
   render() {
@@ -194,7 +183,6 @@ export default class TimeView extends Component {
       rtl,
       selected,
       getNow,
-      resources,
       components,
       accessors,
       getters,
@@ -234,7 +222,7 @@ export default class TimeView extends Component {
     allDayAppointments.sort((a, b) => sortAppointments(a, b, accessors));
 
     return (
-      <div className={clsx('rbc-time-view', resources && 'rbc-time-view-resources')}>
+      <div className={clsx('rbc-time-view')}>
         <TimeViewHeader
           range={range}
           appointments={allDayAppointments}
@@ -243,7 +231,6 @@ export default class TimeView extends Component {
           getNow={getNow}
           localizer={localizer}
           selected={selected}
-          resources={this.memoizedResources(resources, accessors)}
           selectable={this.props.selectable}
           accessors={accessors}
           getters={getters}
@@ -280,7 +267,6 @@ export default class TimeView extends Component {
 
 TimeView.propTypes = {
   appointments: PropTypes.array.isRequired,
-  resources: PropTypes.array,
 
   step: PropTypes.number,
   timeslots: PropTypes.number,

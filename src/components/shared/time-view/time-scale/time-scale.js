@@ -36,7 +36,7 @@ export default class TimeGutter extends Component {
   };
 
   render() {
-    const { resource, components, getters } = this.props;
+    const { components, getters } = this.props;
 
     return (
       <div className="rbc-time-gutter rbc-time-column">
@@ -45,7 +45,6 @@ export default class TimeGutter extends Component {
             <TimeSlot
               key={idx}
               group={grp}
-              resource={resource}
               components={components}
               renderSlot={this.renderSlot}
               getters={getters}
@@ -67,5 +66,4 @@ TimeGutter.propTypes = {
   getters: PropTypes.object,
 
   localizer: PropTypes.object.isRequired,
-  resource: PropTypes.string,
 };

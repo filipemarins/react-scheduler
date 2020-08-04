@@ -8,7 +8,6 @@ export default class TimeSlot extends Component {
   render() {
     const {
       renderSlot,
-      resource,
       group,
       getters,
       components: { timeSlotWrapper: Wrapper = NoopWrapper } = {},
@@ -18,9 +17,9 @@ export default class TimeSlot extends Component {
     return (
       <div className="rbc-timeslot-group" {...groupProps}>
         {group.map((value, idx) => {
-          const slotProps = getters ? getters.slotProp(value, resource) : {};
+          const slotProps = getters ? getters.slotProp(value) : {};
           return (
-            <Wrapper key={idx} value={value} resource={resource}>
+            <Wrapper key={idx} value={value}>
               <div {...slotProps} className={clsx('rbc-time-slot', slotProps.className)}>
                 {renderSlot && renderSlot(value, idx)}
               </div>
@@ -35,7 +34,6 @@ export default class TimeSlot extends Component {
 TimeSlot.propTypes = {
   renderSlot: PropTypes.func,
   group: PropTypes.array.isRequired,
-  resource: PropTypes.any,
   components: PropTypes.object,
   getters: PropTypes.object,
 };

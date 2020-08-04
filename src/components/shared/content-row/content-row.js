@@ -110,7 +110,6 @@ class ContentRow extends React.Component {
       onSelectStart,
       onSelectEnd,
       onDoubleClick,
-      resourceId,
       longPressThreshold,
       isAllDay,
     } = this.props;
@@ -130,7 +129,6 @@ class ContentRow extends React.Component {
       components,
       onSelect,
       onDoubleClick,
-      resourceId,
       slotMetrics: metrics,
     };
 
@@ -181,7 +179,6 @@ ContentRow.propTypes = {
   range: PropTypes.array.isRequired,
 
   rtl: PropTypes.bool,
-  resourceId: PropTypes.any,
   renderForMeasure: PropTypes.bool,
   renderHeader: PropTypes.func,
 

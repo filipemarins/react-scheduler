@@ -56,7 +56,7 @@ class Header extends React.Component {
     });
   }
 
-  renderRow = (resource) => {
+  renderRow = () => {
     const {
       appointments,
       rtl,
@@ -69,11 +69,6 @@ class Header extends React.Component {
       components,
     } = this.props;
 
-    const resourceId = accessors.resourceId(resource);
-    const appointmentsToDisplay = resource
-      ? appointments.filter((appointment) => accessors.resource(appointment) === resourceId)
-      : appointments;
-
     return (
       <ContentRow
         isAllDay
@@ -81,8 +76,6 @@ class Header extends React.Component {
         getNow={getNow}
         minRows={2}
         range={range}
-        appointments={appointmentsToDisplay}
-        resourceId={resourceId}
         className="rbc-allday-cell"
         selectable={selectable}
         selected={this.props.selected}
@@ -102,7 +95,6 @@ class Header extends React.Component {
     const {
       width,
       rtl,
-      resources,
       range,
       appointments,
       getNow,
@@ -113,18 +105,13 @@ class Header extends React.Component {
       scrollRef,
       localizer,
       isOverflowing,
-      components: {
-        timeGutterHeader: TimeGutterHeader,
-        resourceHeader: ResourceHeaderComponent = NoopWrapper,
-      },
+      components: { timeGutterHeader: TimeGutterHeader },
     } = this.props;
 
     const style = {};
     if (isOverflowing) {
       style[rtl ? 'marginLeft' : 'marginRight'] = `${scrollbarSize()}px`;
     }
-
-    const groupedAppointments = resources.groupAppointments(appointments);
 
     return (
       <div
@@ -139,46 +126,34 @@ class Header extends React.Component {
           {TimeGutterHeader && <TimeGutterHeader />}
         </div>
 
-        {resources.map(([id, resource], idx) => (
-          <div className="rbc-time-header-content" key={id || idx}>
-            {resource && (
-              <div className="rbc-row rbc-row-resource" key={`resource_${id}`}>
-                <div className="rbc-header">
-                  <ResourceHeaderComponent>
-                    {accessors.resourceTitle(resource)}
-                  </ResourceHeaderComponent>
-                </div>
-              </div>
-            )}
-            <div
-              className={`rbc-row rbc-time-header-cell${
-                range.length <= 1 ? ' rbc-time-header-cell-single-day' : ''
-              }`}
-            >
-              {this.renderHeaderCells(range)}
-            </div>
-            <ContentRow
-              isAllDay
-              rtl={rtl}
-              getNow={getNow}
-              minRows={2}
-              range={range}
-              appointments={groupedAppointments.get(id) || []}
-              resourceId={resource && id}
-              className="rbc-allday-cell"
-              selectable={selectable}
-              selected={this.props.selected}
-              components={components}
-              accessors={accessors}
-              getters={getters}
-              localizer={localizer}
-              onSelect={this.props.onSelectAppointment}
-              onDoubleClick={this.props.onDoubleClickAppointment}
-              onSelectSlot={this.props.onSelectSlot}
-              longPressThreshold={this.props.longPressThreshold}
-            />
+        <div className="rbc-time-header-content">
+          <div
+            className={`rbc-row rbc-time-header-cell${
+              range.length <= 1 ? ' rbc-time-header-cell-single-day' : ''
+            }`}
+          >
+            {this.renderHeaderCells(range)}
           </div>
-        ))}
+          <ContentRow
+            isAllDay
+            rtl={rtl}
+            getNow={getNow}
+            minRows={2}
+            range={range}
+            appointments={[]}
+            className="rbc-allday-cell"
+            selectable={selectable}
+            selected={this.props.selected}
+            components={components}
+            accessors={accessors}
+            getters={getters}
+            localizer={localizer}
+            onSelect={this.props.onSelectAppointment}
+            onDoubleClick={this.props.onDoubleClickAppointment}
+            onSelectSlot={this.props.onSelectSlot}
+            longPressThreshold={this.props.longPressThreshold}
+          />
+        </div>
       </div>
     );
   }
@@ -187,7 +162,6 @@ class Header extends React.Component {
 Header.propTypes = {
   range: PropTypes.array.isRequired,
   appointments: PropTypes.array.isRequired,
-  resources: PropTypes.object,
   getNow: PropTypes.func.isRequired,
   isOverflowing: PropTypes.bool,
 

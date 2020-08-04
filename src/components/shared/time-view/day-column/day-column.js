@@ -181,7 +181,7 @@ class DayColumn extends React.Component {
         if (
           (dates.eq(current.startDate, start, 'minutes') &&
             dates.eq(current.endDate, end, 'minutes')) ||
-          onSelecting({ start, end, resourceId: this.props.resource }) === false
+          onSelecting({ start, end }) === false
         )
           return;
       }
@@ -282,7 +282,6 @@ class DayColumn extends React.Component {
       slots,
       start: startDate,
       end: endDate,
-      resourceId: this.props.resource,
       action,
       bounds,
       box,
@@ -302,7 +301,6 @@ class DayColumn extends React.Component {
       max,
       rtl,
       isNow,
-      resource,
       accessors,
       localizer,
       getters: { dayProp, ...getters },
@@ -329,17 +327,10 @@ class DayColumn extends React.Component {
         )}
       >
         {slotMetrics.groups.map((grp, idx) => (
-          <TimeSlot
-            key={idx}
-            group={grp}
-            resource={resource}
-            getters={getters}
-            components={components}
-          />
+          <TimeSlot key={idx} group={grp} getters={getters} components={components} />
         ))}
         <AppointmentContainer
           localizer={localizer}
-          resource={resource}
           accessors={accessors}
           getters={getters}
           components={components}
@@ -398,7 +389,6 @@ DayColumn.propTypes = {
 
   className: PropTypes.string,
   dragThroughAppointments: PropTypes.bool,
-  resource: PropTypes.any,
 
   dayLayoutAlgorithm: DayLayoutAlgorithmPropType,
 };

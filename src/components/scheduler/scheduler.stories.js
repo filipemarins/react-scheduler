@@ -7,7 +7,6 @@ import 'sass/styles.scss';
 import momentLocalizer from 'localizers/moment';
 import { views } from 'utils/constants';
 import { appointmentsWithCustomSize, fakeAppointments } from 'tests/fixtures/appointments';
-import resources from 'tests/fixtures/resources';
 import {
   dateCellWrapper,
   timeSlotWrapper,
@@ -174,15 +173,6 @@ storiesOf('Basic Usage', module)
       }}
     />
   ))
-  .add('add custom timeSlotWrapper', () => (
-    <Scheduler
-      defaultView={views.DAY}
-      appointments={appointmentsWithCustomSize}
-      components={{
-        timeSlotWrapper,
-      }}
-    />
-  ))
   .add('add custom appointmentWrapper', () => (
     <Scheduler
       defaultView={views.DAY}
@@ -192,21 +182,21 @@ storiesOf('Basic Usage', module)
       }}
     />
   ))
-  .add('add custom no agenda appointments label', () => (
-    <Scheduler
-      defaultView={views.AGENDA}
-      appointments={appointmentsWithCustomSize}
-      messages={{
-        noAppointmentsInRange: 'There are no special appointments in this range [test message]',
-      }}
-    />
-  ))
   .add('add custom timeSlotWrapper', () => (
     <Scheduler
       defaultView={views.WEEK}
       appointments={appointmentsWithCustomSize}
       components={{
         timeSlotWrapper,
+      }}
+    />
+  ))
+  .add('add custom no agenda appointments label', () => (
+    <Scheduler
+      defaultView={views.AGENDA}
+      appointments={appointmentsWithCustomSize}
+      messages={{
+        noAppointmentsInRange: 'There are no special appointments in this range [test message]',
       }}
     />
   ));
@@ -428,15 +418,6 @@ storiesOf('Layout Issues', module)
       ]}
     />
   ));
-
-storiesOf('Resources', module).add('demo', () => (
-  <Scheduler
-    appointments={resources.appointments}
-    resources={resources.list}
-    defaultView={views.DAY}
-    defaultDate={new Date(2015, 3, 4)}
-  />
-));
 
 storiesOf('Timeslots', module)
   .add('selectable, step 15, 4 timeslots', () => (

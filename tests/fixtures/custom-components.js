@@ -38,7 +38,7 @@ export const appointmentWrapper = (appointmentWrapperProps) => {
 
 export const timeSlotWrapper = (timeSlotWrapperProps) => {
   const style =
-    timeSlotWrapperProps.resource === null || timeSlotWrapperProps.value.getMinutes() !== 0
+    timeSlotWrapperProps.value.getMinutes() !== 0
       ? {}
       : {
           border: '4px solid',
