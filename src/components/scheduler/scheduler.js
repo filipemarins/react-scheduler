@@ -23,7 +23,7 @@ import moveDate from 'utils/move';
 import { wrapAccessor } from 'utils/accessors';
 
 import NoopWrapper from 'components/shared/noop-wrapper';
-import VIEWS from 'components/views';
+import VIEWS from './views';
 import Toolbar from './toolbar';
 
 function viewNames(_views) {

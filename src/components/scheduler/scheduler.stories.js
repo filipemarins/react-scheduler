@@ -17,18 +17,18 @@ const localizer = momentLocalizer(moment);
 
 addDecorator((fn) => <div style={{ height: 600 }}>{fn()}</div>);
 
-const Calendar = (props) => <BaseScheduler localizer={localizer} {...props} />;
+const Scheduler = (props) => <BaseScheduler localizer={localizer} {...props} />;
 
 storiesOf('Basic Usage', module)
   .add('demo', () => (
-    <Calendar
+    <Scheduler
       events={fakeEvents}
       onSelectEvent={action('event selected')}
       defaultDate={new Date(2015, 3, 1)}
     />
   ))
   .add('default view', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.WEEK}
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
@@ -38,7 +38,7 @@ storiesOf('Basic Usage', module)
     />
   ))
   .add('selectable', () => (
-    <Calendar
+    <Scheduler
       selectable
       defaultView={views.WEEK}
       min={moment('12:00am', 'h:mma').toDate()}
@@ -50,10 +50,10 @@ storiesOf('Basic Usage', module)
     />
   ))
   .add('complex day view layout', () => (
-    <Calendar defaultDate={new Date()} defaultView={views.DAY} events={createEvents(1)} step={30} />
+    <Scheduler defaultDate={new Date()} defaultView={views.DAY} events={createEvents(1)} step={30} />
   ))
   .add('multi-day', () => (
-    <Calendar
+    <Scheduler
       showMultiDayTimes
       defaultDate={new Date(2016, 11, 4)}
       max={moment().endOf('day').add(-1, 'hours').toDate()}
@@ -83,7 +83,7 @@ storiesOf('Basic Usage', module)
   ))
   .add('agenda view - with length prop', () => (
     /* should display as title toolbar (from now to now + 14 days) */
-    <Calendar defaultView={views.AGENDA} events={eventsWithCustomSize} length={14} />
+    <Scheduler defaultView={views.AGENDA} events={eventsWithCustomSize} length={14} />
   ))
   .add('custom now is the first of the month', () => {
     // Issue on week view
@@ -93,7 +93,7 @@ storiesOf('Basic Usage', module)
       return now;
     };
     return (
-      <Calendar
+      <Scheduler
         defaultView={views.WEEK}
         getNow={customNow}
         min={moment('12:00am', 'h:mma').toDate()}
@@ -105,7 +105,7 @@ storiesOf('Basic Usage', module)
     );
   })
   .add('add custom date header', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.MONTH}
       events={eventsWithCustomSize}
       components={{
@@ -117,7 +117,7 @@ storiesOf('Basic Usage', module)
     />
   ))
   .add('add custom week header', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.WEEK}
       events={eventsWithCustomSize}
       components={{
@@ -129,7 +129,7 @@ storiesOf('Basic Usage', module)
     />
   ))
   .add('add custom toolbar', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.WEEK}
       events={eventsWithCustomSize}
       components={{
@@ -144,7 +144,7 @@ storiesOf('Basic Usage', module)
     // Should rename to TimeScaleHeader
     const TimeGutter = () => <p>Custom gutter text</p>;
     return (
-      <Calendar
+      <Scheduler
         events={fakeEvents}
         onSelectEvent={action('event selected')}
         defaultDate={new Date(2015, 3, 1)}
@@ -157,7 +157,7 @@ storiesOf('Basic Usage', module)
     );
   })
   .add('add custom dateCellWrapper', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.MONTH}
       events={eventsWithCustomSize}
       components={{
@@ -166,7 +166,7 @@ storiesOf('Basic Usage', module)
     />
   ))
   .add('add custom timeSlotWrapper', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.DAY}
       events={eventsWithCustomSize}
       components={{
@@ -175,7 +175,7 @@ storiesOf('Basic Usage', module)
     />
   ))
   .add('add custom eventWrapper', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.DAY}
       events={eventsWithCustomSize}
       components={{
@@ -184,7 +184,7 @@ storiesOf('Basic Usage', module)
     />
   ))
   .add('add custom no agenda events label', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.AGENDA}
       events={eventsWithCustomSize}
       messages={{
@@ -193,7 +193,7 @@ storiesOf('Basic Usage', module)
     />
   ))
   .add('add custom timeSlotWrapper', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.WEEK}
       events={eventsWithCustomSize}
       components={{
@@ -204,7 +204,7 @@ storiesOf('Basic Usage', module)
 
 storiesOf('Event Durations', module)
   .add('Daylight savings starts', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.DAY}
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
@@ -232,7 +232,7 @@ storiesOf('Event Durations', module)
     />
   ))
   .add('Daylight savings ends', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.DAY}
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
@@ -260,7 +260,7 @@ storiesOf('Event Durations', module)
     />
   ))
   .add('Daylight savings starts, after 2am', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.DAY}
       min={moment('3:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
@@ -276,7 +276,7 @@ storiesOf('Event Durations', module)
     />
   ))
   .add('Daylight savings ends, after 2am', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.DAY}
       min={moment('3:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
@@ -294,7 +294,7 @@ storiesOf('Event Durations', module)
 
 storiesOf('Layout Issues', module)
   .add('event layout', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.DAY}
       defaultDate={new Date()}
       timeslots={4}
@@ -302,7 +302,7 @@ storiesOf('Layout Issues', module)
     />
   ))
   .add('first of the week all-day event', () => (
-    <Calendar
+    <Scheduler
       defaultDate={new Date(2016, 11, 4)}
       events={[
         {
@@ -315,7 +315,7 @@ storiesOf('Layout Issues', module)
     />
   ))
   .add('end of the week all-day event', () => (
-    <Calendar
+    <Scheduler
       defaultDate={new Date(2016, 11, 3)}
       events={[
         {
@@ -328,7 +328,7 @@ storiesOf('Layout Issues', module)
     />
   ))
   .add('event at end of week', () => (
-    <Calendar
+    <Scheduler
       defaultDate={new Date(2016, 11, 3)}
       events={[
         {
@@ -340,7 +340,7 @@ storiesOf('Layout Issues', module)
     />
   ))
   .add('event at start of week', () => (
-    <Calendar
+    <Scheduler
       defaultDate={new Date(2016, 11, 4)}
       events={[
         {
@@ -352,7 +352,7 @@ storiesOf('Layout Issues', module)
     />
   ))
   .add('events on a constrained day column', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.DAY}
       min={moment('8 am', 'h a').toDate()}
       max={moment('5 pm', 'h a').toDate()}
@@ -361,7 +361,7 @@ storiesOf('Layout Issues', module)
   ))
   .add('no duration', () => (
     /* should display all three events */
-    <Calendar
+    <Scheduler
       defaultDate={new Date(2016, 11, 4)}
       events={[
         {
@@ -383,7 +383,7 @@ storiesOf('Layout Issues', module)
     />
   ))
   .add('Single days should only span one slot, multi-days multiple', () => (
-    <Calendar
+    <Scheduler
       defaultDate={new Date(2015, 3, 1)}
       events={[
         {
@@ -421,7 +421,7 @@ storiesOf('Layout Issues', module)
   ));
 
 storiesOf('Resources', module).add('demo', () => (
-  <Calendar
+  <Scheduler
     events={resources.events}
     resources={resources.list}
     defaultView={views.DAY}
@@ -431,7 +431,7 @@ storiesOf('Resources', module).add('demo', () => (
 
 storiesOf('Timeslots', module)
   .add('selectable, step 15, 4 timeslots', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.WEEK}
       selectable
       timeslots={4}
@@ -445,7 +445,7 @@ storiesOf('Timeslots', module)
     />
   ))
   .add('selectable, step 10, 6 timeslots', () => (
-    <Calendar
+    <Scheduler
       selectable
       defaultView={views.WEEK}
       timeslots={6}
@@ -459,7 +459,7 @@ storiesOf('Timeslots', module)
     />
   ))
   .add('selectable, step 5, 6 timeslots', () => (
-    <Calendar
+    <Scheduler
       selectable
       defaultView={views.WEEK}
       timeslots={6}
@@ -473,7 +473,7 @@ storiesOf('Timeslots', module)
     />
   ))
   .add('selectable, 3 timeslots', () => (
-    <Calendar
+    <Scheduler
       defaultView={views.WEEK}
       selectable
       timeslots={3}

@@ -1,22 +1,25 @@
 import invariant from 'invariant';
-import VIEWS from 'components/views';
+import VIEWS from 'components/scheduler/views';
 import { navigate } from './constants';
 
-export default function moveDate(View, { action, date, today, ...props }) {
-  View = typeof View === 'string' ? VIEWS[View] : View;
+const moveDate = (View, { action, date, today, ...props }) => {
+  const view = typeof View === 'string' ? VIEWS[View] : View;
+  let movedDate;
 
   switch (action) {
     case navigate.TODAY:
-      date = today || new Date();
+      movedDate = today || new Date();
       break;
     case navigate.DATE:
       break;
     default:
       invariant(
-        View && typeof View.navigate === 'function',
+        View && typeof view.navigate === 'function',
         'Calendar View components must implement a static `.navigate(date, action)` method.s'
       );
-      date = View.navigate(date, action, props);
+      movedDate = view.navigate(date, action, props);
   }
-  return date;
-}
+  return movedDate;
+};
+
+export default moveDate;
