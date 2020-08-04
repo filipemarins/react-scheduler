@@ -10,15 +10,42 @@ import { navigate } from 'utils/constants';
 import { inRange } from 'utils/event-levels';
 import { isSelected } from 'utils/selection';
 
-function Agenda({ selected, getters, accessors, localizer, components, length, date, events }) {
+const Agenda = ({ selected, getters, accessors, localizer, components, length, date, events }) => {
   const headerRef = useRef(null);
   const dateColRef = useRef(null);
   const timeColRef = useRef(null);
   const contentRef = useRef(null);
   const tbodyRef = useRef(null);
+  const adjustHeader = () => {
+    if (!tbodyRef.current) return;
+
+    const header = headerRef.current;
+    const firstRow = tbodyRef.current.firstChild;
+
+    if (!firstRow) return;
+
+    const isOverflowing = contentRef.current.scrollHeight > contentRef.current.clientHeight;
+
+    let _widths = [];
+    const widths = _widths;
+
+    _widths = [getWidth(firstRow.children[0]), getWidth(firstRow.children[1])];
+
+    if (widths[0] !== _widths[0] || widths[1] !== _widths[1]) {
+      dateColRef.current.style.width = `${_widths[0]}px`;
+      timeColRef.current.style.width = `${_widths[1]}px`;
+    }
+
+    if (isOverflowing) {
+      addClass(header, 'rbc-header-overflowing');
+      header.style.marginRight = `${scrollbarSize()}px`;
+    } else {
+      removeClass(header, 'rbc-header-overflowing');
+    }
+  };
 
   useEffect(() => {
-    _adjustHeader();
+    adjustHeader();
   });
 
   const renderDay = (day, events, dayKey) => {
@@ -87,34 +114,6 @@ function Agenda({ selected, getters, accessors, localizer, components, length, d
     );
   };
 
-  const _adjustHeader = () => {
-    if (!tbodyRef.current) return;
-
-    const header = headerRef.current;
-    const firstRow = tbodyRef.current.firstChild;
-
-    if (!firstRow) return;
-
-    const isOverflowing = contentRef.current.scrollHeight > contentRef.current.clientHeight;
-
-    let _widths = [];
-    const widths = _widths;
-
-    _widths = [getWidth(firstRow.children[0]), getWidth(firstRow.children[1])];
-
-    if (widths[0] !== _widths[0] || widths[1] !== _widths[1]) {
-      dateColRef.current.style.width = `${_widths[0]}px`;
-      timeColRef.current.style.width = `${_widths[1]}px`;
-    }
-
-    if (isOverflowing) {
-      addClass(header, 'rbc-header-overflowing');
-      header.style.marginRight = `${scrollbarSize()}px`;
-    } else {
-      removeClass(header, 'rbc-header-overflowing');
-    }
-  };
-
   const { messages } = localizer;
   const end = dates.add(date, length, 'day');
 
@@ -152,7 +151,7 @@ function Agenda({ selected, getters, accessors, localizer, components, length, d
       )}
     </div>
   );
-}
+};
 
 Agenda.propTypes = {
   events: PropTypes.array,
