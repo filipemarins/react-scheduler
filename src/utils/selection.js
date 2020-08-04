@@ -1,6 +1,6 @@
-export function isSelected(event, selected) {
-  if (!event || selected == null) return false;
-  return [].concat(selected).indexOf(event) !== -1;
+export function isSelected(appointment, selected) {
+  if (!appointment || selected == null) return false;
+  return [].concat(selected).indexOf(appointment) !== -1;
 }
 
 export function slotWidth(rowBox, slots) {

@@ -25,9 +25,9 @@ export const formats = {
   weekdayFormat: 'ddd',
 
   selectRangeFormat: timeRangeFormat,
-  eventTimeRangeFormat: timeRangeFormat,
-  eventTimeRangeStartFormat: timeRangeStartFormat,
-  eventTimeRangeEndFormat: timeRangeEndFormat,
+  appointmentTimeRangeFormat: timeRangeFormat,
+  appointmentTimeRangeStartFormat: timeRangeStartFormat,
+  appointmentTimeRangeEndFormat: timeRangeEndFormat,
 
   timeGutterFormat: 'LT',
 

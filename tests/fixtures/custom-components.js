@@ -27,13 +27,13 @@ export const dateCellWrapper = (dateCellWrapperProps) => {
   );
 };
 
-export const eventWrapper = (eventWrapperProps) => {
+export const appointmentWrapper = (appointmentWrapperProps) => {
   const style = {
     border: '4px solid',
-    borderColor: eventWrapperProps.event.start.getHours() % 2 === 0 ? 'green' : 'red',
+    borderColor: appointmentWrapperProps.appointment.start.getHours() % 2 === 0 ? 'green' : 'red',
     padding: '5px',
   };
-  return <div style={style}>{eventWrapperProps.children}</div>;
+  return <div style={style}>{appointmentWrapperProps.children}</div>;
 };
 
 export const timeSlotWrapper = (timeSlotWrapperProps) => {

@@ -37,7 +37,7 @@
     "build": "yarn rollup -c && yarn build:css",
     "build:examples": "npm run clean:examples && webpack --config examples/webpack.config.js",
     "examples": "npm run clean:examples && webpack-dev-server --config examples/webpack.config.js --mode development",
-    "lint": "eslint src test stories",
+    "lint": "eslint src tests",
     "lint-staged": "npx lint-staged",
     "storybook": "start-storybook -p 9002",
     "test": "jest",

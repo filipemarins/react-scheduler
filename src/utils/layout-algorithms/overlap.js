@@ -1,6 +1,6 @@
 import { sortBy } from 'lodash-es';
 
-class Event {
+class Appointment {
   constructor(data, { accessors, slotMetrics }) {
     const { start, startDate, end, endDate, top, height } = slotMetrics.getRange(
       accessors.start(data),
@@ -17,11 +17,11 @@ class Event {
   }
 
   /**
-   * The event's width without any overlap.
+   * The appointment's width without any overlap.
    */
   get _width() {
-    // The container event's width is determined by the maximum number of
-    // events in any of its rows.
+    // The container appointment's width is determined by the maximum number of
+    // appointments in any of its rows.
     if (this.rows) {
       const columns =
         this.rows.reduce(
@@ -34,18 +34,18 @@ class Event {
 
     const availableWidth = 100 - this.container._width;
 
-    // The row event's width is the space left by the container, divided
+    // The row appointment's width is the space left by the container, divided
     // among itself and its leaves.
     if (this.leaves) {
       return availableWidth / (this.leaves.length + 1);
     }
 
-    // The leaf event's width is determined by its row's width
+    // The leaf appointment's width is determined by its row's width
     return this.row._width;
   }
 
   /**
-   * The event's calculated width, possibly with extra width added for
+   * The appointment's calculated width, possibly with extra width added for
    * overlapping effect.
    */
   get width() {
@@ -83,7 +83,7 @@ class Event {
 }
 
 /**
- * Return true if event a and b is considered to be on the same row.
+ * Return true if appointment a and b is considered to be on the same row.
  */
 function onSameRow(a, b, minimumStartDifference) {
   return (
@@ -94,29 +94,29 @@ function onSameRow(a, b, minimumStartDifference) {
   );
 }
 
-function sortByRender(events) {
-  const sortedByTime = sortBy(events, ['startMs', (e) => -e.endMs]);
+function sortByRender(appointments) {
+  const sortedByTime = sortBy(appointments, ['startMs', (e) => -e.endMs]);
 
   const sorted = [];
   while (sortedByTime.length > 0) {
-    const event = sortedByTime.shift();
-    sorted.push(event);
+    const appointment = sortedByTime.shift();
+    sorted.push(appointment);
 
     for (let i = 0; i < sortedByTime.length; i++) {
       const test = sortedByTime[i];
 
-      // Still inside this event, look for next.
-      if (event.endMs > test.startMs) continue;
+      // Still inside this appointment, look for next.
+      if (appointment.endMs > test.startMs) continue;
 
-      // We've found the first event of the next event group.
-      // If that event is not right next to our current event, we have to
+      // We've found the first appointment of the next appointment group.
+      // If that appointment is not right next to our current appointment, we have to
       // move it here.
       if (i > 0) {
-        const event = sortedByTime.splice(i, 1)[0];
-        sorted.push(event);
+        const appointment = sortedByTime.splice(i, 1)[0];
+        sorted.push(appointment);
       }
 
-      // We've already found the next event group, so stop looking.
+      // We've already found the next appointment group, so stop looking.
       break;
     }
   }
@@ -124,67 +124,70 @@ function sortByRender(events) {
   return sorted;
 }
 
-export default function getStyledEvents({
-  events,
+export default function getStyledAppointments({
+  appointments,
   minimumStartDifference,
   slotMetrics,
   accessors,
 }) {
-  // Create proxy events and order them so that we don't have
+  // Create proxy appointments and order them so that we don't have
   // to fiddle with z-indexes.
-  const proxies = events.map((event) => new Event(event, { slotMetrics, accessors }));
-  const eventsInRenderOrder = sortByRender(proxies);
+  const proxies = appointments.map(
+    (appointment) => new Appointment(appointment, { slotMetrics, accessors })
+  );
+  const appointmentsInRenderOrder = sortByRender(proxies);
 
-  // Group overlapping events, while keeping order.
-  // Every event is always one of: container, row or leaf.
+  // Group overlapping appointments, while keeping order.
+  // Every appointment is always one of: container, row or leaf.
   // Containers can contain rows, and rows can contain leaves.
-  const containerEvents = [];
-  for (let i = 0; i < eventsInRenderOrder.length; i++) {
-    const event = eventsInRenderOrder[i];
+  const containerAppointments = [];
+  for (let i = 0; i < appointmentsInRenderOrder.length; i++) {
+    const appointment = appointmentsInRenderOrder[i];
 
-    // Check if this event can go into a container event.
-    const container = containerEvents.find(
-      (c) => c.end > event.start || Math.abs(event.start - c.start) < minimumStartDifference
+    // Check if this appointment can go into a container appointment.
+    const container = containerAppointments.find(
+      (c) =>
+        c.end > appointment.start || Math.abs(appointment.start - c.start) < minimumStartDifference
     );
 
-    // Couldn't find a container — that means this event is a container.
+    // Couldn't find a container — that means this appointment is a container.
     if (!container) {
-      event.rows = [];
-      containerEvents.push(event);
+      appointment.rows = [];
+      containerAppointments.push(appointment);
       continue;
     }
 
-    // Found a container for the event.
-    event.container = container;
+    // Found a container for the appointment.
+    appointment.container = container;
 
-    // Check if the event can be placed in an existing row.
+    // Check if the appointment can be placed in an existing row.
     // Start looking from behind.
     let row = null;
     for (let j = container.rows.length - 1; !row && j >= 0; j--) {
-      if (onSameRow(container.rows[j], event, minimumStartDifference)) {
+      if (onSameRow(container.rows[j], appointment, minimumStartDifference)) {
         row = container.rows[j];
       }
     }
 
     if (row) {
       // Found a row, so add it.
-      row.leaves.push(event);
-      event.row = row;
+      row.leaves.push(appointment);
+      appointment.row = row;
     } else {
-      // Couldn't find a row – that means this event is a row.
-      event.leaves = [];
-      container.rows.push(event);
+      // Couldn't find a row – that means this appointment is a row.
+      appointment.leaves = [];
+      container.rows.push(appointment);
     }
   }
 
-  // Return the original events, along with their styles.
-  return eventsInRenderOrder.map((event) => ({
-    event: event.data,
+  // Return the original appointments, along with their styles.
+  return appointmentsInRenderOrder.map((appointment) => ({
+    appointment: appointment.data,
     style: {
-      top: event.top,
-      height: event.height,
-      width: event.width,
-      xOffset: Math.max(0, event.xOffset),
+      top: appointment.top,
+      height: appointment.height,
+      width: appointment.width,
+      xOffset: Math.max(0, appointment.xOffset),
     },
   }));
 }

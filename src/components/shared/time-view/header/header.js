@@ -58,7 +58,7 @@ class Header extends React.Component {
 
   renderRow = (resource) => {
     const {
-      events,
+      appointments,
       rtl,
       selectable,
       getNow,
@@ -70,9 +70,9 @@ class Header extends React.Component {
     } = this.props;
 
     const resourceId = accessors.resourceId(resource);
-    const eventsToDisplay = resource
-      ? events.filter((event) => accessors.resource(event) === resourceId)
-      : events;
+    const appointmentsToDisplay = resource
+      ? appointments.filter((appointment) => accessors.resource(appointment) === resourceId)
+      : appointments;
 
     return (
       <ContentRow
@@ -81,7 +81,7 @@ class Header extends React.Component {
         getNow={getNow}
         minRows={2}
         range={range}
-        events={eventsToDisplay}
+        appointments={appointmentsToDisplay}
         resourceId={resourceId}
         className="rbc-allday-cell"
         selectable={selectable}
@@ -90,8 +90,8 @@ class Header extends React.Component {
         accessors={accessors}
         getters={getters}
         localizer={localizer}
-        onSelect={this.props.onSelectEvent}
-        onDoubleClick={this.props.onDoubleClickEvent}
+        onSelect={this.props.onSelectAppointment}
+        onDoubleClick={this.props.onDoubleClickAppointment}
         onSelectSlot={this.props.onSelectSlot}
         longPressThreshold={this.props.longPressThreshold}
       />
@@ -104,7 +104,7 @@ class Header extends React.Component {
       rtl,
       resources,
       range,
-      events,
+      appointments,
       getNow,
       accessors,
       selectable,
@@ -124,7 +124,7 @@ class Header extends React.Component {
       style[rtl ? 'marginLeft' : 'marginRight'] = `${scrollbarSize()}px`;
     }
 
-    const groupedEvents = resources.groupEvents(events);
+    const groupedAppointments = resources.groupAppointments(appointments);
 
     return (
       <div
@@ -142,13 +142,11 @@ class Header extends React.Component {
         {resources.map(([id, resource], idx) => (
           <div className="rbc-time-header-content" key={id || idx}>
             {resource && (
-              <div className="rbc-row rbc-row-resource" key={`resource_${idx}`}>
+              <div className="rbc-row rbc-row-resource" key={`resource_${id}`}>
                 <div className="rbc-header">
-                  <ResourceHeaderComponent
-                    index={idx}
-                    label={accessors.resourceTitle(resource)}
-                    resource={resource}
-                  />
+                  <ResourceHeaderComponent>
+                    {accessors.resourceTitle(resource)}
+                  </ResourceHeaderComponent>
                 </div>
               </div>
             )}
@@ -165,7 +163,7 @@ class Header extends React.Component {
               getNow={getNow}
               minRows={2}
               range={range}
-              events={groupedEvents.get(id) || []}
+              appointments={groupedAppointments.get(id) || []}
               resourceId={resource && id}
               className="rbc-allday-cell"
               selectable={selectable}
@@ -174,8 +172,8 @@ class Header extends React.Component {
               accessors={accessors}
               getters={getters}
               localizer={localizer}
-              onSelect={this.props.onSelectEvent}
-              onDoubleClick={this.props.onDoubleClickEvent}
+              onSelect={this.props.onSelectAppointment}
+              onDoubleClick={this.props.onDoubleClickAppointment}
               onSelectSlot={this.props.onSelectSlot}
               longPressThreshold={this.props.longPressThreshold}
             />
@@ -188,7 +186,7 @@ class Header extends React.Component {
 
 Header.propTypes = {
   range: PropTypes.array.isRequired,
-  events: PropTypes.array.isRequired,
+  appointments: PropTypes.array.isRequired,
   resources: PropTypes.object,
   getNow: PropTypes.func.isRequired,
   isOverflowing: PropTypes.bool,
@@ -202,12 +200,12 @@ Header.propTypes = {
   getters: PropTypes.object.isRequired,
 
   selected: PropTypes.object,
-  selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
+  selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
   longPressThreshold: PropTypes.number,
 
   onSelectSlot: PropTypes.func,
-  onSelectEvent: PropTypes.func,
-  onDoubleClickEvent: PropTypes.func,
+  onSelectAppointment: PropTypes.func,
+  onDoubleClickAppointment: PropTypes.func,
   onDrillDown: PropTypes.func,
   getDrilldownView: PropTypes.func.isRequired,
   scrollRef: PropTypes.any,

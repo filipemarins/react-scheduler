@@ -32,23 +32,6 @@ function isValidView(view, { views: _views }) {
   return names.indexOf(view) !== -1;
 }
 
-/**
- * react-scheduler is a full featured scheduler component for managing events and dates. It uses
- * modern `flexbox` for layout, making it super responsive and performant. Leaving most of the layout heavy lifting
- * to the browser. __note:__ The default styles use `height: 100%` which means your container must set an explicit
- * height (feel free to adjust the styles to suit your specific needs).
- *
- * Scheduler is unopiniated about editing and moving events, preferring to let you implement it in a way that makes
- * the most sense to your app. It also tries not to be prescriptive about your event data structures, just tell it
- * how to find the start and end datetimes and you can pass it whatever you want.
- *
- * One thing to note is that, `react-scheduler` treats event start/end dates as an _exclusive_ range.
- * which means that the event spans up to, but not including, the end date. In the case
- * of displaying events on whole days, end dates are rounded _up_ to the next day. So an
- * event ending on `Apr 8th 12:00:00 am` will not appear on the 8th, whereas one ending
- * on `Apr 8th 12:01:00 am` will. If you want _inclusive_ ranges consider providing a
- * function `endAccessor` that returns the end date + 1 day for those events that end at midnight.
- */
 class Scheduler extends React.Component {
   constructor(...args) {
     super(...args);
@@ -71,7 +54,7 @@ class Scheduler extends React.Component {
     resourceAccessor,
     resourceIdAccessor,
     resourceTitleAccessor,
-    eventPropGetter,
+    appointmentPropGetter,
     slotPropGetter,
     slotGroupPropGetter,
     dayPropGetter,
@@ -89,14 +72,15 @@ class Scheduler extends React.Component {
       viewNames: names,
       localizer: mergeWithDefaults(localizer, culture, formats, msgs),
       getters: {
-        eventProp: (...args) => (eventPropGetter && eventPropGetter(...args)) || {},
+        appointmentProp: (...args) =>
+          (appointmentPropGetter && appointmentPropGetter(...args)) || {},
         slotProp: (...args) => (slotPropGetter && slotPropGetter(...args)) || {},
         slotGroupProp: (...args) => (slotGroupPropGetter && slotGroupPropGetter(...args)) || {},
         dayProp: (...args) => (dayPropGetter && dayPropGetter(...args)) || {},
       },
       components: defaults(components[view] || {}, omit(components, names), {
-        eventWrapper: NoopWrapper,
-        eventContainerWrapper: NoopWrapper,
+        appointmentWrapper: NoopWrapper,
+        appointmentContainerWrapper: NoopWrapper,
         dateCellWrapper: NoopWrapper,
         weekWrapper: NoopWrapper,
         timeSlotWrapper: NoopWrapper,
@@ -196,12 +180,12 @@ class Scheduler extends React.Component {
     this.handleRangeChange(this.props.date || this.props.getNow(), views[view], view);
   };
 
-  handleSelectEvent = (...args) => {
-    notify(this.props.onSelectEvent, args);
+  handleSelectAppointment = (...args) => {
+    notify(this.props.onSelectAppointment, args);
   };
 
-  handleDoubleClickEvent = (...args) => {
-    notify(this.props.onDoubleClickEvent, args);
+  handleDoubleClickAppointment = (...args) => {
+    notify(this.props.onDoubleClickAppointment, args);
   };
 
   handleSelectSlot = (slotInfo) => {
@@ -223,7 +207,7 @@ class Scheduler extends React.Component {
     let {
       view,
       toolbar,
-      events,
+      appointments,
       style,
       className,
       elementProps,
@@ -266,7 +250,7 @@ class Scheduler extends React.Component {
         )}
         <View
           {...props}
-          events={events}
+          appointments={appointments}
           date={current}
           getNow={getNow}
           length={length}
@@ -278,8 +262,8 @@ class Scheduler extends React.Component {
           getDrilldownView={this.getDrilldownView}
           onNavigate={this.handleNavigate}
           onDrillDown={this.handleDrillDown}
-          onSelectEvent={this.handleSelectEvent}
-          onDoubleClickEvent={this.handleDoubleClickEvent}
+          onSelectAppointment={this.handleSelectAppointment}
+          onDoubleClickAppointment={this.handleDoubleClickAppointment}
           onSelectSlot={this.handleSelectSlot}
           onShowMore={onShowMore}
         />
@@ -322,22 +306,22 @@ Scheduler.propTypes = {
   defaultView: PropTypes.string,
 
   /**
-   * An array of event objects to display on the scheduler. Events objects
+   * An array of appointment objects to display on the scheduler. Appointments objects
    * can be any shape, as long as the scheduler knows how to retrieve the
-   * following details of the event:
+   * following details of the appointment:
    *
    *  - start time
    *  - end time
    *  - title
-   *  - whether its an "all day" event or not
-   *  - any resource the event may be related to
+   *  - whether its an "all day" appointment or not
+   *  - any resource the appointment may be related to
    *
    * Each of these properties can be customized or generated dynamically by
    * setting the various "accessor" props. Without any configuration the default
-   * event should look like:
+   * appointment should look like:
    *
    * ```js
-   * Event {
+   * Appointment {
    *   title: string,
    *   start: Date,
    *   end: Date,
@@ -346,14 +330,14 @@ Scheduler.propTypes = {
    * }
    * ```
    */
-  events: PropTypes.arrayOf(PropTypes.object),
+  appointments: PropTypes.arrayOf(PropTypes.object),
 
   /**
-   * Accessor for the event title, used to display event information. Should
+   * Accessor for the appointment title, used to display appointment information. Should
    * resolve to a `renderable` value.
    *
    * ```js
-   * string | (event: Object) => string
+   * string | (appointment: Object) => string
    * ```
    *
    * @type {(func|string)}
@@ -361,11 +345,11 @@ Scheduler.propTypes = {
   titleAccessor: accessor,
 
   /**
-   * Accessor for the event tooltip. Should
+   * Accessor for the appointment tooltip. Should
    * resolve to a `renderable` value. Removes the tooltip if null.
    *
    * ```js
-   * string | (event: Object) => string
+   * string | (appointment: Object) => string
    * ```
    *
    * @type {(func|string)}
@@ -373,11 +357,11 @@ Scheduler.propTypes = {
   tooltipAccessor: accessor,
 
   /**
-   * Determines whether the event should be considered an "all day" event and ignore time.
+   * Determines whether the appointment should be considered an "all day" appointment and ignore time.
    * Must resolve to a `boolean` value.
    *
    * ```js
-   * string | (event: Object) => boolean
+   * string | (appointment: Object) => boolean
    * ```
    *
    * @type {(func|string)}
@@ -385,10 +369,10 @@ Scheduler.propTypes = {
   allDayAccessor: accessor,
 
   /**
-   * The start date/time of the event. Must resolve to a JavaScript `Date` object.
+   * The start date/time of the appointment. Must resolve to a JavaScript `Date` object.
    *
    * ```js
-   * string | (event: Object) => Date
+   * string | (appointment: Object) => Date
    * ```
    *
    * @type {(func|string)}
@@ -396,10 +380,10 @@ Scheduler.propTypes = {
   startAccessor: accessor,
 
   /**
-   * The end date/time of the event. Must resolve to a JavaScript `Date` object.
+   * The end date/time of the appointment. Must resolve to a JavaScript `Date` object.
    *
    * ```js
-   * string | (event: Object) => Date
+   * string | (appointment: Object) => Date
    * ```
    *
    * @type {(func|string)}
@@ -407,11 +391,11 @@ Scheduler.propTypes = {
   endAccessor: accessor,
 
   /**
-   * Returns the id of the `resource` that the event is a member of. This
+   * Returns the id of the `resource` that the appointment is a member of. This
    * id should match at least one resource in the `resources` array.
    *
    * ```js
-   * string | (event: Object) => Date
+   * string | (appointment: Object) => Date
    * ```
    *
    * @type {(func|string)}
@@ -419,8 +403,8 @@ Scheduler.propTypes = {
   resourceAccessor: accessor,
 
   /**
-   * An array of resource objects that map events to a specific resource.
-   * Resource objects, like events, can be any shape or have any properties,
+   * An array of resource objects that map appointments to a specific resource.
+   * Resource objects, like appointments, can be any shape or have any properties,
    * but should be uniquly identifiable via the `resourceIdAccessor`, as
    * well as a "title" or name as provided by the `resourceTitleAccessor` prop.
    */
@@ -478,7 +462,7 @@ Scheduler.propTypes = {
   onView: PropTypes.func,
 
   /**
-   * Callback fired when date header, or the truncated events links are clicked
+   * Callback fired when date header, or the truncated appointments links are clicked
    *
    */
   onDrillDown: PropTypes.func,
@@ -529,24 +513,24 @@ Scheduler.propTypes = {
   onSelectSlot: PropTypes.func,
 
   /**
-   * Callback fired when a scheduler event is selected.
+   * Callback fired when a scheduler appointment is selected.
    *
    * ```js
-   * (event: Object, e: SyntheticEvent) => any
+   * (appointment: Object, e: SyntheticAppointment) => any
    * ```
    *
    * @controllable selected
    */
-  onSelectEvent: PropTypes.func,
+  onSelectAppointment: PropTypes.func,
 
   /**
-   * Callback fired when a scheduler event is clicked twice.
+   * Callback fired when a scheduler appointment is clicked twice.
    *
    * ```js
-   * (event: Object, e: SyntheticEvent) => void
+   * (appointment: Object, e: SyntheticAppointment) => void
    * ```
    */
-  onDoubleClickEvent: PropTypes.func,
+  onDoubleClickAppointment: PropTypes.func,
 
   /**
    * Callback fired when dragging a selection in the Time views.
@@ -563,13 +547,13 @@ Scheduler.propTypes = {
    * Callback fired when a +{count} more is clicked
    *
    * ```js
-   * (events: Object, date: Date) => any
+   * (appointments: Object, date: Date) => any
    * ```
    */
   onShowMore: PropTypes.func,
 
   /**
-   * The selected event, if any.
+   * The selected appointment, if any.
    */
   selected: PropTypes.object,
 
@@ -608,7 +592,7 @@ Scheduler.propTypes = {
 
   /**
    * The string name of the destination view for drill-down actions, such
-   * as clicking a date header, or the truncated events links. If
+   * as clicking a date header, or the truncated appointments links. If
    * `getDrilldownView` is also specified it will be used instead.
    *
    * Set to `null` to disable drill-down actions.
@@ -655,11 +639,11 @@ Scheduler.propTypes = {
   /**
    * Allows mouse selection of ranges of dates/times.
    *
-   * The 'ignoreEvents' option prevents selection code from running when a
-   * drag begins over an event. Useful when you want custom event click or drag
+   * The 'ignoreAppointments' option prevents selection code from running when a
+   * drag begins over an appointment. Useful when you want custom appointment click or drag
    * logic
    */
-  selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
+  selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
 
   /**
    * Specifies the number of miliseconds the user must press and hold on the screen for a touch
@@ -689,18 +673,18 @@ Scheduler.propTypes = {
 
   /**
    * Optionally provide a function that returns an object of className or style props
-   * to be applied to the the event node.
+   * to be applied to the the appointment node.
    *
    * ```js
    * (
-   * 	event: Object,
+   * 	appointment: Object,
    * 	start: Date,
    * 	end: Date,
    * 	isSelected: boolean
    * ) => { className?: string, style?: Object }
    * ```
    */
-  eventPropGetter: PropTypes.func,
+  appointmentPropGetter: PropTypes.func,
 
   /**
    * Optionally provide a function that returns an object of className or style props
@@ -734,10 +718,10 @@ Scheduler.propTypes = {
   dayPropGetter: PropTypes.func,
 
   /**
-   * Support to show multi-day events with specific start and end times in the
+   * Support to show multi-day appointments with specific start and end times in the
    * main time grid (rather than in the all day header).
    *
-   * **Note: This may cause schedulers with several events to look very busy in
+   * **Note: This may cause schedulers with several appointments to look very busy in
    * the week and day views.**
    */
   showMultiDayTimes: PropTypes.bool,
@@ -845,61 +829,61 @@ Scheduler.propTypes = {
     agendaTimeRangeFormat: dateRangeFormat,
 
     /**
-     * Time range displayed on events.
+     * Time range displayed on appointments.
      */
-    eventTimeRangeFormat: dateRangeFormat,
+    appointmentTimeRangeFormat: dateRangeFormat,
 
     /**
-     * An optional event time range for events that continue onto another day
+     * An optional appointment time range for appointments that continue onto another day
      */
-    eventTimeRangeStartFormat: dateFormat,
+    appointmentTimeRangeStartFormat: dateFormat,
 
     /**
-     * An optional event time range for events that continue from another day
+     * An optional appointment time range for appointments that continue from another day
      */
-    eventTimeRangeEndFormat: dateFormat,
+    appointmentTimeRangeEndFormat: dateFormat,
   }),
 
   /**
    * Customize how different sections of the scheduler render by providing custom Components.
-   * In particular the `Event` component can be specified for the entire scheduler, or you can
+   * In particular the `Appointment` component can be specified for the entire scheduler, or you can
    * provide an individual component for each view type.
    *
    * ```jsx
    * const components = {
-   *   event: MyEvent, // used by each view (Month, Day, Week)
-   *   eventWrapper: MyEventWrapper,
-   *   eventContainerWrapper: MyEventContainerWrapper,
+   *   appointment: MyAppointment, // used by each view (Month, Day, Week)
+   *   appointmentWrapper: MyAppointmentWrapper,
+   *   appointmentContainerWrapper: MyAppointmentContainerWrapper,
    *   dateCellWrapper: MyDateCellWrapper,
    *   timeSlotWrapper: MyTimeSlotWrapper,
    *   timeGutterHeader: MyTimeGutterWrapper,
    *   toolbar: MyToolbar,
    *   agenda: {
-   *   	 event: MyAgendaEvent // with the agenda view use a different component to render events
+   *   	 appointment: MyAgendaAppointment // with the agenda view use a different component to render appointments
    *     time: MyAgendaTime,
    *     date: MyAgendaDate,
    *   },
    *   day: {
    *     header: MyDayHeader,
-   *     event: MyDayEvent,
+   *     appointment: MyDayAppointment,
    *   },
    *   week: {
    *     header: MyWeekHeader,
-   *     event: MyWeekEvent,
+   *     appointment: MyWeekAppointment,
    *   },
    *   month: {
    *     header: MyMonthHeader,
    *     dateHeader: MyMonthDateHeader,
-   *     event: MyMonthEvent,
+   *     appointment: MyMonthAppointment,
    *   }
    * }
    * <Scheduler components={components} />
    * ```
    */
   components: PropTypes.shape({
-    event: PropTypes.elementType,
-    eventWrapper: PropTypes.elementType,
-    eventContainerWrapper: PropTypes.elementType,
+    appointment: PropTypes.elementType,
+    appointmentWrapper: PropTypes.elementType,
+    appointmentContainerWrapper: PropTypes.elementType,
     dateCellWrapper: PropTypes.elementType,
     timeSlotWrapper: PropTypes.elementType,
     timeGutterHeader: PropTypes.elementType,
@@ -910,21 +894,21 @@ Scheduler.propTypes = {
     agenda: PropTypes.shape({
       date: PropTypes.elementType,
       time: PropTypes.elementType,
-      event: PropTypes.elementType,
+      appointment: PropTypes.elementType,
     }),
 
     day: PropTypes.shape({
       header: PropTypes.elementType,
-      event: PropTypes.elementType,
+      appointment: PropTypes.elementType,
     }),
     week: PropTypes.shape({
       header: PropTypes.elementType,
-      event: PropTypes.elementType,
+      appointment: PropTypes.elementType,
     }),
     month: PropTypes.shape({
       header: PropTypes.elementType,
       dateHeader: PropTypes.elementType,
-      event: PropTypes.elementType,
+      appointment: PropTypes.elementType,
     }),
   }),
 
@@ -942,16 +926,16 @@ Scheduler.propTypes = {
     agenda: PropTypes.node,
     date: PropTypes.node,
     time: PropTypes.node,
-    event: PropTypes.node,
-    noEventsInRange: PropTypes.node,
+    appointment: PropTypes.node,
+    noAppointmentsInRange: PropTypes.node,
     showMore: PropTypes.func,
   }),
 
   /**
-   * A day event layout(arrangement) algorithm.
-   * `overlap` allows events to be overlapped.
-   * `no-overlap` resizes events to avoid overlap.
-   * or custom `Function(events, minimumStartDifference, slotMetrics, accessors)`
+   * A day appointment layout(arrangement) algorithm.
+   * `overlap` allows appointments to be overlapped.
+   * `no-overlap` resizes appointments to avoid overlap.
+   * or custom `Function(appointments, minimumStartDifference, slotMetrics, accessors)`
    */
   dayLayoutAlgorithm: DayLayoutAlgorithmPropType,
 };
@@ -984,5 +968,5 @@ Scheduler.defaultProps = {
 export default uncontrollable(Scheduler, {
   view: 'onView',
   date: 'onNavigate',
-  selected: 'onSelectEvent',
+  selected: 'onSelectAppointment',
 });

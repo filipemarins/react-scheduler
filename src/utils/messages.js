@@ -1,7 +1,7 @@
 const defaultMessages = {
   date: 'Date',
   time: 'Time',
-  event: 'Event',
+  appointment: 'Appointment',
   allDay: 'All Day',
   week: 'Week',
   work_week: 'Work Week',
@@ -14,7 +14,7 @@ const defaultMessages = {
   today: 'Today',
   agenda: 'Agenda',
 
-  noEventsInRange: 'There are no events in this range.',
+  noAppointmentsInRange: 'There are no appointments in this range.',
 
   showMore: (total) => `+${total} more`,
 };

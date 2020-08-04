@@ -2,17 +2,17 @@ import moment from 'moment';
 
 const now = new Date();
 
-export const fakeEvents = [
+export const fakeAppointments = [
   {
     id: 0,
-    title: 'All Day Event very long title',
+    title: 'All Day Appointment very long title',
     allDay: true,
     start: new Date(2015, 3, 0),
     end: new Date(2015, 3, 1),
   },
   {
     id: 1,
-    title: 'Long Event',
+    title: 'Long Appointment',
     start: new Date(2015, 3, 7),
     end: new Date(2015, 3, 10),
   },
@@ -33,7 +33,7 @@ export const fakeEvents = [
 
   {
     id: 4,
-    title: 'Some Event',
+    title: 'Some Appointment',
     start: new Date(2015, 3, 9, 0, 0, 0),
     end: new Date(2015, 3, 10, 0, 0, 0),
   },
@@ -85,19 +85,19 @@ export const fakeEvents = [
   },
   {
     id: 12,
-    title: 'Late Night Event',
+    title: 'Late Night Appointment',
     start: new Date(2015, 3, 17, 19, 30, 0),
     end: new Date(2015, 3, 18, 2, 0, 0),
   },
   {
     id: 12.5,
-    title: 'Late Same Night Event',
+    title: 'Late Same Night Appointment',
     start: new Date(2015, 3, 17, 19, 30, 0),
     end: new Date(2015, 3, 17, 23, 30, 0),
   },
   {
     id: 13,
-    title: 'Multi-day Event',
+    title: 'Multi-day Appointment',
     start: new Date(2015, 3, 20, 19, 30, 0),
     end: new Date(2015, 3, 22, 2, 0, 0),
   },
@@ -109,7 +109,7 @@ export const fakeEvents = [
   },
   {
     id: 15,
-    title: 'Point in Time Event',
+    title: 'Point in Time Appointment',
     start: now,
     end: now,
   },
@@ -139,7 +139,7 @@ export const fakeEvents = [
   },
   {
     id: 20,
-    title: 'An overlapped Event',
+    title: 'An overlapped Appointment',
     start: new Date(2015, 3, 14, 17, 0, 0),
     end: new Date(2015, 3, 14, 18, 30, 0),
   },
@@ -163,7 +163,7 @@ export const fakeEvents = [
   },
 ];
 
-export const eventsWithCustomSize = [
+export const appointmentsWithCustomSize = [
   {
     title: 'test',
     start: moment().add(1, 'days').subtract(5, 'hours').toDate(),

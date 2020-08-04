@@ -35,9 +35,9 @@ export const formats = {
   weekdayFormat: 'eee',
 
   selectRangeFormat: timeRangeFormat,
-  eventTimeRangeFormat: timeRangeFormat,
-  eventTimeRangeStartFormat: timeRangeStartFormat,
-  eventTimeRangeEndFormat: timeRangeEndFormat,
+  appointmentTimeRangeFormat: timeRangeFormat,
+  appointmentTimeRangeStartFormat: timeRangeStartFormat,
+  appointmentTimeRangeEndFormat: timeRangeEndFormat,
 
   timeGutterFormat: { time: 'short' },
 

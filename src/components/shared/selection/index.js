@@ -1,4 +1,8 @@
-import Selection, { getEventNodeFromPoint, getBoundsForNode, isEvent } from './selection';
+import Selection, {
+  getAppointmentNodeFromPoint,
+  getBoundsForNode,
+  isAppointment,
+} from './selection';
 
-export { getEventNodeFromPoint, getBoundsForNode, isEvent };
+export { getAppointmentNodeFromPoint, getBoundsForNode, isAppointment };
 export default Selection;

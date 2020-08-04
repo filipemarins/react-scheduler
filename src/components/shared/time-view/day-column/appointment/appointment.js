@@ -6,11 +6,11 @@ function stringifyPercent(v) {
 }
 
 /* eslint-disable react/prop-types */
-const Event = (props) => {
+const Appointment = (props) => {
   const {
     style,
     className,
-    event,
+    appointment,
     accessors,
     rtl,
     selected,
@@ -20,27 +20,27 @@ const Event = (props) => {
     getters,
     onClick,
     onDoubleClick,
-    components: { event: Event, eventWrapper: EventWrapper },
+    components: { appointment: Appointment, appointmentWrapper: AppointmentWrapper },
   } = props;
-  const title = accessors.title(event);
-  const tooltip = accessors.tooltip(event);
-  const end = accessors.end(event);
-  const start = accessors.start(event);
+  const title = accessors.title(appointment);
+  const tooltip = accessors.tooltip(appointment);
+  const end = accessors.end(appointment);
+  const start = accessors.start(appointment);
 
-  const userProps = getters.eventProp(event, start, end, selected);
+  const userProps = getters.appointmentProp(appointment, start, end, selected);
 
   const { height, top, width, xOffset } = style;
   const inner = [
-    <div key="1" className="rbc-event-label">
+    <div key="1" className="rbc-appointment-label">
       {label}
     </div>,
-    <div key="2" className="rbc-event-content">
-      {Event ? <Event event={event} title={title} /> : title}
+    <div key="2" className="rbc-appointment-content">
+      {Appointment ? <Appointment appointment={appointment} title={title} /> : title}
     </div>,
   ];
 
   return (
-    <EventWrapper type="time" {...props}>
+    <AppointmentWrapper type="time" {...props}>
       <div
         onClick={onClick}
         onDoubleClick={onDoubleClick}
@@ -52,16 +52,16 @@ const Event = (props) => {
           height: stringifyPercent(height),
         }}
         title={tooltip ? (typeof label === 'string' ? `${label}: ` : '') + tooltip : undefined}
-        className={clsx('rbc-event', className, userProps.className, {
+        className={clsx('rbc-appointment', className, userProps.className, {
           'rbc-selected': selected,
-          'rbc-event-continues-earlier': continuesEarlier,
-          'rbc-event-continues-later': continuesLater,
+          'rbc-appointment-continues-earlier': continuesEarlier,
+          'rbc-appointment-continues-later': continuesLater,
         })}
       >
         {inner}
       </div>
-    </EventWrapper>
+    </AppointmentWrapper>
   );
 };
 
-export default Event;
+export default Appointment;

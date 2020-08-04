@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import * as dates from 'utils/dates';
 import { notify } from 'utils/helpers';
 import { dateCellSelection, getSlotAtX, pointInBox } from 'utils/selection';
-import Selection, { getBoundsForNode, isEvent } from 'components/shared/selection';
+import Selection, { getBoundsForNode, isAppointment } from 'components/shared/selection';
 
 class BackgroundCells extends React.Component {
   constructor(props, context) {
@@ -38,7 +38,7 @@ class BackgroundCells extends React.Component {
     }));
 
     const selectorClicksHandler = (point, actionType) => {
-      if (!isEvent(findDOMNode(this), point)) {
+      if (!isAppointment(findDOMNode(this), point)) {
         const rowBox = getBoundsForNode(node);
         const { range, rtl } = this.props;
 
@@ -81,9 +81,9 @@ class BackgroundCells extends React.Component {
     });
 
     selector.on('beforeSelect', (box) => {
-      if (this.props.selectable !== 'ignoreEvents') return;
+      if (this.props.selectable !== 'ignoreAppointments') return;
 
-      return !isEvent(findDOMNode(this), box);
+      return !isAppointment(findDOMNode(this), box);
     });
 
     selector.on('click', (point) => selectorClicksHandler(point, 'click'));
@@ -165,7 +165,7 @@ BackgroundCells.propTypes = {
 
   container: PropTypes.func,
   dayPropGetter: PropTypes.func,
-  selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
+  selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
   longPressThreshold: PropTypes.number,
 
   onSelectSlot: PropTypes.func.isRequired,

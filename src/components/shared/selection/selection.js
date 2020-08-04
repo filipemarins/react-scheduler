@@ -10,13 +10,13 @@ function isOverContainer(container, x, y) {
   return !container || contains(container, document.elementFromPoint(x, y));
 }
 
-export function getEventNodeFromPoint(node, { clientX, clientY }) {
+export function getAppointmentNodeFromPoint(node, { clientX, clientY }) {
   const target = document.elementFromPoint(clientX, clientY);
-  return closest(target, '.rbc-event', node);
+  return closest(target, '.rbc-appointment', node);
 }
 
-export function isEvent(node, bounds) {
-  return !!getEventNodeFromPoint(node, bounds);
+export function isAppointment(node, bounds) {
+  return !!getAppointmentNodeFromPoint(node, bounds);
 }
 
 function getEventCoordinates(e) {

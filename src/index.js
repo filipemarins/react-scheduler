@@ -1,7 +1,7 @@
 import NoopWrapper from 'components/shared/noop-wrapper';
 
 export const components = {
-  eventWrapper: NoopWrapper,
+  appointmentWrapper: NoopWrapper,
   timeSlotWrapper: NoopWrapper,
   dateCellWrapper: NoopWrapper,
 };

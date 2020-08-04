@@ -1,11 +1,11 @@
 import {
   endOfRange,
-  eventSegments,
-  eventLevels,
+  appointmentSegments,
+  appointmentLevels,
   inRange,
   segmentsOverlap,
-  sortEvents,
-} from './event-levels';
+  sortAppointments,
+} from './appointment-levels';
 
 describe('endOfRange', () => {
   test('it adds one day by default', () => {
@@ -27,11 +27,11 @@ describe('endOfRange', () => {
   });
 });
 
-describe('eventSegments', () => {
-  const event = { start: new Date(2017, 0, 8), end: new Date(2017, 0, 11, 12) };
+describe('appointmentSegments', () => {
+  const appointment = { start: new Date(2017, 0, 8), end: new Date(2017, 0, 11, 12) };
   const accessors = { start: (e) => e.start, end: (e) => e.end };
 
-  test('it includes the original event in the returned object', () => {
+  test('it includes the original appointment in the returned object', () => {
     const range = [
       new Date(2017, 0, 8),
       new Date(2017, 0, 9),
@@ -39,12 +39,12 @@ describe('eventSegments', () => {
       new Date(2017, 0, 11),
     ];
 
-    const result = eventSegments(event, range, accessors);
+    const result = appointmentSegments(appointment, range, accessors);
 
-    expect(result.event).toEqual(event);
+    expect(result.appointment).toEqual(appointment);
   });
 
-  describe('when the event spans the full range', () => {
+  describe('when the appointment spans the full range', () => {
     const range = [
       new Date(2017, 0, 8),
       new Date(2017, 0, 9),
@@ -52,70 +52,70 @@ describe('eventSegments', () => {
       new Date(2017, 0, 11),
     ];
 
-    test('it sets span equal to the number of days the event spans', () => {
-      const result = eventSegments(event, range, accessors);
+    test('it sets span equal to the number of days the appointment spans', () => {
+      const result = appointmentSegments(appointment, range, accessors);
 
       expect(result.span).toBe(4);
     });
 
     test('it sets left equal to one', () => {
-      const result = eventSegments(event, range, accessors);
+      const result = appointmentSegments(appointment, range, accessors);
 
       expect(result.left).toBe(1);
     });
 
     test('it sets right equal to the length of the range', () => {
-      const result = eventSegments(event, range, accessors);
+      const result = appointmentSegments(appointment, range, accessors);
 
       expect(result.right).toBe(4);
     });
   });
 
-  describe('when the event starts before the range and ends at the end of the range', () => {
+  describe('when the appointment starts before the range and ends at the end of the range', () => {
     const range = [new Date(2017, 0, 9), new Date(2017, 0, 10), new Date(2017, 0, 11)];
 
     test('it sets span equal to the number of days the range spans', () => {
-      const result = eventSegments(event, range, accessors);
+      const result = appointmentSegments(appointment, range, accessors);
 
       expect(result.span).toBe(3);
     });
 
     test('it sets left equal to one', () => {
-      const result = eventSegments(event, range, accessors);
+      const result = appointmentSegments(appointment, range, accessors);
 
       expect(result.left).toBe(1);
     });
 
     test('it sets right equal to the length of the range', () => {
-      const result = eventSegments(event, range, accessors);
+      const result = appointmentSegments(appointment, range, accessors);
 
       expect(result.right).toBe(3);
     });
   });
 
-  describe('when the event starts at the start of the range and ends after it', () => {
+  describe('when the appointment starts at the start of the range and ends after it', () => {
     const range = [new Date(2017, 0, 8), new Date(2017, 0, 9), new Date(2017, 0, 10)];
 
     test('it sets span equal to the number of days the range spans', () => {
-      const result = eventSegments(event, range, accessors);
+      const result = appointmentSegments(appointment, range, accessors);
 
       expect(result.span).toBe(3);
     });
 
     test('it sets left equal to one', () => {
-      const result = eventSegments(event, range, accessors);
+      const result = appointmentSegments(appointment, range, accessors);
 
       expect(result.left).toBe(1);
     });
 
     test('it sets right equal to the length of the range', () => {
-      const result = eventSegments(event, range, accessors);
+      const result = appointmentSegments(appointment, range, accessors);
 
       expect(result.right).toBe(3);
     });
   });
 
-  describe('when the event starts and ends within the range', () => {
+  describe('when the appointment starts and ends within the range', () => {
     const range = [
       new Date(2017, 0, 7),
       new Date(2017, 0, 8),
@@ -125,27 +125,27 @@ describe('eventSegments', () => {
       new Date(2017, 0, 12),
     ];
 
-    test('it sets span equal to the number of days the event spans', () => {
-      const result = eventSegments(event, range, accessors);
+    test('it sets span equal to the number of days the appointment spans', () => {
+      const result = appointmentSegments(appointment, range, accessors);
 
       expect(result.span).toBe(4);
     });
 
-    test('it sets left equal to the 1-based index into the range where the event starts', () => {
-      const result = eventSegments(event, range, accessors);
+    test('it sets left equal to the 1-based index into the range where the appointment starts', () => {
+      const result = appointmentSegments(appointment, range, accessors);
 
       expect(result.left).toBe(2);
     });
 
-    test('it sets right equal to the 1-based index into the range where the event ends', () => {
-      const result = eventSegments(event, range, accessors);
+    test('it sets right equal to the 1-based index into the range where the appointment ends', () => {
+      const result = appointmentSegments(appointment, range, accessors);
 
       expect(result.right).toBe(5);
     });
   });
 });
 
-describe('eventLevels', () => {
+describe('appointmentLevels', () => {
   test('it sorts the segments within each level based on their left value', () => {
     const segments = [
       { left: 2, right: 2 },
@@ -155,7 +155,7 @@ describe('eventLevels', () => {
       { left: 1, right: 1 },
     ];
 
-    const result = eventLevels(segments);
+    const result = appointmentLevels(segments);
 
     const expectedLevels = [
       [segments[2], segments[0], segments[1]],
@@ -165,14 +165,14 @@ describe('eventLevels', () => {
     expect(result.extra).toEqual([]);
   });
 
-  test('it returns a single level if no events overlap', () => {
+  test('it returns a single level if no appointments overlap', () => {
     const segments = [
       { left: 1, right: 1 },
       { left: 2, right: 2 },
       { left: 3, right: 3 },
     ];
 
-    const result = eventLevels(segments);
+    const result = appointmentLevels(segments);
 
     const expectedLevels = [[segments[0], segments[1], segments[2]]];
     expect(result.levels).toEqual(expectedLevels);
@@ -193,7 +193,7 @@ describe('eventLevels', () => {
         { left: 3, right: 3 },
       ];
 
-      const result = eventLevels(segments);
+      const result = appointmentLevels(segments);
 
       const expectedLevels = [
         [segments[0], segments[3], segments[6]],
@@ -215,7 +215,7 @@ describe('eventLevels', () => {
         { left: 3, right: 3 },
       ];
 
-      const result = eventLevels(segments, limit);
+      const result = appointmentLevels(segments, limit);
 
       const expectedLevels = [[segments[0], segments[2]], [segments[1]]];
       expect(result.levels).toEqual(expectedLevels);
@@ -230,7 +230,7 @@ describe('eventLevels', () => {
         { left: 3, right: 3 },
       ];
 
-      const result = eventLevels(segments, limit);
+      const result = appointmentLevels(segments, limit);
 
       const expectedLevels = [[segments[0], segments[3]], [segments[1]]];
       const expectedExtra = [segments[2]];
@@ -248,9 +248,9 @@ describe('inRange', () => {
   const accessors = { start: (e) => e.start, end: (e) => e.end };
 
   describe('matrix', () => {
-    function compare(title, event, [rangeStart, rangeEnd], result = true) {
+    function compare(title, appointment, [rangeStart, rangeEnd], result = true) {
       it(`${title}: inRange ${result}`, () => {
-        expect(inRange(event, rangeStart, rangeEnd, accessors)).toBe(result);
+        expect(inRange(appointment, rangeStart, rangeEnd, accessors)).toBe(result);
       });
     }
     const weekOfThe5th = [d(5), d(11)];
@@ -263,47 +263,62 @@ describe('inRange', () => {
         true,
       ],
       ['multiday w/ time, 1 day range', { start: d(10, 5), end: d(11, 6) }, [d(11), d(11)], true],
-      ['single day event, end of the week', { start: d(11), end: d(12) }, weekOfThe5th, true],
-      ['single day event, middle of the week', { start: d(10), end: d(11) }, weekOfThe5th, true],
-      ['single day event, end of the week', { start: d(11), end: d(12) }, weekOfThe12th, false],
+      ['single day appointment, end of the week', { start: d(11), end: d(12) }, weekOfThe5th, true],
+      [
+        'single day appointment, middle of the week',
+        { start: d(10), end: d(11) },
+        weekOfThe5th,
+        true,
+      ],
+      [
+        'single day appointment, end of the week',
+        { start: d(11), end: d(12) },
+        weekOfThe12th,
+        false,
+      ],
 
       ['no duration, first of the week', { start: d(12), end: d(12) }, weekOfThe12th, true],
       ['no duration, end of the week', { start: d(11), end: d(11) }, weekOfThe5th, true],
       ['no duration, first of the next week', { start: d(12), end: d(12) }, weekOfThe5th, false],
       ['no duration, middle of the week', { start: d(14), end: d(14) }, weekOfThe12th, true],
       [
-        'single day w/ time event, end of the week',
+        'single day w/ time appointment, end of the week',
         { start: d(11, 10), end: d(11, 12) },
         weekOfThe5th,
         true,
       ],
       [
-        'single day w/ time event, end of the week',
+        'single day w/ time appointment, end of the week',
         { start: d(11, 10), end: d(11, 12) },
         weekOfThe12th,
         false,
       ],
       [
-        'multi day w/ time event, end of the week',
+        'multi day w/ time appointment, end of the week',
         { start: d(11, 10), end: d(13, 12) },
         weekOfThe12th,
         true,
       ],
       [
-        'single day w/ time event, middle of the week',
+        'single day w/ time appointment, middle of the week',
         { start: d(10, 10), end: d(10, 12) },
         weekOfThe5th,
         true,
       ],
-      ['multi day event, first of the week', { start: d(11), end: d(13) }, weekOfThe5th, true],
       [
-        'multi day event, midnight of next the week',
+        'multi day appointment, first of the week',
+        { start: d(11), end: d(13) },
+        weekOfThe5th,
+        true,
+      ],
+      [
+        'multi day appointment, midnight of next the week',
         { start: d(11), end: d(13) },
         weekOfThe12th,
         true,
       ],
       [
-        'multi day event w/ time, first of next the week',
+        'multi day appointment w/ time, first of next the week',
         { start: d(11, 5), end: d(13, 5) },
         weekOfThe12th,
         true,
@@ -311,45 +326,45 @@ describe('inRange', () => {
     ].forEach((g) => compare(...g));
   });
 
-  test('it returns true when event starts before the range end and ends after the range start', () => {
-    const event = { start: new Date(2017, 4, 12), end: new Date(2017, 4, 31) };
+  test('it returns true when appointment starts before the range end and ends after the range start', () => {
+    const appointment = { start: new Date(2017, 4, 12), end: new Date(2017, 4, 31) };
 
-    const result = inRange(event, rangeStart, rangeEnd, accessors);
-
-    expect(result).toBeTruthy();
-  });
-
-  test('it returns false when event starts before the range end and ends before the range start', () => {
-    const event = { start: new Date(2017, 3, 25), end: new Date(2017, 3, 28) };
-
-    const result = inRange(event, rangeStart, rangeEnd, accessors);
-
-    expect(result).toBeFalsy();
-  });
-
-  test('it returns false when event starts after the range end and ends after the range start', () => {
-    const event = { start: new Date(2017, 5, 2), end: new Date(2017, 5, 3) };
-
-    const result = inRange(event, rangeStart, rangeEnd, accessors);
-
-    expect(result).toBeFalsy();
-  });
-
-  test('it returns true when event spans the whole range', () => {
-    const event = { start: new Date(2017, 4, 1), end: new Date(2017, 5, 1) };
-
-    const result = inRange(event, rangeStart, rangeEnd, accessors);
+    const result = inRange(appointment, rangeStart, rangeEnd, accessors);
 
     expect(result).toBeTruthy();
   });
 
-  test('it uses the start of the day for the event start date', () => {
-    const event = {
+  test('it returns false when appointment starts before the range end and ends before the range start', () => {
+    const appointment = { start: new Date(2017, 3, 25), end: new Date(2017, 3, 28) };
+
+    const result = inRange(appointment, rangeStart, rangeEnd, accessors);
+
+    expect(result).toBeFalsy();
+  });
+
+  test('it returns false when appointment starts after the range end and ends after the range start', () => {
+    const appointment = { start: new Date(2017, 5, 2), end: new Date(2017, 5, 3) };
+
+    const result = inRange(appointment, rangeStart, rangeEnd, accessors);
+
+    expect(result).toBeFalsy();
+  });
+
+  test('it returns true when appointment spans the whole range', () => {
+    const appointment = { start: new Date(2017, 4, 1), end: new Date(2017, 5, 1) };
+
+    const result = inRange(appointment, rangeStart, rangeEnd, accessors);
+
+    expect(result).toBeTruthy();
+  });
+
+  test('it uses the start of the day for the appointment start date', () => {
+    const appointment = {
       start: new Date(2017, 4, 1, 12),
       end: new Date(2017, 5, 1),
     };
 
-    const result = inRange(event, rangeStart, rangeEnd, accessors);
+    const result = inRange(appointment, rangeStart, rangeEnd, accessors);
 
     expect(result).toBeTruthy();
   });
@@ -409,132 +424,132 @@ describe('segmentsOverlap', () => {
   });
 });
 
-describe('sortEvents', () => {
+describe('sortAppointments', () => {
   const accessors = {
     start: (e) => e.start,
     end: (e) => e.end,
     allDay: (e) => e.allDay,
   };
 
-  describe('when the events start on different calendar days', () => {
-    const earlierEvent = {
+  describe('when the appointments start on different calendar days', () => {
+    const earlierAppointment = {
       start: new Date(2017, 0, 1),
       end: new Date(2017, 0, 3),
     };
-    const laterEvent = {
+    const laterAppointment = {
       start: new Date(2017, 0, 2),
       end: new Date(2017, 0, 3),
     };
 
-    test('it returns a positive number when event B starts on a day before the start day of event A', () => {
-      const result = sortEvents(laterEvent, earlierEvent, accessors);
+    test('it returns a positive number when appointment B starts on a day before the start day of appointment A', () => {
+      const result = sortAppointments(laterAppointment, earlierAppointment, accessors);
 
       expect(result).toBeGreaterThan(0);
     });
 
-    test('it returns a negative number when event A starts on a day before the start day of event B', () => {
-      const result = sortEvents(earlierEvent, laterEvent, accessors);
+    test('it returns a negative number when appointment A starts on a day before the start day of appointment B', () => {
+      const result = sortAppointments(earlierAppointment, laterAppointment, accessors);
 
       expect(result).toBeLessThan(0);
     });
   });
 
-  describe('when the events start on the same calendar day', () => {
-    describe('when the events have different durations', () => {
-      const shorterEvent = {
+  describe('when the appointments start on the same calendar day', () => {
+    describe('when the appointments have different durations', () => {
+      const shorterAppointment = {
         start: new Date(2017, 0, 1),
         end: new Date(2017, 0, 2),
       };
-      const longerEvent = {
+      const longerAppointment = {
         start: new Date(2017, 0, 1),
         end: new Date(2017, 0, 4),
       };
 
-      test('it returns a positive number when event B has a longer duration than event A', () => {
-        const result = sortEvents(shorterEvent, longerEvent, accessors);
+      test('it returns a positive number when appointment B has a longer duration than appointment A', () => {
+        const result = sortAppointments(shorterAppointment, longerAppointment, accessors);
 
         expect(result).toBeGreaterThan(0);
       });
 
-      test('it returns a negative number when event A has a longer duration than event B', () => {
-        const result = sortEvents(longerEvent, shorterEvent, accessors);
+      test('it returns a negative number when appointment A has a longer duration than appointment B', () => {
+        const result = sortAppointments(longerAppointment, shorterAppointment, accessors);
 
         expect(result).toBeLessThan(0);
       });
     });
 
-    describe('when the events have the same duration', () => {
-      describe('when only one of the events is an all day event', () => {
-        const allDayEvent = {
+    describe('when the appointments have the same duration', () => {
+      describe('when only one of the appointments is an all day appointment', () => {
+        const allDayAppointment = {
           start: new Date(2017, 0, 1),
           end: new Date(2017, 0, 2),
           allDay: true,
         };
-        const nonAllDayEvent = {
+        const nonAllDayAppointment = {
           start: new Date(2017, 0, 1),
           end: new Date(2017, 0, 2),
           allDay: false,
         };
 
-        test('it returns a positive number when event B is an all day event', () => {
-          const result = sortEvents(nonAllDayEvent, allDayEvent, accessors);
+        test('it returns a positive number when appointment B is an all day appointment', () => {
+          const result = sortAppointments(nonAllDayAppointment, allDayAppointment, accessors);
 
           expect(result).toBeGreaterThan(0);
         });
 
-        test('it returns a negative number when event A is an all day event', () => {
-          const result = sortEvents(allDayEvent, nonAllDayEvent, accessors);
+        test('it returns a negative number when appointment A is an all day appointment', () => {
+          const result = sortAppointments(allDayAppointment, nonAllDayAppointment, accessors);
 
           expect(result).toBeLessThan(0);
         });
       });
 
-      describe('when both of the events are all day events', () => {
-        const allDayEvent = {
+      describe('when both of the appointments are all day appointments', () => {
+        const allDayAppointment = {
           start: new Date(2017, 0, 1),
           end: new Date(2017, 0, 2),
           allDay: true,
         };
-        const otherAllDayEvent = {
+        const otherAllDayAppointment = {
           start: new Date(2017, 0, 1),
           end: new Date(2017, 0, 2),
           allDay: true,
         };
 
         test('it returns zero', () => {
-          const result = sortEvents(allDayEvent, otherAllDayEvent, accessors);
+          const result = sortAppointments(allDayAppointment, otherAllDayAppointment, accessors);
 
           expect(result).toBe(0);
         });
       });
 
-      describe('when neither of the events are all day events', () => {
-        const earlierEvent = {
+      describe('when neither of the appointments are all day appointments', () => {
+        const earlierAppointment = {
           start: new Date(2017, 0, 1, 12),
           end: new Date(2017, 0, 2),
           allDay: false,
         };
-        const laterEvent = {
+        const laterAppointment = {
           start: new Date(2017, 0, 1, 16),
           end: new Date(2017, 0, 2),
           allDay: false,
         };
 
-        test('it returns a positive number when event B starts at an earlier time than event A', () => {
-          const result = sortEvents(laterEvent, earlierEvent, accessors);
+        test('it returns a positive number when appointment B starts at an earlier time than appointment A', () => {
+          const result = sortAppointments(laterAppointment, earlierAppointment, accessors);
 
           expect(result).toBeGreaterThan(0);
         });
 
-        test('it returns a negative number when event A starts at an earlier time than event B', () => {
-          const result = sortEvents(earlierEvent, laterEvent, accessors);
+        test('it returns a negative number when appointment A starts at an earlier time than appointment B', () => {
+          const result = sortAppointments(earlierAppointment, laterAppointment, accessors);
 
           expect(result).toBeLessThan(0);
         });
 
-        test('it returns zero when both events start at the same time', () => {
-          const otherEarlierEvent = { ...earlierEvent };
-          const result = sortEvents(earlierEvent, otherEarlierEvent, accessors);
+        test('it returns zero when both appointments start at the same time', () => {
+          const otherEarlierAppointment = { ...earlierAppointment };
+          const result = sortAppointments(earlierAppointment, otherEarlierAppointment, accessors);
 
           expect(result).toBe(0);
         });

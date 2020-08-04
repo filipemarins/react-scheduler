@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { isSelected } from 'utils/selection';
 
-import EventCell from './event-cell';
+import AppointmentCell from './appointment-cell';
 
 /* eslint-disable react/prop-types */
 export default {
@@ -27,7 +27,7 @@ export default {
     selected: {},
   },
 
-  renderEvent(props, event) {
+  renderAppointment(props, appointment) {
     const {
       selected,
       isAllDay: _,
@@ -40,12 +40,12 @@ export default {
       components,
     } = props;
 
-    const continuesPrior = slotMetrics.continuesPrior(event);
-    const continuesAfter = slotMetrics.continuesAfter(event);
+    const continuesPrior = slotMetrics.continuesPrior(appointment);
+    const continuesAfter = slotMetrics.continuesAfter(appointment);
 
     return (
-      <EventCell
-        event={event}
+      <AppointmentCell
+        appointment={appointment}
         getters={getters}
         localizer={localizer}
         accessors={accessors}
@@ -56,7 +56,7 @@ export default {
         continuesAfter={continuesAfter}
         slotStart={slotMetrics.first}
         slotEnd={slotMetrics.last}
-        selected={isSelected(event, selected)}
+        selected={isSelected(appointment, selected)}
       />
     );
   },

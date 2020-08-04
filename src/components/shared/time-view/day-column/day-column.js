@@ -8,11 +8,11 @@ import getTimeSlotMetrics from 'utils/get-time-slot-metrics';
 import { isSelected } from 'utils/selection';
 import { notify } from 'utils/helpers';
 import { DayLayoutAlgorithmPropType } from 'utils/prop-types';
-import * as DayEventLayout from 'utils/day-event-layout';
+import { getStyledAppointments } from 'utils/day-appointment-layout';
 
-import Selection, { getBoundsForNode, isEvent } from 'components/shared/selection';
+import Selection, { getBoundsForNode, isAppointment } from 'components/shared/selection';
 import TimeSlot from '../time-slot';
-import Event from './event';
+import Appointment from './appointment';
 
 class DayColumn extends React.Component {
   state = { selecting: false, timeIndicatorPosition: null };
@@ -31,11 +31,6 @@ class DayColumn extends React.Component {
     if (this.props.isNow) {
       this.setTimeIndicatorPositionUpdateInterval();
     }
-  }
-
-  componentWillUnmount() {
-    this._teardownSelectable();
-    this.clearTimeIndicatorInterval();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -66,6 +61,11 @@ class DayColumn extends React.Component {
     ) {
       this.positionTimeIndicator();
     }
+  }
+
+  componentWillUnmount() {
+    this._teardownSelectable();
+    this.clearTimeIndicatorInterval();
   }
 
   /**
@@ -102,75 +102,9 @@ class DayColumn extends React.Component {
     }
   }
 
-  render() {
+  renderAppointments = () => {
     const {
-      max,
-      rtl,
-      isNow,
-      resource,
-      accessors,
-      localizer,
-      getters: { dayProp, ...getters },
-      components: { eventContainerWrapper: EventContainer, ...components },
-    } = this.props;
-
-    const { slotMetrics } = this;
-    const { selecting, top, height, startDate, endDate } = this.state;
-
-    const selectDates = { start: startDate, end: endDate };
-
-    const { className, style } = dayProp(max);
-
-    return (
-      <div
-        style={style}
-        className={clsx(
-          className,
-          'rbc-day-slot',
-          'rbc-time-column',
-          isNow && 'rbc-now',
-          isNow && 'rbc-today', // WHY
-          selecting && 'rbc-slot-selecting'
-        )}
-      >
-        {slotMetrics.groups.map((grp, idx) => (
-          <TimeSlot
-            key={idx}
-            group={grp}
-            resource={resource}
-            getters={getters}
-            components={components}
-          />
-        ))}
-        <EventContainer
-          localizer={localizer}
-          resource={resource}
-          accessors={accessors}
-          getters={getters}
-          components={components}
-          slotMetrics={slotMetrics}
-        >
-          <div className={clsx('rbc-events-container', rtl && 'rtl')}>{this.renderEvents()}</div>
-        </EventContainer>
-
-        {selecting && (
-          <div className="rbc-slot-selection" style={{ top, height }}>
-            <span>{localizer.format(selectDates, 'selectRangeFormat')}</span>
-          </div>
-        )}
-        {isNow && this.intervalTriggered && (
-          <div
-            className="rbc-current-time-indicator"
-            style={{ top: `${this.state.timeIndicatorPosition}%` }}
-          />
-        )}
-      </div>
-    );
-  }
-
-  renderEvents = () => {
-    const {
-      events,
+      appointments,
       rtl,
       selected,
       accessors,
@@ -185,25 +119,25 @@ class DayColumn extends React.Component {
     const { slotMetrics } = this;
     const { messages } = localizer;
 
-    const styledEvents = DayEventLayout.getStyledEvents({
-      events,
+    const styledAppointments = getStyledAppointments({
+      appointments,
       accessors,
       slotMetrics,
       minimumStartDifference: Math.ceil((step * timeslots) / 2),
       dayLayoutAlgorithm,
     });
 
-    return styledEvents.map(({ event, style }, idx) => {
-      const end = accessors.end(event);
-      const start = accessors.start(event);
-      let format = 'eventTimeRangeFormat';
+    return styledAppointments.map(({ appointment, style }, idx) => {
+      const end = accessors.end(appointment);
+      const start = accessors.start(appointment);
+      let format = 'appointmentTimeRangeFormat';
       let label;
 
       const startsBeforeDay = slotMetrics.startsBeforeDay(start);
       const startsAfterDay = slotMetrics.startsAfterDay(end);
 
-      if (startsBeforeDay) format = 'eventTimeRangeEndFormat';
-      else if (startsAfterDay) format = 'eventTimeRangeStartFormat';
+      if (startsBeforeDay) format = 'appointmentTimeRangeEndFormat';
+      else if (startsAfterDay) format = 'appointmentTimeRangeStartFormat';
 
       if (startsBeforeDay && startsAfterDay) label = messages.allDay;
       else label = localizer.format({ start, end }, format);
@@ -212,9 +146,9 @@ class DayColumn extends React.Component {
       const continuesLater = startsAfterDay || slotMetrics.startsAfter(end);
 
       return (
-        <Event
+        <Appointment
           style={style}
-          event={event}
+          appointment={appointment}
           label={label}
           key={`evt_${idx}`}
           getters={getters}
@@ -223,9 +157,9 @@ class DayColumn extends React.Component {
           continuesEarlier={continuesEarlier}
           continuesLater={continuesLater}
           accessors={accessors}
-          selected={isSelected(event, selected)}
-          onClick={(e) => this._select(event, e)}
-          onDoubleClick={(e) => this._doubleClick(event, e)}
+          selected={isSelected(appointment, selected)}
+          onClick={(e) => this._select(appointment, e)}
+          onDoubleClick={(e) => this._doubleClick(appointment, e)}
         />
       );
     });
@@ -290,7 +224,7 @@ class DayColumn extends React.Component {
     };
 
     const selectorClicksHandler = (box, actionType) => {
-      if (!isEvent(findDOMNode(this), box)) {
+      if (!isAppointment(findDOMNode(this), box)) {
         const { startDate, endDate } = selectionState(box);
         this._selectSlot({
           startDate,
@@ -306,9 +240,9 @@ class DayColumn extends React.Component {
     selector.on('selectStart', maybeSelect);
 
     selector.on('beforeSelect', (box) => {
-      if (this.props.selectable !== 'ignoreEvents') return;
+      if (this.props.selectable !== 'ignoreAppointments') return;
 
-      return !isEvent(findDOMNode(this), box);
+      return !isAppointment(findDOMNode(this), box);
     });
 
     selector.on('click', (box) => selectorClicksHandler(box, 'click'));
@@ -356,16 +290,84 @@ class DayColumn extends React.Component {
   };
 
   _select = (...args) => {
-    notify(this.props.onSelectEvent, args);
+    notify(this.props.onSelectAppointment, args);
   };
 
   _doubleClick = (...args) => {
-    notify(this.props.onDoubleClickEvent, args);
+    notify(this.props.onDoubleClickAppointment, args);
   };
+
+  render() {
+    const {
+      max,
+      rtl,
+      isNow,
+      resource,
+      accessors,
+      localizer,
+      getters: { dayProp, ...getters },
+      components: { appointmentContainerWrapper: AppointmentContainer, ...components },
+    } = this.props;
+
+    const { slotMetrics } = this;
+    const { selecting, top, height, startDate, endDate } = this.state;
+
+    const selectDates = { start: startDate, end: endDate };
+
+    const { className, style } = dayProp(max);
+
+    return (
+      <div
+        style={style}
+        className={clsx(
+          className,
+          'rbc-day-slot',
+          'rbc-time-column',
+          isNow && 'rbc-now',
+          isNow && 'rbc-today', // WHY
+          selecting && 'rbc-slot-selecting'
+        )}
+      >
+        {slotMetrics.groups.map((grp, idx) => (
+          <TimeSlot
+            key={idx}
+            group={grp}
+            resource={resource}
+            getters={getters}
+            components={components}
+          />
+        ))}
+        <AppointmentContainer
+          localizer={localizer}
+          resource={resource}
+          accessors={accessors}
+          getters={getters}
+          components={components}
+          slotMetrics={slotMetrics}
+        >
+          <div className={clsx('rbc-appointments-container', rtl && 'rtl')}>
+            {this.renderAppointments()}
+          </div>
+        </AppointmentContainer>
+
+        {selecting && (
+          <div className="rbc-slot-selection" style={{ top, height }}>
+            <span>{localizer.format(selectDates, 'selectRangeFormat')}</span>
+          </div>
+        )}
+        {isNow && this.intervalTriggered && (
+          <div
+            className="rbc-current-time-indicator"
+            style={{ top: `${this.state.timeIndicatorPosition}%` }}
+          />
+        )}
+      </div>
+    );
+  }
 }
 
 DayColumn.propTypes = {
-  events: PropTypes.array.isRequired,
+  appointments: PropTypes.array.isRequired,
   step: PropTypes.number.isRequired,
   date: PropTypes.instanceOf(Date).isRequired,
   min: PropTypes.instanceOf(Date).isRequired,
@@ -385,24 +387,24 @@ DayColumn.propTypes = {
   timeslots: PropTypes.number,
 
   selected: PropTypes.object,
-  selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
-  eventOffset: PropTypes.number,
+  selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
+  appointmentOffset: PropTypes.number,
   longPressThreshold: PropTypes.number,
 
   onSelecting: PropTypes.func,
   onSelectSlot: PropTypes.func.isRequired,
-  onSelectEvent: PropTypes.func.isRequired,
-  onDoubleClickEvent: PropTypes.func.isRequired,
+  onSelectAppointment: PropTypes.func.isRequired,
+  onDoubleClickAppointment: PropTypes.func.isRequired,
 
   className: PropTypes.string,
-  dragThroughEvents: PropTypes.bool,
+  dragThroughAppointments: PropTypes.bool,
   resource: PropTypes.any,
 
   dayLayoutAlgorithm: DayLayoutAlgorithmPropType,
 };
 
 DayColumn.defaultProps = {
-  dragThroughEvents: true,
+  dragThroughAppointments: true,
   timeslots: 2,
 };
 

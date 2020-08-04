@@ -1,8 +1,8 @@
-import { getStyledEvents } from './day-event-layout';
+import { getStyledAppointments } from './day-appointment-layout';
 import getTimeSlotMetrics from './get-time-slot-metrics';
 import * as dates from './dates';
 
-describe('getStyledEvents', () => {
+describe('getStyledAppointments', () => {
   const d = (...args) => new Date(2015, 3, 1, ...args);
   const min = dates.startOf(d(), 'day');
   const max = dates.endOf(d(), 'day');
@@ -11,16 +11,16 @@ describe('getStyledEvents', () => {
   const dayLayoutAlgorithm = 'overlap';
 
   describe('matrix', () => {
-    function compare(title, events, expectedResults) {
+    function compare(title, appointments, expectedResults) {
       it(title, () => {
-        const styledEvents = getStyledEvents({
-          events,
+        const styledAppointments = getStyledAppointments({
+          appointments,
           accessors,
           slotMetrics,
           minimumStartDifference: 10,
           dayLayoutAlgorithm,
         });
-        const results = styledEvents.map((result) => ({
+        const results = styledAppointments.map((result) => ({
           width: Math.floor(result.style.width),
           xOffset: Math.floor(result.style.xOffset),
         }));
@@ -29,9 +29,9 @@ describe('getStyledEvents', () => {
     }
 
     const toCheck = [
-      ['single event', [{ start: d(11), end: d(12) }], [{ width: 100, xOffset: 0 }]],
+      ['single appointment', [{ start: d(11), end: d(12) }], [{ width: 100, xOffset: 0 }]],
       [
-        'two consecutive events',
+        'two consecutive appointments',
         [
           { start: d(11), end: d(11, 10) },
           { start: d(11, 10), end: d(11, 20) },
@@ -42,7 +42,7 @@ describe('getStyledEvents', () => {
         ],
       ],
       [
-        'two consecutive events too close together',
+        'two consecutive appointments too close together',
         [
           { start: d(11), end: d(11, 5) },
           { start: d(11, 5), end: d(11, 10) },
@@ -53,7 +53,7 @@ describe('getStyledEvents', () => {
         ],
       ],
       [
-        'two overlapping events',
+        'two overlapping appointments',
         [
           { start: d(11), end: d(12) },
           { start: d(11), end: d(12) },
@@ -64,7 +64,7 @@ describe('getStyledEvents', () => {
         ],
       ],
       [
-        'three overlapping events',
+        'three overlapping appointments',
         [
           { start: d(11), end: d(12) },
           { start: d(11), end: d(12) },
@@ -77,7 +77,7 @@ describe('getStyledEvents', () => {
         ],
       ],
       [
-        'one big event overlapping with two consecutive events',
+        'one big appointment overlapping with two consecutive appointments',
         [
           { start: d(11), end: d(12) },
           { start: d(11), end: d(11, 30) },
@@ -90,7 +90,7 @@ describe('getStyledEvents', () => {
         ],
       ],
       [
-        'one big event overlapping with two consecutive events starting too close together',
+        'one big appointment overlapping with two consecutive appointments starting too close together',
         [
           { start: d(11), end: d(12) },
           { start: d(11), end: d(11, 5) },

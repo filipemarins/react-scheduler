@@ -13,7 +13,7 @@ class WorkWeek extends React.Component {
     const { date, ...props } = this.props;
     const range = workWeekRange(date, this.props);
 
-    return <TimeView {...props} range={range} eventOffset={15} />;
+    return <TimeView {...props} range={range} appointmentOffset={15} />;
   }
 }
 

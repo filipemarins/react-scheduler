@@ -7,22 +7,22 @@ export default function Resources(resources, accessors) {
       return resources.map((resource, idx) => fn([accessors.resourceId(resource), resource], idx));
     },
 
-    groupEvents(events) {
-      const eventsByResource = new Map();
+    groupAppointments(appointments) {
+      const appointmentsByResource = new Map();
 
       if (!resources) {
-        // Return all events if resources are not provided
-        eventsByResource.set(NONE, events);
-        return eventsByResource;
+        // Return all appointments if resources are not provided
+        appointmentsByResource.set(NONE, appointments);
+        return appointmentsByResource;
       }
 
-      events.forEach((event) => {
-        const id = accessors.resource(event) || NONE;
-        const resourceEvents = eventsByResource.get(id) || [];
-        resourceEvents.push(event);
-        eventsByResource.set(id, resourceEvents);
+      appointments.forEach((appointment) => {
+        const id = accessors.resource(appointment) || NONE;
+        const resourceAppointments = appointmentsByResource.get(id) || [];
+        resourceAppointments.push(appointment);
+        appointmentsByResource.set(id, resourceAppointments);
       });
-      return eventsByResource;
+      return appointmentsByResource;
     },
   };
 }

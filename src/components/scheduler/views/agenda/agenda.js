@@ -7,10 +7,19 @@ import scrollbarSize from 'dom-helpers/scrollbarSize';
 
 import * as dates from 'utils/dates';
 import { navigate } from 'utils/constants';
-import { inRange } from 'utils/event-levels';
+import { inRange } from 'utils/appointment-levels';
 import { isSelected } from 'utils/selection';
 
-const Agenda = ({ selected, getters, accessors, localizer, components, length, date, events }) => {
+const Agenda = ({
+  selected,
+  getters,
+  accessors,
+  localizer,
+  components,
+  length,
+  date,
+  appointments,
+}) => {
   const headerRef = useRef(null);
   const dateColRef = useRef(null);
   const timeColRef = useRef(null);
@@ -48,24 +57,29 @@ const Agenda = ({ selected, getters, accessors, localizer, components, length, d
     adjustHeader();
   });
 
-  const renderDay = (day, events, dayKey) => {
-    const { event: Event, date: AgendaDate } = components;
+  const renderDay = (day, appointments, dayKey) => {
+    const { appointment: Appointment, date: AgendaDate } = components;
 
-    events = events.filter((e) =>
+    appointments = appointments.filter((e) =>
       inRange(e, dates.startOf(day, 'day'), dates.endOf(day, 'day'), accessors)
     );
 
-    return events.map((event, idx) => {
-      const title = accessors.title(event);
-      const end = accessors.end(event);
-      const start = accessors.start(event);
+    return appointments.map((appointment, idx) => {
+      const title = accessors.title(appointment);
+      const end = accessors.end(appointment);
+      const start = accessors.start(appointment);
 
-      const userProps = getters.eventProp(event, start, end, isSelected(event, selected));
+      const userProps = getters.appointmentProp(
+        appointment,
+        start,
+        end,
+        isSelected(appointment, selected)
+      );
 
       const dateLabel = idx === 0 && localizer.format(day, 'agendaDateFormat');
       const first =
         idx === 0 ? (
-          <td rowSpan={events.length} className="rbc-agenda-date-cell">
+          <td rowSpan={appointments.length} className="rbc-agenda-date-cell">
             {AgendaDate ? <AgendaDate day={day} label={dateLabel} /> : dateLabel}
           </td>
         ) : (
@@ -75,24 +89,24 @@ const Agenda = ({ selected, getters, accessors, localizer, components, length, d
       return (
         <tr key={`${dayKey}_${idx}`} className={userProps.className} style={userProps.style}>
           {first}
-          <td className="rbc-agenda-time-cell">{timeRangeLabel(day, event)}</td>
-          <td className="rbc-agenda-event-cell">
-            {Event ? <Event event={event} title={title} /> : title}
+          <td className="rbc-agenda-time-cell">{timeRangeLabel(day, appointment)}</td>
+          <td className="rbc-agenda-appointment-cell">
+            {Appointment ? <Appointment appointment={appointment} title={title} /> : title}
           </td>
         </tr>
       );
     }, []);
   };
 
-  const timeRangeLabel = (day, event) => {
+  const timeRangeLabel = (day, appointment) => {
     let labelClass = '';
     const TimeComponent = components.time;
     let label = localizer.messages.allDay;
 
-    const end = accessors.end(event);
-    const start = accessors.start(event);
+    const end = accessors.end(appointment);
+    const start = accessors.start(appointment);
 
-    if (!accessors.allDay(event)) {
+    if (!accessors.allDay(appointment)) {
       if (dates.eq(start, end)) {
         label = localizer.format(start, 'agendaTimeFormat');
       } else if (dates.eq(start, end, 'day')) {
@@ -109,7 +123,11 @@ const Agenda = ({ selected, getters, accessors, localizer, components, length, d
 
     return (
       <span className={labelClass.trim()}>
-        {TimeComponent ? <TimeComponent event={event} day={day} label={label} /> : label}
+        {TimeComponent ? (
+          <TimeComponent appointment={appointment} day={day} label={label} />
+        ) : (
+          label
+        )}
       </span>
     );
   };
@@ -119,13 +137,13 @@ const Agenda = ({ selected, getters, accessors, localizer, components, length, d
 
   const range = dates.range(date, end, 'day');
 
-  events = events.filter((event) => inRange(event, date, end, accessors));
+  appointments = appointments.filter((appointment) => inRange(appointment, date, end, accessors));
 
-  events.sort((a, b) => +accessors.start(a) - +accessors.start(b));
+  appointments.sort((a, b) => +accessors.start(a) - +accessors.start(b));
 
   return (
     <div className="rbc-agenda-view">
-      {events.length !== 0 ? (
+      {appointments.length !== 0 ? (
         <>
           <table ref={headerRef} className="rbc-agenda-table">
             <thead>
@@ -136,25 +154,27 @@ const Agenda = ({ selected, getters, accessors, localizer, components, length, d
                 <th className="rbc-header" ref={timeColRef}>
                   {messages.time}
                 </th>
-                <th className="rbc-header">{messages.event}</th>
+                <th className="rbc-header">{messages.appointment}</th>
               </tr>
             </thead>
           </table>
           <div className="rbc-agenda-content" ref={contentRef}>
             <table className="rbc-agenda-table">
-              <tbody ref={tbodyRef}>{range.map((day, idx) => renderDay(day, events, idx))}</tbody>
+              <tbody ref={tbodyRef}>
+                {range.map((day, idx) => renderDay(day, appointments, idx))}
+              </tbody>
             </table>
           </div>
         </>
       ) : (
-        <span className="rbc-agenda-empty">{messages.noEventsInRange}</span>
+        <span className="rbc-agenda-empty">{messages.noAppointmentsInRange}</span>
       )}
     </div>
   );
 };
 
 Agenda.propTypes = {
-  events: PropTypes.array,
+  appointments: PropTypes.array,
   date: PropTypes.instanceOf(Date),
   length: PropTypes.number.isRequired,
 

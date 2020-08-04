@@ -1,14 +1,14 @@
 @import './variables';
 
-.rbc-event {
+.rbc-appointment {
   border: none;
   box-sizing: border-box;
   box-shadow: none;
   margin: 0;
-  padding: $event-padding;
-  background-color: $event-bg;
-  border-radius: $event-border-radius;
-  color: $event-color;
+  padding: $appointment-padding;
+  background-color: $appointment-bg;
+  border-radius: $appointment-border-radius;
+  color: $appointment-color;
   cursor: pointer;
   width: 100%;
   text-align: left;
@@ -19,38 +19,38 @@
   }
 
   &.rbc-selected {
-    background-color: darken($event-bg, 10%);
+    background-color: darken($appointment-bg, 10%);
   }
 
   &:focus {
-    outline: 5px auto $event-outline;
+    outline: 5px auto $appointment-outline;
   }
 }
 
-.rbc-event-label {
+.rbc-appointment-label {
   @extend .rbc-ellipsis;
   font-size: 80%;
 }
 
-.rbc-event-overlaps {
+.rbc-appointment-overlaps {
   box-shadow: -1px 1px 5px 0px rgba(51,51,51,.5);
 }
 
-.rbc-event-continues-prior {
+.rbc-appointment-continues-prior {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-.rbc-event-continues-after {
+.rbc-appointment-continues-after {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
 
-.rbc-event-continues-earlier {
+.rbc-appointment-continues-earlier {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-.rbc-event-continues-later {
+.rbc-appointment-continues-later {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }

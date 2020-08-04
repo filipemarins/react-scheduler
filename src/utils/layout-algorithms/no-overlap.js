@@ -12,36 +12,36 @@ function getMaxIdxDFS(node, maxIdx, visited) {
   return maxIdx;
 }
 
-export default function ({ events, minimumStartDifference, slotMetrics, accessors }) {
-  const styledEvents = overlap({
-    events,
+export default function ({ appointments, minimumStartDifference, slotMetrics, accessors }) {
+  const styledAppointments = overlap({
+    appointments,
     minimumStartDifference,
     slotMetrics,
     accessors,
   });
 
-  styledEvents.sort((a, b) => {
+  styledAppointments.sort((a, b) => {
     a = a.style;
     b = b.style;
     if (a.top !== b.top) return a.top > b.top ? 1 : -1;
     return a.top + a.height < b.top + b.height ? 1 : -1;
   });
 
-  for (let i = 0; i < styledEvents.length; ++i) {
-    styledEvents[i].friends = [];
-    delete styledEvents[i].style.left;
-    delete styledEvents[i].style.left;
-    delete styledEvents[i].idx;
-    delete styledEvents[i].size;
+  for (let i = 0; i < styledAppointments.length; ++i) {
+    styledAppointments[i].friends = [];
+    delete styledAppointments[i].style.left;
+    delete styledAppointments[i].style.left;
+    delete styledAppointments[i].idx;
+    delete styledAppointments[i].size;
   }
 
-  for (let i = 0; i < styledEvents.length - 1; ++i) {
-    const se1 = styledEvents[i];
+  for (let i = 0; i < styledAppointments.length - 1; ++i) {
+    const se1 = styledAppointments[i];
     const y1 = se1.style.top;
     const y2 = se1.style.top + se1.style.height;
 
-    for (let j = i + 1; j < styledEvents.length; ++j) {
-      const se2 = styledEvents[j];
+    for (let j = i + 1; j < styledAppointments.length; ++j) {
+      const se2 = styledAppointments[j];
       const y3 = se2.style.top;
       const y4 = se2.style.top + se2.style.height;
 
@@ -54,8 +54,8 @@ export default function ({ events, minimumStartDifference, slotMetrics, accessor
     }
   }
 
-  for (let i = 0; i < styledEvents.length; ++i) {
-    const se = styledEvents[i];
+  for (let i = 0; i < styledAppointments.length; ++i) {
+    const se = styledAppointments[i];
     const bitmap = [];
     for (let j = 0; j < 100; ++j) bitmap.push(1); // 1 means available
 
@@ -65,21 +65,21 @@ export default function ({ events, minimumStartDifference, slotMetrics, accessor
     se.idx = bitmap.indexOf(1);
   }
 
-  for (let i = 0; i < styledEvents.length; ++i) {
+  for (let i = 0; i < styledAppointments.length; ++i) {
     let size = 0;
 
-    if (styledEvents[i].size) continue;
+    if (styledAppointments[i].size) continue;
 
     const allFriends = [];
-    const maxIdx = getMaxIdxDFS(styledEvents[i], 0, allFriends);
+    const maxIdx = getMaxIdxDFS(styledAppointments[i], 0, allFriends);
     size = 100 / (maxIdx + 1);
-    styledEvents[i].size = size;
+    styledAppointments[i].size = size;
 
     for (let j = 0; j < allFriends.length; ++j) allFriends[j].size = size;
   }
 
-  for (let i = 0; i < styledEvents.length; ++i) {
-    const e = styledEvents[i];
+  for (let i = 0; i < styledAppointments.length; ++i) {
+    const e = styledAppointments[i];
     e.style.left = e.idx * e.size;
 
     // stretch to maximum
@@ -90,7 +90,7 @@ export default function ({ events, minimumStartDifference, slotMetrics, accessor
     }
     if (maxIdx <= e.idx) e.size = 100 - e.idx * e.size;
 
-    // padding between events
+    // padding between appointments
     // for this feature, `width` is not percentage based unit anymore
     // it will be used with calc()
     const padding = e.idx === 0 ? 0 : 3;
@@ -99,5 +99,5 @@ export default function ({ events, minimumStartDifference, slotMetrics, accessor
     e.style.xOffset = `calc(${e.style.left}% + ${padding}px)`;
   }
 
-  return styledEvents;
+  return styledAppointments;
 }

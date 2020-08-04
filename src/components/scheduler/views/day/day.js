@@ -10,7 +10,7 @@ class Day extends React.Component {
     const { date, ...props } = this.props;
     const range = Day.range(date);
 
-    return <TimeView {...props} range={range} eventOffset={10} />;
+    return <TimeView {...props} range={range} appointmentOffset={10} />;
   }
 }
 

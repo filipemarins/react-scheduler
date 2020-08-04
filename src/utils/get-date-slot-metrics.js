@@ -1,19 +1,19 @@
 import memoize from 'memoize-one';
 import * as dates from './dates';
-import { eventSegments, endOfRange, eventLevels } from './event-levels';
+import { appointmentSegments, endOfRange, appointmentLevels } from './appointment-levels';
 
 const isSegmentInSlot = (seg, slot) => seg.left <= slot && seg.right >= slot;
 
-const isEqual = (a, b) => a[0].range === b[0].range && a[0].events === b[0].events;
+const isEqual = (a, b) => a[0].range === b[0].range && a[0].appointments === b[0].appointments;
 
 const getDateSlotMetrics = () => {
   return memoize((options) => {
-    const { range, events, maxRows, minRows, accessors } = options;
+    const { range, appointments, maxRows, minRows, accessors } = options;
     const { first, last } = endOfRange(range);
 
-    const segments = events.map((evt) => eventSegments(evt, range, accessors));
+    const segments = appointments.map((evt) => appointmentSegments(evt, range, accessors));
 
-    const { levels, extra } = eventLevels(segments, Math.max(maxRows - 1, 1));
+    const { levels, extra } = appointmentLevels(segments, Math.max(maxRows - 1, 1));
     while (levels.length < minRows) levels.push([]);
 
     return {
@@ -38,21 +38,23 @@ const getDateSlotMetrics = () => {
         return range.find((r) => dates.eq(r, date, 'day'));
       },
 
-      getEventsForSlot(slot) {
-        return segments.filter((seg) => isSegmentInSlot(seg, slot)).map((seg) => seg.event);
+      getAppointmentsForSlot(slot) {
+        return segments
+          .filter((segment) => isSegmentInSlot(segment, slot))
+          .map((segment) => segment.appointment);
       },
 
-      continuesPrior(event) {
-        return dates.lt(accessors.start(event), first, 'day');
+      continuesPrior(appointment) {
+        return dates.lt(accessors.start(appointment), first, 'day');
       },
 
-      continuesAfter(event) {
-        const eventEnd = accessors.end(event);
-        const singleDayDuration = dates.eq(accessors.start(event), eventEnd, 'minutes');
+      continuesAfter(appointment) {
+        const appointmentEnd = accessors.end(appointment);
+        const singleDayDuration = dates.eq(accessors.start(appointment), appointmentEnd, 'minutes');
 
         return singleDayDuration
-          ? dates.gte(eventEnd, last, 'minutes')
-          : dates.gt(eventEnd, last, 'minutes');
+          ? dates.gte(appointmentEnd, last, 'minutes')
+          : dates.gt(appointmentEnd, last, 'minutes');
       },
     };
   }, isEqual);

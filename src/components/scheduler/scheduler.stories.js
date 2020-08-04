@@ -6,10 +6,14 @@ import { action } from '@storybook/addon-actions';
 import 'sass/styles.scss';
 import momentLocalizer from 'localizers/moment';
 import { views } from 'utils/constants';
-import { eventsWithCustomSize, fakeEvents } from 'tests/fixtures/events';
+import { appointmentsWithCustomSize, fakeAppointments } from 'tests/fixtures/appointments';
 import resources from 'tests/fixtures/resources';
-import { dateCellWrapper, timeSlotWrapper, eventWrapper } from 'tests/fixtures/custom-components';
-import createEvents from 'tests/fixtures/create-events';
+import {
+  dateCellWrapper,
+  timeSlotWrapper,
+  appointmentWrapper,
+} from 'tests/fixtures/custom-components';
+import createAppointments from 'tests/fixtures/create-appointments';
 
 import BaseScheduler from './scheduler';
 
@@ -22,8 +26,8 @@ const Scheduler = (props) => <BaseScheduler localizer={localizer} {...props} />;
 storiesOf('Basic Usage', module)
   .add('demo', () => (
     <Scheduler
-      events={fakeEvents}
-      onSelectEvent={action('event selected')}
+      appointments={fakeAppointments}
+      onSelectAppointments={action('appointment selected')}
       defaultDate={new Date(2015, 3, 1)}
     />
   ))
@@ -32,8 +36,8 @@ storiesOf('Basic Usage', module)
       defaultView={views.WEEK}
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
-      events={eventsWithCustomSize}
-      onSelectEvent={action('event selected')}
+      appointments={appointmentsWithCustomSize}
+      onSelectAppointments={action('appointment selected')}
       defaultDate={new Date()}
     />
   ))
@@ -43,21 +47,26 @@ storiesOf('Basic Usage', module)
       defaultView={views.WEEK}
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
-      events={eventsWithCustomSize}
-      onSelectEvent={action('event selected')}
+      appointments={appointmentsWithCustomSize}
+      onSelectAppointments={action('appointment selected')}
       onSelectSlot={action('slot selected')}
       defaultDate={new Date()}
     />
   ))
   .add('complex day view layout', () => (
-    <Scheduler defaultDate={new Date()} defaultView={views.DAY} events={createEvents(1)} step={30} />
+    <Scheduler
+      defaultDate={new Date()}
+      defaultView={views.DAY}
+      appointments={createAppointments(1)}
+      step={30}
+    />
   ))
   .add('multi-day', () => (
     <Scheduler
       showMultiDayTimes
       defaultDate={new Date(2016, 11, 4)}
       max={moment().endOf('day').add(-1, 'hours').toDate()}
-      events={[
+      appointments={[
         {
           title: 'start of the week',
           start: new Date(2016, 11, 4, 15),
@@ -83,7 +92,7 @@ storiesOf('Basic Usage', module)
   ))
   .add('agenda view - with length prop', () => (
     /* should display as title toolbar (from now to now + 14 days) */
-    <Scheduler defaultView={views.AGENDA} events={eventsWithCustomSize} length={14} />
+    <Scheduler defaultView={views.AGENDA} appointments={appointmentsWithCustomSize} length={14} />
   ))
   .add('custom now is the first of the month', () => {
     // Issue on week view
@@ -98,8 +107,8 @@ storiesOf('Basic Usage', module)
         getNow={customNow}
         min={moment('12:00am', 'h:mma').toDate()}
         max={moment('11:59pm', 'h:mma').toDate()}
-        events={eventsWithCustomSize}
-        onSelectEvent={action('event selected')}
+        appointments={appointmentsWithCustomSize}
+        onSelectAppointments={action('appointment selected')}
         defaultDate={new Date()}
       />
     );
@@ -107,7 +116,7 @@ storiesOf('Basic Usage', module)
   .add('add custom date header', () => (
     <Scheduler
       defaultView={views.MONTH}
-      events={eventsWithCustomSize}
+      appointments={appointmentsWithCustomSize}
       components={{
         month: {
           // eslint-disable-next-line react/prop-types
@@ -119,7 +128,7 @@ storiesOf('Basic Usage', module)
   .add('add custom week header', () => (
     <Scheduler
       defaultView={views.WEEK}
-      events={eventsWithCustomSize}
+      appointments={appointmentsWithCustomSize}
       components={{
         week: {
           // eslint-disable-next-line react/prop-types
@@ -131,7 +140,7 @@ storiesOf('Basic Usage', module)
   .add('add custom toolbar', () => (
     <Scheduler
       defaultView={views.WEEK}
-      events={eventsWithCustomSize}
+      appointments={appointmentsWithCustomSize}
       components={{
         week: {
           // eslint-disable-next-line react/prop-types
@@ -145,8 +154,8 @@ storiesOf('Basic Usage', module)
     const TimeGutter = () => <p>Custom gutter text</p>;
     return (
       <Scheduler
-        events={fakeEvents}
-        onSelectEvent={action('event selected')}
+        appointments={fakeAppointments}
+        onSelectAppointments={action('appointment selected')}
         defaultDate={new Date(2015, 3, 1)}
         defaultView="week"
         views={['week', 'day']}
@@ -159,7 +168,7 @@ storiesOf('Basic Usage', module)
   .add('add custom dateCellWrapper', () => (
     <Scheduler
       defaultView={views.MONTH}
-      events={eventsWithCustomSize}
+      appointments={appointmentsWithCustomSize}
       components={{
         dateCellWrapper,
       }}
@@ -168,47 +177,47 @@ storiesOf('Basic Usage', module)
   .add('add custom timeSlotWrapper', () => (
     <Scheduler
       defaultView={views.DAY}
-      events={eventsWithCustomSize}
+      appointments={appointmentsWithCustomSize}
       components={{
         timeSlotWrapper,
       }}
     />
   ))
-  .add('add custom eventWrapper', () => (
+  .add('add custom appointmentWrapper', () => (
     <Scheduler
       defaultView={views.DAY}
-      events={eventsWithCustomSize}
+      appointments={appointmentsWithCustomSize}
       components={{
-        eventWrapper,
+        appointmentWrapper,
       }}
     />
   ))
-  .add('add custom no agenda events label', () => (
+  .add('add custom no agenda appointments label', () => (
     <Scheduler
       defaultView={views.AGENDA}
-      events={eventsWithCustomSize}
+      appointments={appointmentsWithCustomSize}
       messages={{
-        noEventsInRange: 'There are no special events in this range [test message]',
+        noAppointmentsInRange: 'There are no special appointments in this range [test message]',
       }}
     />
   ))
   .add('add custom timeSlotWrapper', () => (
     <Scheduler
       defaultView={views.WEEK}
-      events={eventsWithCustomSize}
+      appointments={appointmentsWithCustomSize}
       components={{
         timeSlotWrapper,
       }}
     />
   ));
 
-storiesOf('Event Durations', module)
+storiesOf('Appointment Durations', module)
   .add('Daylight savings starts', () => (
     <Scheduler
       defaultView={views.DAY}
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
-      events={[
+      appointments={[
         {
           title: 'on DST',
           start: new Date(2017, 2, 12, 1),
@@ -236,7 +245,7 @@ storiesOf('Event Durations', module)
       defaultView={views.DAY}
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
-      events={[
+      appointments={[
         {
           title: 'on DST',
           start: new Date(2017, 10, 5, 1),
@@ -264,7 +273,7 @@ storiesOf('Event Durations', module)
       defaultView={views.DAY}
       min={moment('3:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
-      events={[
+      appointments={[
         {
           title: 'After DST',
           start: new Date(2017, 2, 12, 7),
@@ -280,7 +289,7 @@ storiesOf('Event Durations', module)
       defaultView={views.DAY}
       min={moment('3:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
-      events={[
+      appointments={[
         {
           title: 'After DST',
           start: new Date(2017, 10, 5, 7),
@@ -293,44 +302,44 @@ storiesOf('Event Durations', module)
   ));
 
 storiesOf('Layout Issues', module)
-  .add('event layout', () => (
+  .add('appointment layout', () => (
     <Scheduler
       defaultView={views.DAY}
       defaultDate={new Date()}
       timeslots={4}
-      events={createEvents(1)}
+      appointments={createAppointments(1)}
     />
   ))
-  .add('first of the week all-day event', () => (
+  .add('first of the week all-day appointment', () => (
     <Scheduler
       defaultDate={new Date(2016, 11, 4)}
-      events={[
+      appointments={[
         {
           allDay: true,
-          title: 'All Day Event',
+          title: 'All Day Appointment',
           start: new Date(2016, 11, 4),
           end: new Date(2016, 11, 4),
         },
       ]}
     />
   ))
-  .add('end of the week all-day event', () => (
+  .add('end of the week all-day appointment', () => (
     <Scheduler
       defaultDate={new Date(2016, 11, 3)}
-      events={[
+      appointments={[
         {
           allDay: true,
-          title: 'All Day Event',
+          title: 'All Day Appointment',
           start: new Date(2016, 11, 3),
           end: new Date(2016, 11, 3),
         },
       ]}
     />
   ))
-  .add('event at end of week', () => (
+  .add('appointment at end of week', () => (
     <Scheduler
       defaultDate={new Date(2016, 11, 3)}
-      events={[
+      appointments={[
         {
           title: 'has time',
           start: moment(new Date(2016, 11, 3)).add(1, 'days').subtract(5, 'hours').toDate(),
@@ -339,10 +348,10 @@ storiesOf('Layout Issues', module)
       ]}
     />
   ))
-  .add('event at start of week', () => (
+  .add('appointment at start of week', () => (
     <Scheduler
       defaultDate={new Date(2016, 11, 4)}
-      events={[
+      appointments={[
         {
           title: 'has time',
           start: moment(new Date(2016, 11, 4)).add(1, 'days').subtract(5, 'hours').toDate(),
@@ -351,19 +360,19 @@ storiesOf('Layout Issues', module)
       ]}
     />
   ))
-  .add('events on a constrained day column', () => (
+  .add('appointments on a constrained day column', () => (
     <Scheduler
       defaultView={views.DAY}
       min={moment('8 am', 'h a').toDate()}
       max={moment('5 pm', 'h a').toDate()}
-      events={eventsWithCustomSize}
+      appointments={appointmentsWithCustomSize}
     />
   ))
   .add('no duration', () => (
-    /* should display all three events */
+    /* should display all three appointments */
     <Scheduler
       defaultDate={new Date(2016, 11, 4)}
-      events={[
+      appointments={[
         {
           title: 'start of the week',
           start: new Date(2016, 11, 4),
@@ -385,7 +394,7 @@ storiesOf('Layout Issues', module)
   .add('Single days should only span one slot, multi-days multiple', () => (
     <Scheduler
       defaultDate={new Date(2015, 3, 1)}
-      events={[
+      appointments={[
         {
           title: 'SingleDay 1',
           start: new Date(2015, 3, 10),
@@ -422,7 +431,7 @@ storiesOf('Layout Issues', module)
 
 storiesOf('Resources', module).add('demo', () => (
   <Scheduler
-    events={resources.events}
+    appointments={resources.appointments}
     resources={resources.list}
     defaultView={views.DAY}
     defaultDate={new Date(2015, 3, 4)}
@@ -438,8 +447,8 @@ storiesOf('Timeslots', module)
       step={15}
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
-      events={eventsWithCustomSize}
-      onSelectEvent={action('event selected')}
+      appointments={appointmentsWithCustomSize}
+      onSelectAppointments={action('appointment selected')}
       onSelectSlot={action('slot selected')}
       defaultDate={new Date()}
     />
@@ -452,8 +461,8 @@ storiesOf('Timeslots', module)
       step={10}
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
-      events={eventsWithCustomSize}
-      onSelectEvent={action('event selected')}
+      appointments={appointmentsWithCustomSize}
+      onSelectAppointments={action('appointment selected')}
       onSelectSlot={action('slot selected')}
       defaultDate={new Date()}
     />
@@ -466,8 +475,8 @@ storiesOf('Timeslots', module)
       step={5}
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
-      events={eventsWithCustomSize}
-      onSelectEvent={action('event selected')}
+      appointments={appointmentsWithCustomSize}
+      onSelectAppointments={action('appointment selected')}
       onSelectSlot={action('slot selected')}
       defaultDate={new Date()}
     />
@@ -480,8 +489,8 @@ storiesOf('Timeslots', module)
       getNow={() => moment('9:30am', 'h:mma').toDate()}
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
-      events={eventsWithCustomSize}
-      onSelectEvent={action('event selected')}
+      appointments={appointmentsWithCustomSize}
+      onSelectAppointments={action('appointment selected')}
       onSelectSlot={action('slot selected')}
       defaultDate={new Date()}
     />

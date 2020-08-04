@@ -8,11 +8,11 @@ import { chunk } from 'lodash-es';
 import * as dates from 'utils/dates';
 import { navigate, views } from 'utils/constants';
 import { notify } from 'utils/helpers';
-import { inRange, sortEvents } from 'utils/event-levels';
+import { inRange, sortAppointments } from 'utils/appointment-levels';
 import ContentRow from 'components/shared/content-row';
 import NoopWrapper from 'components/shared/noop-wrapper';
 
-const eventsForWeek = (evts, start, end, accessors) =>
+const appointmentsForWeek = (evts, start, end, accessors) =>
   evts.filter((e) => inRange(e, start, end, accessors));
 
 class Month extends React.Component {
@@ -78,24 +78,24 @@ class Month extends React.Component {
     notify(this.props.onDrillDown, [date, view]);
   };
 
-  handleSelectEvent = (...args) => {
+  handleSelectAppointment = (...args) => {
     this.clearSelection();
-    notify(this.props.onSelectEvent, args);
+    notify(this.props.onSelectAppointment, args);
   };
 
-  handleDoubleClickEvent = (...args) => {
+  handleDoubleClickAppointment = (...args) => {
     this.clearSelection();
-    notify(this.props.onDoubleClickEvent, args);
+    notify(this.props.onDoubleClickAppointment, args);
   };
 
-  handleShowMore = (events, date, cell, slot) => {
+  handleShowMore = (appointments, date, cell, slot) => {
     const { onDrillDown, onShowMore, getDrilldownView } = this.props;
-    // cancel any pending selections so only the event click goes through.
+    // cancel any pending selections so only the appointment click goes through.
     this.clearSelection();
 
     notify(onDrillDown, [date, getDrilldownView(date) || views.DAY]);
 
-    notify(onShowMore, [events, date, slot]);
+    notify(onShowMore, [appointments, date, slot]);
   };
 
   readerDateHeading = ({ date, className, ...props }) => {
@@ -152,7 +152,7 @@ class Month extends React.Component {
 
   renderWeek = (week, weekIdx) => {
     let {
-      events,
+      appointments,
       components,
       selectable,
       getNow,
@@ -166,9 +166,9 @@ class Month extends React.Component {
 
     const { needLimitMeasure, rowLimit } = this.state;
 
-    events = eventsForWeek(events, week[0], week[week.length - 1], accessors);
+    appointments = appointmentsForWeek(appointments, week[0], week[week.length - 1], accessors);
 
-    events.sort((a, b) => sortEvents(a, b, accessors));
+    appointments.sort((a, b) => sortAppointments(a, b, accessors));
 
     return (
       <ContentRow
@@ -179,7 +179,7 @@ class Month extends React.Component {
         getNow={getNow}
         date={date}
         range={week}
-        events={events}
+        appointments={appointments}
         maxRows={rowLimit}
         selected={selected}
         selectable={selectable}
@@ -190,8 +190,8 @@ class Month extends React.Component {
         renderHeader={this.readerDateHeading}
         renderForMeasure={needLimitMeasure}
         onShowMore={this.handleShowMore}
-        onSelect={this.handleSelectEvent}
-        onDoubleClick={this.handleDoubleClickEvent}
+        onSelect={this.handleSelectAppointment}
+        onDoubleClick={this.handleDoubleClickAppointment}
         onSelectSlot={this.handleSelectSlot}
         longPressThreshold={longPressThreshold}
         rtl={this.props.rtl}
@@ -229,7 +229,7 @@ class Month extends React.Component {
 }
 
 Month.propTypes = {
-  events: PropTypes.array.isRequired,
+  appointments: PropTypes.array.isRequired,
   date: PropTypes.instanceOf(Date),
 
   min: PropTypes.instanceOf(Date),
@@ -248,13 +248,13 @@ Month.propTypes = {
   localizer: PropTypes.object.isRequired,
 
   selected: PropTypes.object,
-  selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
+  selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
   longPressThreshold: PropTypes.number,
 
   onNavigate: PropTypes.func,
   onSelectSlot: PropTypes.func,
-  onSelectEvent: PropTypes.func,
-  onDoubleClickEvent: PropTypes.func,
+  onSelectAppointment: PropTypes.func,
+  onDoubleClickAppointment: PropTypes.func,
   onShowMore: PropTypes.func,
   onDrillDown: PropTypes.func,
   getDrilldownView: PropTypes.func.isRequired,

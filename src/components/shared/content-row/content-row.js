@@ -7,22 +7,24 @@ import { findDOMNode } from 'react-dom';
 
 import * as dates from 'utils/dates';
 import getDateSlotMetrics from 'utils/get-date-slot-metrics';
-import EventRow from './event-row';
-import EventEndingRow from './event-ending-row';
+import AppointmentRow from './appointment-row';
+import AppointmentEndingRow from './appointment-ending-row';
 import Cells from './cells';
 
-class DateContentRow extends React.Component {
+class ContentRow extends React.Component {
   constructor(...args) {
     super(...args);
 
     this.slotMetrics = getDateSlotMetrics();
   }
 
-  handleSelectSlot = (slot) => {
-    const { range, onSelectSlot } = this.props;
+  getRowLimit() {
+    const appointmentHeight = getHeight(this.appointmentRow);
+    const headingHeight = this.headingRow ? getHeight(this.headingRow) : 0;
+    const appointmentSpace = getHeight(findDOMNode(this)) - headingHeight;
 
-    onSelectSlot(range.slice(slot.start, slot.end + 1), slot);
-  };
+    return Math.max(Math.floor(appointmentSpace / appointmentHeight), 1);
+  }
 
   handleShowMore = (slot, target) => {
     const { range, onShowMore } = this.props;
@@ -32,16 +34,16 @@ class DateContentRow extends React.Component {
     let cell;
     if (row) cell = row.children[slot - 1];
 
-    const events = metrics.getEventsForSlot(slot);
-    onShowMore(events, range[slot - 1], cell, slot, target);
+    const appointments = metrics.getAppointmentsForSlot(slot);
+    onShowMore(appointments, range[slot - 1], cell, slot, target);
   };
 
   createHeadingRef = (r) => {
     this.headingRow = r;
   };
 
-  createEventRef = (r) => {
-    this.eventRow = r;
+  createAppointmentRef = (r) => {
+    this.appointmentRow = r;
   };
 
   getContainer = () => {
@@ -49,13 +51,11 @@ class DateContentRow extends React.Component {
     return container ? container() : findDOMNode(this);
   };
 
-  getRowLimit() {
-    const eventHeight = getHeight(this.eventRow);
-    const headingHeight = this.headingRow ? getHeight(this.headingRow) : 0;
-    const eventSpace = getHeight(findDOMNode(this)) - headingHeight;
+  handleSelectSlot = (slot) => {
+    const { range, onSelectSlot } = this.props;
 
-    return Math.max(Math.floor(eventSpace / eventHeight), 1);
-  }
+    onSelectSlot(range.slice(slot.start, slot.end + 1), slot);
+  };
 
   renderHeadingCell = (date, index) => {
     const { renderHeader, getNow } = this.props;
@@ -77,10 +77,10 @@ class DateContentRow extends React.Component {
               {range.map(this.renderHeadingCell)}
             </div>
           )}
-          <div className="rbc-row" ref={this.createEventRef}>
+          <div className="rbc-row" ref={this.createAppointmentRef}>
             <div className="rbc-row-segment">
-              <div className="rbc-event">
-                <div className="rbc-event-content">&nbsp;</div>
+              <div className="rbc-appointment">
+                <div className="rbc-appointment-content">&nbsp;</div>
               </div>
             </div>
           </div>
@@ -122,7 +122,7 @@ class DateContentRow extends React.Component {
 
     const WeekWrapper = components.weekWrapper;
 
-    const eventRowProps = {
+    const appointmentRowProps = {
       selected,
       accessors,
       getters,
@@ -157,15 +157,15 @@ class DateContentRow extends React.Component {
               {range.map(this.renderHeadingCell)}
             </div>
           )}
-          <WeekWrapper isAllDay={isAllDay} {...eventRowProps}>
+          <WeekWrapper isAllDay={isAllDay} {...appointmentRowProps}>
             {levels.map((segs, idx) => (
-              <EventRow key={idx} segments={segs} {...eventRowProps} />
+              <AppointmentRow key={idx} segments={segs} {...appointmentRowProps} />
             ))}
             {!!extra.length && (
-              <EventEndingRow
+              <AppointmentEndingRow
                 segments={extra}
                 onShowMore={this.handleShowMore}
-                {...eventRowProps}
+                {...appointmentRowProps}
               />
             )}
           </WeekWrapper>
@@ -175,9 +175,9 @@ class DateContentRow extends React.Component {
   }
 }
 
-DateContentRow.propTypes = {
+ContentRow.propTypes = {
   date: PropTypes.instanceOf(Date),
-  events: PropTypes.array.isRequired,
+  appointments: PropTypes.array.isRequired,
   range: PropTypes.array.isRequired,
 
   rtl: PropTypes.bool,
@@ -187,7 +187,7 @@ DateContentRow.propTypes = {
 
   container: PropTypes.func,
   selected: PropTypes.object,
-  selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
+  selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
   longPressThreshold: PropTypes.number,
 
   onShowMore: PropTypes.func,
@@ -210,9 +210,9 @@ DateContentRow.propTypes = {
   maxRows: PropTypes.number.isRequired,
 };
 
-DateContentRow.defaultProps = {
+ContentRow.defaultProps = {
   minRows: 0,
   maxRows: Infinity,
 };
 
-export default DateContentRow;
+export default ContentRow;

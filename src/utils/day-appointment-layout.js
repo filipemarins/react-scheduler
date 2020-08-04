@@ -9,9 +9,8 @@ const DefaultAlgorithms = {
   'no-overlap': noOverlap,
 };
 
-//
-export function getStyledEvents({
-  events,
+export function getStyledAppointments({
+  appointments,
   minimumStartDifference,
   slotMetrics,
   accessors,

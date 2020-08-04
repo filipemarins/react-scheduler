@@ -9,13 +9,15 @@ import memoize from 'memoize-one';
 import { DayLayoutAlgorithmPropType } from 'utils/prop-types';
 import * as dates from 'utils/dates';
 import { notify } from 'utils/helpers';
-import { inRange, sortEvents } from 'utils/event-levels';
+import { inRange, sortAppointments } from 'utils/appointment-levels';
 import Resources from 'utils/resources';
 import DayColumn from './day-column';
 import TimeViewHeader from './header';
 import TimeScale from './time-scale';
 
 export default class TimeView extends Component {
+  memoizedResources = memoize((resources, accessors) => Resources(resources, accessors));
+
   constructor(props) {
     super(props);
 
@@ -87,10 +89,10 @@ export default class TimeView extends Component {
     this.gutter = ref && findDOMNode(ref);
   };
 
-  handleSelectAlldayEvent = (...args) => {
-    // cancel any pending selections so only the event click goes through.
+  handleSelectAlldayAppointment = (...args) => {
+    // cancel any pending selections so only the appointment click goes through.
     this.clearSelection();
-    notify(this.props.onSelectEvent, args);
+    notify(this.props.onSelectAppointment, args);
   };
 
   handleSelectAllDaySlot = (slots, slotInfo) => {
@@ -102,37 +104,6 @@ export default class TimeView extends Component {
       action: slotInfo.action,
     });
   };
-
-  renderEvents(range, events, now) {
-    const { min, max, components, accessors, localizer, dayLayoutAlgorithm } = this.props;
-
-    const resources = this.memoizedResources(this.props.resources, accessors);
-    const groupedEvents = resources.groupEvents(events);
-
-    return resources.map(([id, resource], i) =>
-      range.map((date, jj) => {
-        const daysEvents = (groupedEvents.get(id) || []).filter((event) =>
-          dates.inRange(date, accessors.start(event), accessors.end(event), 'day')
-        );
-
-        return (
-          <DayColumn
-            {...this.props}
-            localizer={localizer}
-            min={dates.merge(date, min)}
-            max={dates.merge(date, max)}
-            resource={resource && id}
-            components={components}
-            isNow={dates.eq(date, now, 'day')}
-            key={`${i}-${jj}`}
-            date={date}
-            events={daysEvents}
-            dayLayoutAlgorithm={dayLayoutAlgorithm}
-          />
-        );
-      })
-    );
-  }
 
   clearSelection() {
     clearTimeout(this._selectTimer);
@@ -184,11 +155,40 @@ export default class TimeView extends Component {
     }
   };
 
-  memoizedResources = memoize((resources, accessors) => Resources(resources, accessors));
+  renderAppointments(range, appointments, now) {
+    const { min, max, components, accessors, localizer, dayLayoutAlgorithm } = this.props;
+
+    const resources = this.memoizedResources(this.props.resources, accessors);
+    const groupedAppointments = resources.groupAppointments(appointments);
+
+    return resources.map(([id, resource], i) =>
+      range.map((date, jj) => {
+        const daysAppointments = (groupedAppointments.get(id) || []).filter((appointment) =>
+          dates.inRange(date, accessors.start(appointment), accessors.end(appointment), 'day')
+        );
+
+        return (
+          <DayColumn
+            {...this.props}
+            localizer={localizer}
+            min={dates.merge(date, min)}
+            max={dates.merge(date, max)}
+            resource={resource && id}
+            components={components}
+            isNow={dates.eq(date, now, 'day')}
+            key={`${i}-${jj}`}
+            date={date}
+            appointments={daysAppointments}
+            dayLayoutAlgorithm={dayLayoutAlgorithm}
+          />
+        );
+      })
+    );
+  }
 
   render() {
     let {
-      events,
+      appointments,
       range,
       width,
       rtl,
@@ -212,33 +212,32 @@ export default class TimeView extends Component {
 
     this.slots = range.length;
 
-    const allDayEvents = [];
-    const rangeEvents = [];
+    const allDayAppointments = [];
+    const rangeAppointments = [];
 
-    events.forEach((event) => {
-      if (inRange(event, start, end, accessors)) {
-        const eStart = accessors.start(event);
-        const eEnd = accessors.end(event);
-
+    appointments.forEach((appointment) => {
+      if (inRange(appointment, start, end, accessors)) {
+        const appointmentStart = accessors.start(appointment);
+        const appointmentEnd = accessors.end(appointment);
         if (
-          accessors.allDay(event) ||
-          (dates.isJustDate(eStart) && dates.isJustDate(eEnd)) ||
-          (!showMultiDayTimes && !dates.eq(eStart, eEnd, 'day'))
+          accessors.allDay(appointment) ||
+          (dates.isJustDate(appointmentStart) && dates.isJustDate(appointmentEnd)) ||
+          (!showMultiDayTimes && !dates.eq(appointmentStart, appointmentEnd, 'day'))
         ) {
-          allDayEvents.push(event);
+          allDayAppointments.push(appointment);
         } else {
-          rangeEvents.push(event);
+          rangeAppointments.push(appointment);
         }
       }
     });
 
-    allDayEvents.sort((a, b) => sortEvents(a, b, accessors));
+    allDayAppointments.sort((a, b) => sortAppointments(a, b, accessors));
 
     return (
       <div className={clsx('rbc-time-view', resources && 'rbc-time-view-resources')}>
         <TimeViewHeader
           range={range}
-          events={allDayEvents}
+          appointments={allDayAppointments}
           width={width}
           rtl={rtl}
           getNow={getNow}
@@ -253,8 +252,8 @@ export default class TimeView extends Component {
           isOverflowing={this.state.isOverflowing}
           longPressThreshold={longPressThreshold}
           onSelectSlot={this.handleSelectAllDaySlot}
-          onSelectEvent={this.handleSelectAlldayEvent}
-          onDoubleClickEvent={this.props.onDoubleClickEvent}
+          onSelectAppointment={this.handleSelectAlldayAppointment}
+          onDoubleClickAppointment={this.props.onDoubleClickAppointment}
           onDrillDown={this.props.onDrillDown}
           getDrilldownView={this.props.getDrilldownView}
         />
@@ -272,7 +271,7 @@ export default class TimeView extends Component {
             className="rbc-time-gutter"
             getters={getters}
           />
-          {this.renderEvents(range, rangeEvents, getNow())}
+          {this.renderAppointments(range, rangeAppointments, getNow())}
         </div>
       </div>
     );
@@ -280,7 +279,7 @@ export default class TimeView extends Component {
 }
 
 TimeView.propTypes = {
-  events: PropTypes.array.isRequired,
+  appointments: PropTypes.array.isRequired,
   resources: PropTypes.array,
 
   step: PropTypes.number,
@@ -302,15 +301,15 @@ TimeView.propTypes = {
   localizer: PropTypes.object.isRequired,
 
   selected: PropTypes.object,
-  selectable: PropTypes.oneOf([true, false, 'ignoreEvents']),
+  selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
   longPressThreshold: PropTypes.number,
 
   onNavigate: PropTypes.func,
   onSelectSlot: PropTypes.func,
   onSelectEnd: PropTypes.func,
   onSelectStart: PropTypes.func,
-  onSelectEvent: PropTypes.func,
-  onDoubleClickEvent: PropTypes.func,
+  onSelectAppointment: PropTypes.func,
+  onDoubleClickAppointment: PropTypes.func,
   onDrillDown: PropTypes.func,
   getDrilldownView: PropTypes.func.isRequired,
 

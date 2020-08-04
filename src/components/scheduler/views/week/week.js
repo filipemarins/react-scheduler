@@ -10,7 +10,7 @@ class Week extends React.Component {
     const { date, ...props } = this.props;
     const range = Week.range(date, this.props);
 
-    return <TimeView {...props} range={range} eventOffset={15} />;
+    return <TimeView {...props} range={range} appointmentOffset={15} />;
   }
 }
 

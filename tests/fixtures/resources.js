@@ -1,5 +1,5 @@
 export default {
-  events: [
+  appointments: [
     {
       title: 'Meeting',
       resourceId: 'a',
