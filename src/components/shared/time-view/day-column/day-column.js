@@ -109,7 +109,6 @@ class DayColumn extends React.Component {
       selected,
       accessors,
       localizer,
-      getters,
       components,
       step,
       timeslots,
@@ -151,7 +150,6 @@ class DayColumn extends React.Component {
           appointment={appointment}
           label={label}
           key={`evt_${idx}`}
-          getters={getters}
           rtl={rtl}
           components={components}
           continuesEarlier={continuesEarlier}
@@ -303,7 +301,6 @@ class DayColumn extends React.Component {
       isNow,
       accessors,
       localizer,
-      getters: { dayProp, ...getters },
       components: { appointmentContainerWrapper: AppointmentContainer, ...components },
     } = this.props;
 
@@ -312,13 +309,9 @@ class DayColumn extends React.Component {
 
     const selectDates = { start: startDate, end: endDate };
 
-    const { className, style } = dayProp(max);
-
     return (
       <div
-        style={style}
         className={clsx(
-          className,
           'rbc-day-slot',
           'rbc-time-column',
           isNow && 'rbc-now',
@@ -327,12 +320,11 @@ class DayColumn extends React.Component {
         )}
       >
         {slotMetrics.groups.map((grp, idx) => (
-          <TimeSlot key={idx} group={grp} getters={getters} components={components} />
+          <TimeSlot key={idx} group={grp} components={components} />
         ))}
         <AppointmentContainer
           localizer={localizer}
           accessors={accessors}
-          getters={getters}
           components={components}
           slotMetrics={slotMetrics}
         >
@@ -370,7 +362,6 @@ DayColumn.propTypes = {
 
   accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
-  getters: PropTypes.object.isRequired,
   localizer: PropTypes.object.isRequired,
 
   showMultiDayTimes: PropTypes.bool,

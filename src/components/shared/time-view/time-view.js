@@ -185,7 +185,6 @@ export default class TimeView extends Component {
       getNow,
       components,
       accessors,
-      getters,
       localizer,
       min,
       max,
@@ -233,7 +232,6 @@ export default class TimeView extends Component {
           selected={selected}
           selectable={this.props.selectable}
           accessors={accessors}
-          getters={getters}
           components={components}
           scrollRef={this.scrollRef}
           isOverflowing={this.state.isOverflowing}
@@ -256,7 +254,6 @@ export default class TimeView extends Component {
             timeslots={this.props.timeslots}
             components={components}
             className="rbc-time-gutter"
-            getters={getters}
           />
           {this.renderAppointments(range, rangeAppointments, getNow())}
         </div>
@@ -283,7 +280,6 @@ TimeView.propTypes = {
 
   accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
-  getters: PropTypes.object.isRequired,
   localizer: PropTypes.object.isRequired,
 
   selected: PropTypes.object,

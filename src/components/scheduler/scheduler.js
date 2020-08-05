@@ -51,10 +51,6 @@ class Scheduler extends React.Component {
     allDayAccessor,
     tooltipAccessor,
     titleAccessor,
-    appointmentPropGetter,
-    slotPropGetter,
-    slotGroupPropGetter,
-    dayPropGetter,
     view,
     views,
     localizer,
@@ -68,13 +64,6 @@ class Scheduler extends React.Component {
     return {
       viewNames: names,
       localizer: mergeWithDefaults(localizer, culture, formats, msgs),
-      getters: {
-        appointmentProp: (...args) =>
-          (appointmentPropGetter && appointmentPropGetter(...args)) || {},
-        slotProp: (...args) => (slotPropGetter && slotPropGetter(...args)) || {},
-        slotGroupProp: (...args) => (slotGroupPropGetter && slotGroupPropGetter(...args)) || {},
-        dayProp: (...args) => (dayPropGetter && dayPropGetter(...args)) || {},
-      },
       components: defaults(components[view] || {}, omit(components, names), {
         appointmentWrapper: NoopWrapper,
         appointmentContainerWrapper: NoopWrapper,
@@ -220,7 +209,7 @@ class Scheduler extends React.Component {
     current = current || getNow();
 
     const View = this.getView();
-    const { accessors, components, getters, localizer, viewNames } = this.state.context;
+    const { accessors, components, localizer, viewNames } = this.state.context;
 
     const CalToolbar = components.toolbar || Toolbar;
     const label = View.title(current, { localizer, length });
@@ -249,7 +238,6 @@ class Scheduler extends React.Component {
           getNow={getNow}
           length={length}
           localizer={localizer}
-          getters={getters}
           components={components}
           accessors={accessors}
           showMultiDayTimes={showMultiDayTimes}
@@ -619,52 +607,6 @@ Scheduler.propTypes = {
    *Switch the scheduler to a `right-to-left` read direction.
    */
   rtl: PropTypes.bool,
-
-  /**
-   * Optionally provide a function that returns an object of className or style props
-   * to be applied to the the appointment node.
-   *
-   * ```js
-   * (
-   * 	appointment: Object,
-   * 	start: Date,
-   * 	end: Date,
-   * 	isSelected: boolean
-   * ) => { className?: string, style?: Object }
-   * ```
-   */
-  appointmentPropGetter: PropTypes.func,
-
-  /**
-   * Optionally provide a function that returns an object of className or style props
-   * to be applied to the time-slot node. Caution! Styles that change layout or
-   * position may break the scheduler in unexpected ways.
-   *
-   * ```js
-   * (date: Date) => { className?: string, style?: Object }
-   * ```
-   */
-  slotPropGetter: PropTypes.func,
-
-  /**
-   * Optionally provide a function that returns an object of props to be applied
-   * to the time-slot group node. Useful to dynamically change the sizing of time nodes.
-   * ```js
-   * () => { style?: Object }
-   * ```
-   */
-  slotGroupPropGetter: PropTypes.func,
-
-  /**
-   * Optionally provide a function that returns an object of className or style props
-   * to be applied to the the day background. Caution! Styles that change layout or
-   * position may break the scheduler in unexpected ways.
-   *
-   * ```js
-   * (date: Date) => { className?: string, style?: Object }
-   * ```
-   */
-  dayPropGetter: PropTypes.func,
 
   /**
    * Support to show multi-day appointments with specific start and end times in the

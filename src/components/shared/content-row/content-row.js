@@ -100,7 +100,6 @@ class ContentRow extends React.Component {
       renderForMeasure,
 
       accessors,
-      getters,
       components,
 
       getNow,
@@ -124,7 +123,6 @@ class ContentRow extends React.Component {
     const appointmentRowProps = {
       selected,
       accessors,
-      getters,
       localizer,
       components,
       onSelect,
@@ -141,7 +139,6 @@ class ContentRow extends React.Component {
           range={range}
           selectable={selectable}
           container={this.getContainer}
-          getters={getters}
           onSelectStart={onSelectStart}
           onSelectEnd={onSelectEnd}
           onSelectSlot={this.handleSelectSlot}
@@ -193,14 +190,12 @@ ContentRow.propTypes = {
   onSelectEnd: PropTypes.func,
   onSelectStart: PropTypes.func,
   onDoubleClick: PropTypes.func,
-  dayPropGetter: PropTypes.func,
 
   getNow: PropTypes.func.isRequired,
   isAllDay: PropTypes.bool,
 
   accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
-  getters: PropTypes.object.isRequired,
   localizer: PropTypes.object.isRequired,
 
   minRows: PropTypes.number.isRequired,

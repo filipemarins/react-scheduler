@@ -10,16 +10,7 @@ import { navigate } from 'utils/constants';
 import { inRange } from 'utils/appointment-levels';
 import { isSelected } from 'utils/selection';
 
-const Agenda = ({
-  selected,
-  getters,
-  accessors,
-  localizer,
-  components,
-  length,
-  date,
-  appointments,
-}) => {
+const Agenda = ({ selected, accessors, localizer, components, length, date, appointments }) => {
   const headerRef = useRef(null);
   const dateColRef = useRef(null);
   const timeColRef = useRef(null);
@@ -66,15 +57,6 @@ const Agenda = ({
 
     return appointments.map((appointment, idx) => {
       const title = accessors.title(appointment);
-      const end = accessors.end(appointment);
-      const start = accessors.start(appointment);
-
-      const userProps = getters.appointmentProp(
-        appointment,
-        start,
-        end,
-        isSelected(appointment, selected)
-      );
 
       const dateLabel = idx === 0 && localizer.format(day, 'agendaDateFormat');
       const first =
@@ -87,7 +69,7 @@ const Agenda = ({
         );
 
       return (
-        <tr key={`${dayKey}_${idx}`} className={userProps.className} style={userProps.style}>
+        <tr key={`${dayKey}`}>
           {first}
           <td className="rbc-agenda-time-cell">{timeRangeLabel(day, appointment)}</td>
           <td className="rbc-agenda-appointment-cell">
@@ -182,7 +164,6 @@ Agenda.propTypes = {
 
   accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
-  getters: PropTypes.object.isRequired,
   localizer: PropTypes.object.isRequired,
 };
 

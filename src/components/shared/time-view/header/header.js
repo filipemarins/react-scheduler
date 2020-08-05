@@ -19,7 +19,6 @@ class Header extends React.Component {
       localizer,
       getDrilldownView,
       getNow,
-      getters: { dayProp },
       components: { header: HeaderComponent = NoopWrapper },
     } = this.props;
 
@@ -29,8 +28,6 @@ class Header extends React.Component {
       const drilldownView = getDrilldownView(date);
       const label = localizer.format(date, 'dayFormat');
 
-      const { className, style } = dayProp(date);
-
       const header = (
         <HeaderComponent date={date} localizer={localizer}>
           {label}
@@ -38,11 +35,7 @@ class Header extends React.Component {
       );
 
       return (
-        <div
-          key={i}
-          style={style}
-          className={clsx('rbc-header', className, dates.eq(date, today, 'day') && 'rbc-today')}
-        >
+        <div key={i} className={clsx('rbc-header', dates.eq(date, today, 'day') && 'rbc-today')}>
           <span
             onClick={(e) => this.handleHeaderClick(date, drilldownView, e)}
             onKeyPress={(e) => this.handleHeadingClick(date, drilldownView, e)}
@@ -63,7 +56,6 @@ class Header extends React.Component {
       selectable,
       getNow,
       range,
-      getters,
       localizer,
       accessors,
       components,
@@ -81,7 +73,6 @@ class Header extends React.Component {
         selected={this.props.selected}
         components={components}
         accessors={accessors}
-        getters={getters}
         localizer={localizer}
         onSelect={this.props.onSelectAppointment}
         onDoubleClick={this.props.onDoubleClickAppointment}
@@ -101,7 +92,6 @@ class Header extends React.Component {
       accessors,
       selectable,
       components,
-      getters,
       scrollRef,
       localizer,
       isOverflowing,
@@ -146,7 +136,6 @@ class Header extends React.Component {
             selected={this.props.selected}
             components={components}
             accessors={accessors}
-            getters={getters}
             localizer={localizer}
             onSelect={this.props.onSelectAppointment}
             onDoubleClick={this.props.onDoubleClickAppointment}
@@ -171,7 +160,6 @@ Header.propTypes = {
   localizer: PropTypes.object.isRequired,
   accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
-  getters: PropTypes.object.isRequired,
 
   selected: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),

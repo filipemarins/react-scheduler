@@ -18,7 +18,6 @@ class AppointmentCell extends React.Component {
       continuesPrior,
       continuesAfter,
       accessors,
-      getters,
       children,
       components: { appointment: Appointment, appointmentWrapper: AppointmentWrapper },
       slotStart,
@@ -33,8 +32,6 @@ class AppointmentCell extends React.Component {
     const allDay = accessors.allDay(appointment);
 
     const showAsAllDay = isAllDay || allDay || dates.diff(start, dates.ceil(end, 'day'), 'day') > 1;
-
-    const userProps = getters.appointmentProp(appointment, start, end, selected);
 
     const content = (
       <div className="rbc-appointment-content" title={tooltip || undefined}>
@@ -60,8 +57,8 @@ class AppointmentCell extends React.Component {
         <div
           {...props}
           tabIndex={0}
-          style={{ ...userProps.style, ...style }}
-          className={clsx('rbc-appointment', className, userProps.className, {
+          style={{ ...style }}
+          className={clsx('rbc-appointment', {
             'rbc-selected': selected,
             'rbc-appointment-allday': showAsAllDay,
             'rbc-appointment-continues-prior': continuesPrior,
@@ -89,7 +86,6 @@ AppointmentCell.propTypes = {
 
   accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
-  getters: PropTypes.object.isRequired,
   localizer: PropTypes.object,
 
   onSelect: PropTypes.func,

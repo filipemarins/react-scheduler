@@ -121,7 +121,6 @@ class BackgroundCells extends React.Component {
     const {
       range,
       getNow,
-      getters,
       date: currentDate,
       components: { dateCellWrapper: Wrapper },
     } = this.props;
@@ -132,15 +131,12 @@ class BackgroundCells extends React.Component {
       <div className="rbc-row-bg">
         {range.map((date, index) => {
           const selected = selecting && index >= startIdx && index <= endIdx;
-          const { className, style } = getters.dayProp(date);
 
           return (
             <Wrapper key={index} value={date} range={range}>
               <div
-                style={style}
                 className={clsx(
                   'rbc-day-bg',
-                  className,
                   selected && 'rbc-selected-cell',
                   dates.eq(date, current, 'day') && 'rbc-today',
                   currentDate &&
@@ -160,11 +156,9 @@ BackgroundCells.propTypes = {
   date: PropTypes.instanceOf(Date),
   getNow: PropTypes.func.isRequired,
 
-  getters: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
 
   container: PropTypes.func,
-  dayPropGetter: PropTypes.func,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
   longPressThreshold: PropTypes.number,
 

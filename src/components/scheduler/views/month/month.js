@@ -161,7 +161,6 @@ class Month extends React.Component {
       localizer,
       longPressThreshold,
       accessors,
-      getters,
     } = this.props;
 
     const { needLimitMeasure, rowLimit } = this.state;
@@ -185,7 +184,6 @@ class Month extends React.Component {
         selectable={selectable}
         components={components}
         accessors={accessors}
-        getters={getters}
         localizer={localizer}
         renderHeader={this.readerDateHeading}
         renderForMeasure={needLimitMeasure}
@@ -244,7 +242,6 @@ Month.propTypes = {
 
   accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
-  getters: PropTypes.object.isRequired,
   localizer: PropTypes.object.isRequired,
 
   selected: PropTypes.object,

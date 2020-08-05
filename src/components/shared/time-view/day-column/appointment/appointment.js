@@ -17,7 +17,6 @@ const Appointment = (props) => {
     label,
     continuesEarlier,
     continuesLater,
-    getters,
     onClick,
     onDoubleClick,
     components: { appointment: Appointment, appointmentWrapper: AppointmentWrapper },
@@ -26,8 +25,6 @@ const Appointment = (props) => {
   const tooltip = accessors.tooltip(appointment);
   const end = accessors.end(appointment);
   const start = accessors.start(appointment);
-
-  const userProps = getters.appointmentProp(appointment, start, end, selected);
 
   const { height, top, width, xOffset } = style;
   const inner = [
@@ -45,14 +42,13 @@ const Appointment = (props) => {
         onClick={onClick}
         onDoubleClick={onDoubleClick}
         style={{
-          ...userProps.style,
           top: stringifyPercent(top),
           [rtl ? 'right' : 'left']: stringifyPercent(xOffset),
           width: stringifyPercent(width),
           height: stringifyPercent(height),
         }}
         title={tooltip ? (typeof label === 'string' ? `${label}: ` : '') + tooltip : undefined}
-        className={clsx('rbc-appointment', className, userProps.className, {
+        className={clsx('rbc-appointment', className, {
           'rbc-selected': selected,
           'rbc-appointment-continues-earlier': continuesEarlier,
           'rbc-appointment-continues-later': continuesLater,
