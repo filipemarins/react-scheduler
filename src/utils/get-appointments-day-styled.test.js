@@ -1,21 +1,19 @@
-import { getStyledAppointments } from './day-appointment-layout';
+import getAppointmentsDayStyled from './get-appointments-day-styled';
 import getTimeSlotMetrics from './get-time-slot-metrics';
 import * as dates from './dates';
 
-describe('getStyledAppointments', () => {
+describe('getAppointmentsDayStyled', () => {
   const d = (...args) => new Date(2015, 3, 1, ...args);
   const min = dates.startOf(d(), 'day');
   const max = dates.endOf(d(), 'day');
   const slotMetrics = getTimeSlotMetrics({ min, max, step: 30, timeslots: 4 });
-  const accessors = { start: (e) => e.start, end: (e) => e.end };
   const dayLayoutAlgorithm = 'overlap';
 
   describe('matrix', () => {
     function compare(title, appointments, expectedResults) {
       it(title, () => {
-        const styledAppointments = getStyledAppointments({
+        const styledAppointments = getAppointmentsDayStyled({
           appointments,
-          accessors,
           slotMetrics,
           minimumStartDifference: 10,
           dayLayoutAlgorithm,

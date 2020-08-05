@@ -8,9 +8,8 @@ import scrollbarSize from 'dom-helpers/scrollbarSize';
 import * as dates from 'utils/dates';
 import { navigate } from 'utils/constants';
 import { inRange } from 'utils/appointment-levels';
-import { isSelected } from 'utils/selection';
 
-const Agenda = ({ selected, accessors, localizer, components, length, date, appointments }) => {
+const Agenda = ({ localizer, components, length, date, appointments }) => {
   const headerRef = useRef(null);
   const dateColRef = useRef(null);
   const timeColRef = useRef(null);
@@ -52,11 +51,11 @@ const Agenda = ({ selected, accessors, localizer, components, length, date, appo
     const { appointment: Appointment, date: AgendaDate } = components;
 
     appointments = appointments.filter((e) =>
-      inRange(e, dates.startOf(day, 'day'), dates.endOf(day, 'day'), accessors)
+      inRange(e, dates.startOf(day, 'day'), dates.endOf(day, 'day'))
     );
 
     return appointments.map((appointment, idx) => {
-      const title = accessors.title(appointment);
+      const { title } = appointment;
 
       const dateLabel = idx === 0 && localizer.format(day, 'agendaDateFormat');
       const first =
@@ -85,10 +84,9 @@ const Agenda = ({ selected, accessors, localizer, components, length, date, appo
     const TimeComponent = components.time;
     let label = localizer.messages.allDay;
 
-    const end = accessors.end(appointment);
-    const start = accessors.start(appointment);
+    const { start, end, allDay } = appointment;
 
-    if (!accessors.allDay(appointment)) {
+    if (!allDay) {
       if (dates.eq(start, end)) {
         label = localizer.format(start, 'agendaTimeFormat');
       } else if (dates.eq(start, end, 'day')) {
@@ -119,9 +117,9 @@ const Agenda = ({ selected, accessors, localizer, components, length, date, appo
 
   const range = dates.range(date, end, 'day');
 
-  appointments = appointments.filter((appointment) => inRange(appointment, date, end, accessors));
+  appointments = appointments.filter((appointment) => inRange(appointment, date, end));
 
-  appointments.sort((a, b) => +accessors.start(a) - +accessors.start(b));
+  appointments.sort((a, b) => +a.start - +b.start);
 
   return (
     <div className="rbc-agenda-view">
@@ -160,9 +158,6 @@ Agenda.propTypes = {
   date: PropTypes.instanceOf(Date),
   length: PropTypes.number.isRequired,
 
-  selected: PropTypes.object,
-
-  accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
   localizer: PropTypes.object.isRequired,
 };

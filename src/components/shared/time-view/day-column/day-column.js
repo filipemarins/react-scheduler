@@ -8,7 +8,7 @@ import getTimeSlotMetrics from 'utils/get-time-slot-metrics';
 import { isSelected } from 'utils/selection';
 import { notify } from 'utils/helpers';
 import { DayLayoutAlgorithmPropType } from 'utils/prop-types';
-import { getStyledAppointments } from 'utils/day-appointment-layout';
+import getAppointmentsDayStyled from 'utils/get-appointments-day-styled';
 
 import Selection, { getBoundsForNode, isAppointment } from 'components/shared/selection';
 import TimeSlot from '../time-slot';
@@ -107,7 +107,6 @@ class DayColumn extends React.Component {
       appointments,
       rtl,
       selected,
-      accessors,
       localizer,
       components,
       step,
@@ -118,17 +117,16 @@ class DayColumn extends React.Component {
     const { slotMetrics } = this;
     const { messages } = localizer;
 
-    const styledAppointments = getStyledAppointments({
+    const styledAppointments = getAppointmentsDayStyled({
       appointments,
-      accessors,
       slotMetrics,
       minimumStartDifference: Math.ceil((step * timeslots) / 2),
       dayLayoutAlgorithm,
     });
 
     return styledAppointments.map(({ appointment, style }, idx) => {
-      const end = accessors.end(appointment);
-      const start = accessors.start(appointment);
+      const { end } = appointment;
+      const { start } = appointment;
       let format = 'appointmentTimeRangeFormat';
       let label;
 
@@ -154,7 +152,6 @@ class DayColumn extends React.Component {
           components={components}
           continuesEarlier={continuesEarlier}
           continuesLater={continuesLater}
-          accessors={accessors}
           selected={isSelected(appointment, selected)}
           onClick={(e) => this._select(appointment, e)}
           onDoubleClick={(e) => this._doubleClick(appointment, e)}
@@ -299,7 +296,6 @@ class DayColumn extends React.Component {
       max,
       rtl,
       isNow,
-      accessors,
       localizer,
       components: { appointmentContainerWrapper: AppointmentContainer, ...components },
     } = this.props;
@@ -324,7 +320,6 @@ class DayColumn extends React.Component {
         ))}
         <AppointmentContainer
           localizer={localizer}
-          accessors={accessors}
           components={components}
           slotMetrics={slotMetrics}
         >
@@ -360,7 +355,6 @@ DayColumn.propTypes = {
 
   rtl: PropTypes.bool,
 
-  accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
   localizer: PropTypes.object.isRequired,
 

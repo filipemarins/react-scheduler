@@ -7,12 +7,12 @@ export const endOfRange = (dateRange, unit = 'day') => ({
   last: dates.add(dateRange[dateRange.length - 1], 1, unit),
 });
 
-export const appointmentSegments = (appointment, range, accessors) => {
+export const appointmentSegments = (appointment, range) => {
   const { first, last } = endOfRange(range);
 
   const slots = dates.diff(first, last, 'day');
-  const start = dates.max(dates.startOf(accessors.start(appointment), 'day'), first);
-  const end = dates.min(dates.ceil(accessors.end(appointment), 'day'), last);
+  const start = dates.max(dates.startOf(appointment.start, 'day'), first);
+  const end = dates.min(dates.ceil(appointment.end, 'day'), last);
 
   const padding = findIndex(range, (x) => dates.eq(x, start, 'day'));
   let span = dates.diff(start, end, 'day');
@@ -34,32 +34,32 @@ export const segmentsOverlap = (seg, otherSegments) =>
 export const appointmentLevels = (rowSegments, limit = Infinity) => {
   let i;
   let j;
-  let seg;
+  let segment;
   const levels = [];
   const extra = [];
 
-  for (i = 0; i < rowSegments.length; i++) {
-    seg = rowSegments[i];
+  for (i = 0; i < rowSegments.length; i += 1) {
+    segment = rowSegments[i];
 
-    for (j = 0; j < levels.length; j++) if (!segmentsOverlap(seg, levels[j])) break;
+    for (j = 0; j < levels.length; j += 1) if (!segmentsOverlap(segment, levels[j])) break;
 
     if (j >= limit) {
-      extra.push(seg);
+      extra.push(segment);
     } else {
-      (levels[j] || (levels[j] = [])).push(seg);
+      (levels[j] || (levels[j] = [])).push(segment);
     }
   }
 
-  for (i = 0; i < levels.length; i++) {
-    levels[i].sort((a, b) => a.left - b.left) //eslint-disable-line
+  for (i = 0; i < levels.length; i += 1) {
+    levels[i].sort((a, b) => a.left - b.left);
   }
 
   return { levels, extra };
 };
 
-export const inRange = (appointment, start, end, accessors) => {
-  const appointmentStart = dates.startOf(accessors.start(appointment), 'day');
-  const appointmentEnd = accessors.end(appointment);
+export const inRange = (appointment, start, end) => {
+  const appointmentStart = dates.startOf(appointment.start, 'day');
+  const appointmentEnd = appointment.end;
 
   const startsBeforeEnd = dates.lte(appointmentStart, end, 'day');
   // when the appointment is zero duration we need to handle a bit differently
@@ -70,27 +70,18 @@ export const inRange = (appointment, start, end, accessors) => {
   return startsBeforeEnd && endsAfterStart;
 };
 
-export const sortAppointments = (appointmentA, appointmentB, accessors) => {
+export const sortAppointments = (appointmentA, appointmentB) => {
   const startSort =
-    +dates.startOf(accessors.start(appointmentA), 'day') -
-    +dates.startOf(accessors.start(appointmentB), 'day');
+    +dates.startOf(appointmentA.start, 'day') - +dates.startOf(appointmentB.start, 'day');
 
-  const durA = dates.diff(
-    accessors.start(appointmentA),
-    dates.ceil(accessors.end(appointmentA), 'day'),
-    'day'
-  );
+  const durA = dates.diff(appointmentA.start, dates.ceil(appointmentA.end, 'day'), 'day');
 
-  const durB = dates.diff(
-    accessors.start(appointmentB),
-    dates.ceil(accessors.end(appointmentB), 'day'),
-    'day'
-  );
+  const durB = dates.diff(appointmentB.start, dates.ceil(appointmentB.end, 'day'), 'day');
 
   return (
     startSort || // sort by start Day first
     Math.max(durB, 1) - Math.max(durA, 1) || // appointments spanning multiple days go first
-    !!accessors.allDay(appointmentB) - !!accessors.allDay(appointmentA) || // then allDay single day appointments
-    +accessors.start(appointmentA) - +accessors.start(appointmentB)
+    !!appointmentB.allDay - !!appointmentA.allDay || // then allDay single day appointments
+    +appointmentA.start - +appointmentB.start
   ); // then sort by start time
 };

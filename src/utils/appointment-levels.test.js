@@ -29,7 +29,6 @@ describe('endOfRange', () => {
 
 describe('appointmentSegments', () => {
   const appointment = { start: new Date(2017, 0, 8), end: new Date(2017, 0, 11, 12) };
-  const accessors = { start: (e) => e.start, end: (e) => e.end };
 
   test('it includes the original appointment in the returned object', () => {
     const range = [
@@ -39,7 +38,7 @@ describe('appointmentSegments', () => {
       new Date(2017, 0, 11),
     ];
 
-    const result = appointmentSegments(appointment, range, accessors);
+    const result = appointmentSegments(appointment, range);
 
     expect(result.appointment).toEqual(appointment);
   });
@@ -53,19 +52,19 @@ describe('appointmentSegments', () => {
     ];
 
     test('it sets span equal to the number of days the appointment spans', () => {
-      const result = appointmentSegments(appointment, range, accessors);
+      const result = appointmentSegments(appointment, range);
 
       expect(result.span).toBe(4);
     });
 
     test('it sets left equal to one', () => {
-      const result = appointmentSegments(appointment, range, accessors);
+      const result = appointmentSegments(appointment, range);
 
       expect(result.left).toBe(1);
     });
 
     test('it sets right equal to the length of the range', () => {
-      const result = appointmentSegments(appointment, range, accessors);
+      const result = appointmentSegments(appointment, range);
 
       expect(result.right).toBe(4);
     });
@@ -75,19 +74,19 @@ describe('appointmentSegments', () => {
     const range = [new Date(2017, 0, 9), new Date(2017, 0, 10), new Date(2017, 0, 11)];
 
     test('it sets span equal to the number of days the range spans', () => {
-      const result = appointmentSegments(appointment, range, accessors);
+      const result = appointmentSegments(appointment, range);
 
       expect(result.span).toBe(3);
     });
 
     test('it sets left equal to one', () => {
-      const result = appointmentSegments(appointment, range, accessors);
+      const result = appointmentSegments(appointment, range);
 
       expect(result.left).toBe(1);
     });
 
     test('it sets right equal to the length of the range', () => {
-      const result = appointmentSegments(appointment, range, accessors);
+      const result = appointmentSegments(appointment, range);
 
       expect(result.right).toBe(3);
     });
@@ -97,19 +96,19 @@ describe('appointmentSegments', () => {
     const range = [new Date(2017, 0, 8), new Date(2017, 0, 9), new Date(2017, 0, 10)];
 
     test('it sets span equal to the number of days the range spans', () => {
-      const result = appointmentSegments(appointment, range, accessors);
+      const result = appointmentSegments(appointment, range);
 
       expect(result.span).toBe(3);
     });
 
     test('it sets left equal to one', () => {
-      const result = appointmentSegments(appointment, range, accessors);
+      const result = appointmentSegments(appointment, range);
 
       expect(result.left).toBe(1);
     });
 
     test('it sets right equal to the length of the range', () => {
-      const result = appointmentSegments(appointment, range, accessors);
+      const result = appointmentSegments(appointment, range);
 
       expect(result.right).toBe(3);
     });
@@ -126,19 +125,19 @@ describe('appointmentSegments', () => {
     ];
 
     test('it sets span equal to the number of days the appointment spans', () => {
-      const result = appointmentSegments(appointment, range, accessors);
+      const result = appointmentSegments(appointment, range);
 
       expect(result.span).toBe(4);
     });
 
     test('it sets left equal to the 1-based index into the range where the appointment starts', () => {
-      const result = appointmentSegments(appointment, range, accessors);
+      const result = appointmentSegments(appointment, range);
 
       expect(result.left).toBe(2);
     });
 
     test('it sets right equal to the 1-based index into the range where the appointment ends', () => {
-      const result = appointmentSegments(appointment, range, accessors);
+      const result = appointmentSegments(appointment, range);
 
       expect(result.right).toBe(5);
     });
@@ -241,85 +240,99 @@ describe('appointmentLevels', () => {
 });
 
 describe('inRange', () => {
-  const d = (...args) => new Date(2015, 3, ...args);
+  const day = (...args) => new Date(2015, 3, ...args);
 
   const rangeStart = new Date(2017, 4, 1);
   const rangeEnd = new Date(2017, 5, 1);
-  const accessors = { start: (e) => e.start, end: (e) => e.end };
 
   describe('matrix', () => {
-    function compare(title, appointment, [rangeStart, rangeEnd], result = true) {
+    const compare = (title, appointment, [start, end], result = true) => {
       it(`${title}: inRange ${result}`, () => {
-        expect(inRange(appointment, rangeStart, rangeEnd, accessors)).toBe(result);
+        expect(inRange(appointment, start, end)).toBe(result);
       });
-    }
-    const weekOfThe5th = [d(5), d(11)];
-    const weekOfThe12th = [d(12), d(18)];
+    };
+    const weekOfThe5th = [day(5), day(11)];
+    const weekOfThe12th = [day(12), day(18)];
     [
       [
         'single day with time, 1 day range',
-        { start: d(11, 5), end: d(11, 6) },
-        [d(11), d(11)],
+        { start: day(11, 5), end: day(11, 6) },
+        [day(11), day(11)],
         true,
       ],
-      ['multiday w/ time, 1 day range', { start: d(10, 5), end: d(11, 6) }, [d(11), d(11)], true],
-      ['single day appointment, end of the week', { start: d(11), end: d(12) }, weekOfThe5th, true],
+      [
+        'multiday w/ time, 1 day range',
+        { start: day(10, 5), end: day(11, 6) },
+        [day(11), day(11)],
+        true,
+      ],
+      [
+        'single day appointment, end of the week',
+        { start: day(11), end: day(12) },
+        weekOfThe5th,
+        true,
+      ],
       [
         'single day appointment, middle of the week',
-        { start: d(10), end: d(11) },
+        { start: day(10), end: day(11) },
         weekOfThe5th,
         true,
       ],
       [
         'single day appointment, end of the week',
-        { start: d(11), end: d(12) },
+        { start: day(11), end: day(12) },
         weekOfThe12th,
         false,
       ],
 
-      ['no duration, first of the week', { start: d(12), end: d(12) }, weekOfThe12th, true],
-      ['no duration, end of the week', { start: d(11), end: d(11) }, weekOfThe5th, true],
-      ['no duration, first of the next week', { start: d(12), end: d(12) }, weekOfThe5th, false],
-      ['no duration, middle of the week', { start: d(14), end: d(14) }, weekOfThe12th, true],
+      ['no duration, first of the week', { start: day(12), end: day(12) }, weekOfThe12th, true],
+      ['no duration, end of the week', { start: day(11), end: day(11) }, weekOfThe5th, true],
+      [
+        'no duration, first of the next week',
+        { start: day(12), end: day(12) },
+        weekOfThe5th,
+        false,
+      ],
+      ['no duration, middle of the week', { start: day(14), end: day(14) }, weekOfThe12th, true],
       [
         'single day w/ time appointment, end of the week',
-        { start: d(11, 10), end: d(11, 12) },
+        { start: day(11, 10), end: day(11, 12) },
         weekOfThe5th,
         true,
       ],
       [
         'single day w/ time appointment, end of the week',
-        { start: d(11, 10), end: d(11, 12) },
+        { start: day(11, 10), end: day(11, 12) },
         weekOfThe12th,
         false,
       ],
       [
         'multi day w/ time appointment, end of the week',
-        { start: d(11, 10), end: d(13, 12) },
+        { start: day(11, 10), end: day(13, 12) },
         weekOfThe12th,
         true,
       ],
       [
         'single day w/ time appointment, middle of the week',
-        { start: d(10, 10), end: d(10, 12) },
+        { start: day(10, 10), end: day(10, 12) },
         weekOfThe5th,
         true,
       ],
       [
         'multi day appointment, first of the week',
-        { start: d(11), end: d(13) },
+        { start: day(11), end: day(13) },
         weekOfThe5th,
         true,
       ],
       [
         'multi day appointment, midnight of next the week',
-        { start: d(11), end: d(13) },
+        { start: day(11), end: day(13) },
         weekOfThe12th,
         true,
       ],
       [
         'multi day appointment w/ time, first of next the week',
-        { start: d(11, 5), end: d(13, 5) },
+        { start: day(11, 5), end: day(13, 5) },
         weekOfThe12th,
         true,
       ],
@@ -329,7 +342,7 @@ describe('inRange', () => {
   test('it returns true when appointment starts before the range end and ends after the range start', () => {
     const appointment = { start: new Date(2017, 4, 12), end: new Date(2017, 4, 31) };
 
-    const result = inRange(appointment, rangeStart, rangeEnd, accessors);
+    const result = inRange(appointment, rangeStart, rangeEnd);
 
     expect(result).toBeTruthy();
   });
@@ -337,7 +350,7 @@ describe('inRange', () => {
   test('it returns false when appointment starts before the range end and ends before the range start', () => {
     const appointment = { start: new Date(2017, 3, 25), end: new Date(2017, 3, 28) };
 
-    const result = inRange(appointment, rangeStart, rangeEnd, accessors);
+    const result = inRange(appointment, rangeStart, rangeEnd);
 
     expect(result).toBeFalsy();
   });
@@ -345,7 +358,7 @@ describe('inRange', () => {
   test('it returns false when appointment starts after the range end and ends after the range start', () => {
     const appointment = { start: new Date(2017, 5, 2), end: new Date(2017, 5, 3) };
 
-    const result = inRange(appointment, rangeStart, rangeEnd, accessors);
+    const result = inRange(appointment, rangeStart, rangeEnd);
 
     expect(result).toBeFalsy();
   });
@@ -353,7 +366,7 @@ describe('inRange', () => {
   test('it returns true when appointment spans the whole range', () => {
     const appointment = { start: new Date(2017, 4, 1), end: new Date(2017, 5, 1) };
 
-    const result = inRange(appointment, rangeStart, rangeEnd, accessors);
+    const result = inRange(appointment, rangeStart, rangeEnd);
 
     expect(result).toBeTruthy();
   });
@@ -364,7 +377,7 @@ describe('inRange', () => {
       end: new Date(2017, 5, 1),
     };
 
-    const result = inRange(appointment, rangeStart, rangeEnd, accessors);
+    const result = inRange(appointment, rangeStart, rangeEnd);
 
     expect(result).toBeTruthy();
   });
@@ -425,12 +438,6 @@ describe('segmentsOverlap', () => {
 });
 
 describe('sortAppointments', () => {
-  const accessors = {
-    start: (e) => e.start,
-    end: (e) => e.end,
-    allDay: (e) => e.allDay,
-  };
-
   describe('when the appointments start on different calendar days', () => {
     const earlierAppointment = {
       start: new Date(2017, 0, 1),
@@ -442,13 +449,13 @@ describe('sortAppointments', () => {
     };
 
     test('it returns a positive number when appointment B starts on a day before the start day of appointment A', () => {
-      const result = sortAppointments(laterAppointment, earlierAppointment, accessors);
+      const result = sortAppointments(laterAppointment, earlierAppointment);
 
       expect(result).toBeGreaterThan(0);
     });
 
     test('it returns a negative number when appointment A starts on a day before the start day of appointment B', () => {
-      const result = sortAppointments(earlierAppointment, laterAppointment, accessors);
+      const result = sortAppointments(earlierAppointment, laterAppointment);
 
       expect(result).toBeLessThan(0);
     });
@@ -466,13 +473,13 @@ describe('sortAppointments', () => {
       };
 
       test('it returns a positive number when appointment B has a longer duration than appointment A', () => {
-        const result = sortAppointments(shorterAppointment, longerAppointment, accessors);
+        const result = sortAppointments(shorterAppointment, longerAppointment);
 
         expect(result).toBeGreaterThan(0);
       });
 
       test('it returns a negative number when appointment A has a longer duration than appointment B', () => {
-        const result = sortAppointments(longerAppointment, shorterAppointment, accessors);
+        const result = sortAppointments(longerAppointment, shorterAppointment);
 
         expect(result).toBeLessThan(0);
       });
@@ -492,13 +499,13 @@ describe('sortAppointments', () => {
         };
 
         test('it returns a positive number when appointment B is an all day appointment', () => {
-          const result = sortAppointments(nonAllDayAppointment, allDayAppointment, accessors);
+          const result = sortAppointments(nonAllDayAppointment, allDayAppointment);
 
           expect(result).toBeGreaterThan(0);
         });
 
         test('it returns a negative number when appointment A is an all day appointment', () => {
-          const result = sortAppointments(allDayAppointment, nonAllDayAppointment, accessors);
+          const result = sortAppointments(allDayAppointment, nonAllDayAppointment);
 
           expect(result).toBeLessThan(0);
         });
@@ -517,7 +524,7 @@ describe('sortAppointments', () => {
         };
 
         test('it returns zero', () => {
-          const result = sortAppointments(allDayAppointment, otherAllDayAppointment, accessors);
+          const result = sortAppointments(allDayAppointment, otherAllDayAppointment);
 
           expect(result).toBe(0);
         });
@@ -536,20 +543,20 @@ describe('sortAppointments', () => {
         };
 
         test('it returns a positive number when appointment B starts at an earlier time than appointment A', () => {
-          const result = sortAppointments(laterAppointment, earlierAppointment, accessors);
+          const result = sortAppointments(laterAppointment, earlierAppointment);
 
           expect(result).toBeGreaterThan(0);
         });
 
         test('it returns a negative number when appointment A starts at an earlier time than appointment B', () => {
-          const result = sortAppointments(earlierAppointment, laterAppointment, accessors);
+          const result = sortAppointments(earlierAppointment, laterAppointment);
 
           expect(result).toBeLessThan(0);
         });
 
         test('it returns zero when both appointments start at the same time', () => {
           const otherEarlierAppointment = { ...earlierAppointment };
-          const result = sortAppointments(earlierAppointment, otherEarlierAppointment, accessors);
+          const result = sortAppointments(earlierAppointment, otherEarlierAppointment);
 
           expect(result).toBe(0);
         });

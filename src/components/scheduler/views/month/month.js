@@ -12,8 +12,7 @@ import { inRange, sortAppointments } from 'utils/appointment-levels';
 import ContentRow from 'components/shared/content-row';
 import NoopWrapper from 'components/shared/noop-wrapper';
 
-const appointmentsForWeek = (evts, start, end, accessors) =>
-  evts.filter((e) => inRange(e, start, end, accessors));
+const appointmentsForWeek = (evts, start, end) => evts.filter((e) => inRange(e, start, end));
 
 class Month extends React.Component {
   constructor(...args) {
@@ -160,14 +159,13 @@ class Month extends React.Component {
       date,
       localizer,
       longPressThreshold,
-      accessors,
     } = this.props;
 
     const { needLimitMeasure, rowLimit } = this.state;
 
-    appointments = appointmentsForWeek(appointments, week[0], week[week.length - 1], accessors);
+    appointments = appointmentsForWeek(appointments, week[0], week[week.length - 1]);
 
-    appointments.sort((a, b) => sortAppointments(a, b, accessors));
+    appointments.sort((a, b) => sortAppointments(a, b));
 
     return (
       <ContentRow
@@ -183,7 +181,6 @@ class Month extends React.Component {
         selected={selected}
         selectable={selectable}
         components={components}
-        accessors={accessors}
         localizer={localizer}
         renderHeader={this.readerDateHeading}
         renderForMeasure={needLimitMeasure}
@@ -240,7 +237,6 @@ Month.propTypes = {
   rtl: PropTypes.bool,
   width: PropTypes.number,
 
-  accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
   localizer: PropTypes.object.isRequired,
 

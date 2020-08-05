@@ -99,7 +99,6 @@ class ContentRow extends React.Component {
       selectable,
       renderForMeasure,
 
-      accessors,
       components,
 
       getNow,
@@ -122,7 +121,6 @@ class ContentRow extends React.Component {
 
     const appointmentRowProps = {
       selected,
-      accessors,
       localizer,
       components,
       onSelect,
@@ -194,7 +192,6 @@ ContentRow.propTypes = {
   getNow: PropTypes.func.isRequired,
   isAllDay: PropTypes.bool,
 
-  accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
   localizer: PropTypes.object.isRequired,
 

@@ -13,7 +13,6 @@ export default {
     selected: PropTypes.object,
     isAllDay: PropTypes.bool,
 
-    accessors: PropTypes.object.isRequired,
     localizer: PropTypes.object.isRequired,
     components: PropTypes.object.isRequired,
 
@@ -30,7 +29,6 @@ export default {
     const {
       selected,
       isAllDay: _,
-      accessors,
       onSelect,
       onDoubleClick,
       localizer,
@@ -45,7 +43,6 @@ export default {
       <AppointmentCell
         appointment={appointment}
         localizer={localizer}
-        accessors={accessors}
         components={components}
         onSelect={onSelect}
         onDoubleClick={onDoubleClick}

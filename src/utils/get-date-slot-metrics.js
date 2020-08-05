@@ -8,10 +8,10 @@ const isEqual = (a, b) => a[0].range === b[0].range && a[0].appointments === b[0
 
 const getDateSlotMetrics = () => {
   return memoize((options) => {
-    const { range, appointments, maxRows, minRows, accessors } = options;
+    const { range, appointments, maxRows, minRows } = options;
     const { first, last } = endOfRange(range);
 
-    const segments = appointments.map((evt) => appointmentSegments(evt, range, accessors));
+    const segments = appointments.map((evt) => appointmentSegments(evt, range));
 
     const { levels, extra } = appointmentLevels(segments, Math.max(maxRows - 1, 1));
     while (levels.length < minRows) levels.push([]);
@@ -45,16 +45,15 @@ const getDateSlotMetrics = () => {
       },
 
       continuesPrior(appointment) {
-        return dates.lt(accessors.start(appointment), first, 'day');
+        return dates.lt(appointment.start, first, 'day');
       },
 
       continuesAfter(appointment) {
-        const appointmentEnd = accessors.end(appointment);
-        const singleDayDuration = dates.eq(accessors.start(appointment), appointmentEnd, 'minutes');
+        const singleDayDuration = dates.eq(appointment.start, appointment.end, 'minutes');
 
         return singleDayDuration
-          ? dates.gte(appointmentEnd, last, 'minutes')
-          : dates.gt(appointmentEnd, last, 'minutes');
+          ? dates.gte(appointment.end, last, 'minutes')
+          : dates.gt(appointment.end, last, 'minutes');
       },
     };
   }, isEqual);

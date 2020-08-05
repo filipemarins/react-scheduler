@@ -1,10 +1,10 @@
 import { sortBy } from 'lodash-es';
 
 class Appointment {
-  constructor(data, { accessors, slotMetrics }) {
+  constructor(data, { slotMetrics }) {
     const { start, startDate, end, endDate, top, height } = slotMetrics.getRange(
-      accessors.start(data),
-      accessors.end(data)
+      data.start,
+      data.end
     );
 
     this.start = start;
@@ -102,22 +102,22 @@ function sortByRender(appointments) {
     const appointment = sortedByTime.shift();
     sorted.push(appointment);
 
-    for (let i = 0; i < sortedByTime.length; i++) {
+    for (let i = 0; i < sortedByTime.length; i += 1) {
       const test = sortedByTime[i];
 
       // Still inside this appointment, look for next.
-      if (appointment.endMs > test.startMs) continue;
-
-      // We've found the first appointment of the next appointment group.
-      // If that appointment is not right next to our current appointment, we have to
-      // move it here.
-      if (i > 0) {
-        const appointment = sortedByTime.splice(i, 1)[0];
-        sorted.push(appointment);
+      // eslint-disable-next-line no-continue
+      if (appointment.endMs > test.startMs) {
+        // We've found the first appointment of the next appointment group.
+        // If that appointment is not right next to our current appointment, we have to
+        // move it here.
+        if (i > 0) {
+          const appointment = sortedByTime.splice(i, 1)[0];
+          sorted.push(appointment);
+        }
+        // We've already found the next appointment group, so stop looking.
+        break;
       }
-
-      // We've already found the next appointment group, so stop looking.
-      break;
     }
   }
 
@@ -128,13 +128,10 @@ export default function getStyledAppointments({
   appointments,
   minimumStartDifference,
   slotMetrics,
-  accessors,
 }) {
   // Create proxy appointments and order them so that we don't have
   // to fiddle with z-indexes.
-  const proxies = appointments.map(
-    (appointment) => new Appointment(appointment, { slotMetrics, accessors })
-  );
+  const proxies = appointments.map((appointment) => new Appointment(appointment, { slotMetrics }));
   const appointmentsInRenderOrder = sortByRender(proxies);
 
   // Group overlapping appointments, while keeping order.

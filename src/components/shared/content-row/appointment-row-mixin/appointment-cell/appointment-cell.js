@@ -17,7 +17,6 @@ class AppointmentCell extends React.Component {
       localizer,
       continuesPrior,
       continuesAfter,
-      accessors,
       children,
       components: { appointment: Appointment, appointmentWrapper: AppointmentWrapper },
       slotStart,
@@ -25,12 +24,7 @@ class AppointmentCell extends React.Component {
       ...props
     } = this.props;
 
-    const title = accessors.title(appointment);
-    const tooltip = accessors.tooltip(appointment);
-    const end = accessors.end(appointment);
-    const start = accessors.start(appointment);
-    const allDay = accessors.allDay(appointment);
-
+    const { title, tooltip, end, start, allDay } = appointment;
     const showAsAllDay = isAllDay || allDay || dates.diff(start, dates.ceil(end, 'day'), 'day') > 1;
 
     const content = (
@@ -84,7 +78,6 @@ AppointmentCell.propTypes = {
   continuesPrior: PropTypes.bool,
   continuesAfter: PropTypes.bool,
 
-  accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
   localizer: PropTypes.object,
 

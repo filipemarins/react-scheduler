@@ -3,8 +3,6 @@ import { views as Views } from './constants';
 
 const viewNames = Object.keys(Views).map((k) => Views[k]);
 
-export const accessor = PropTypes.oneOfType([PropTypes.string, PropTypes.func]);
-
 export const dateFormat = PropTypes.any;
 
 export const dateRangeFormat = PropTypes.func;

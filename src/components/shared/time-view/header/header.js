@@ -50,16 +50,7 @@ class Header extends React.Component {
   }
 
   renderRow = () => {
-    const {
-      appointments,
-      rtl,
-      selectable,
-      getNow,
-      range,
-      localizer,
-      accessors,
-      components,
-    } = this.props;
+    const { appointments, rtl, selectable, getNow, range, localizer, components } = this.props;
 
     return (
       <ContentRow
@@ -72,7 +63,6 @@ class Header extends React.Component {
         selectable={selectable}
         selected={this.props.selected}
         components={components}
-        accessors={accessors}
         localizer={localizer}
         onSelect={this.props.onSelectAppointment}
         onDoubleClick={this.props.onDoubleClickAppointment}
@@ -89,7 +79,6 @@ class Header extends React.Component {
       range,
       appointments,
       getNow,
-      accessors,
       selectable,
       components,
       scrollRef,
@@ -135,7 +124,6 @@ class Header extends React.Component {
             selectable={selectable}
             selected={this.props.selected}
             components={components}
-            accessors={accessors}
             localizer={localizer}
             onSelect={this.props.onSelectAppointment}
             onDoubleClick={this.props.onDoubleClickAppointment}
@@ -158,7 +146,6 @@ Header.propTypes = {
   width: PropTypes.number,
 
   localizer: PropTypes.object.isRequired,
-  accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
 
   selected: PropTypes.object,

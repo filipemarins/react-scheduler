@@ -11,7 +11,6 @@ const Appointment = (props) => {
     style,
     className,
     appointment,
-    accessors,
     rtl,
     selected,
     label,
@@ -19,20 +18,20 @@ const Appointment = (props) => {
     continuesLater,
     onClick,
     onDoubleClick,
-    components: { appointment: Appointment, appointmentWrapper: AppointmentWrapper },
+    components: { appointment: AppointmentComponent, appointmentWrapper: AppointmentWrapper },
   } = props;
-  const title = accessors.title(appointment);
-  const tooltip = accessors.tooltip(appointment);
-  const end = accessors.end(appointment);
-  const start = accessors.start(appointment);
-
+  const { title, tooltip } = appointment;
   const { height, top, width, xOffset } = style;
   const inner = [
     <div key="1" className="rbc-appointment-label">
       {label}
     </div>,
     <div key="2" className="rbc-appointment-content">
-      {Appointment ? <Appointment appointment={appointment} title={title} /> : title}
+      {AppointmentComponent ? (
+        <AppointmentComponent appointment={appointment} title={title} />
+      ) : (
+        title
+      )}
     </div>,
   ];
 

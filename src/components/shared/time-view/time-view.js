@@ -152,11 +152,11 @@ export default class TimeView extends Component {
   };
 
   renderAppointments(range, appointments, now) {
-    const { min, max, components, accessors, localizer, dayLayoutAlgorithm } = this.props;
+    const { min, max, components, localizer, dayLayoutAlgorithm } = this.props;
 
     return range.map((date) => {
       const daysAppointments = appointments.filter((appointment) =>
-        dates.inRange(date, accessors.start(appointment), accessors.end(appointment), 'day')
+        dates.inRange(date, appointment.start, appointment.end, 'day')
       );
       return (
         <DayColumn
@@ -184,7 +184,6 @@ export default class TimeView extends Component {
       selected,
       getNow,
       components,
-      accessors,
       localizer,
       min,
       max,
@@ -203,11 +202,11 @@ export default class TimeView extends Component {
     const rangeAppointments = [];
 
     appointments.forEach((appointment) => {
-      if (inRange(appointment, start, end, accessors)) {
-        const appointmentStart = accessors.start(appointment);
-        const appointmentEnd = accessors.end(appointment);
+      if (inRange(appointment, start, end)) {
+        const appointmentStart = appointment.start;
+        const appointmentEnd = appointment.end;
         if (
-          accessors.allDay(appointment) ||
+          appointment.allDay ||
           (dates.isJustDate(appointmentStart) && dates.isJustDate(appointmentEnd)) ||
           (!showMultiDayTimes && !dates.eq(appointmentStart, appointmentEnd, 'day'))
         ) {
@@ -218,7 +217,7 @@ export default class TimeView extends Component {
       }
     });
 
-    allDayAppointments.sort((a, b) => sortAppointments(a, b, accessors));
+    allDayAppointments.sort((a, b) => sortAppointments(a, b));
 
     return (
       <div className={clsx('rbc-time-view')}>
@@ -231,7 +230,6 @@ export default class TimeView extends Component {
           localizer={localizer}
           selected={selected}
           selectable={this.props.selectable}
-          accessors={accessors}
           components={components}
           scrollRef={this.scrollRef}
           isOverflowing={this.state.isOverflowing}
@@ -278,7 +276,6 @@ TimeView.propTypes = {
   rtl: PropTypes.bool,
   width: PropTypes.number,
 
-  accessors: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
   localizer: PropTypes.object.isRequired,
 

@@ -6,7 +6,6 @@ import clsx from 'clsx';
 import { omit, defaults, transform, mapValues } from 'lodash-es';
 
 import {
-  accessor,
   dateFormat,
   dateRangeFormat,
   DayLayoutAlgorithmPropType,
@@ -17,7 +16,6 @@ import { navigate, views } from 'utils/constants';
 import { mergeWithDefaults } from 'utils/localizer';
 import message from 'utils/messages';
 import moveDate from 'utils/move';
-import { wrapAccessor } from 'utils/accessors';
 
 import NoopWrapper from 'components/shared/noop-wrapper';
 import VIEWS from './views';
@@ -45,20 +43,7 @@ class Scheduler extends React.Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getContext({
-    startAccessor,
-    endAccessor,
-    allDayAccessor,
-    tooltipAccessor,
-    titleAccessor,
-    view,
-    views,
-    localizer,
-    culture,
-    messages = {},
-    components = {},
-    formats = {},
-  }) {
+  getContext({ view, views, localizer, culture, messages = {}, components = {}, formats = {} }) {
     const names = viewNames(views);
     const msgs = message(messages);
     return {
@@ -71,13 +56,6 @@ class Scheduler extends React.Component {
         weekWrapper: NoopWrapper,
         timeSlotWrapper: NoopWrapper,
       }),
-      accessors: {
-        start: wrapAccessor(startAccessor),
-        end: wrapAccessor(endAccessor),
-        allDay: wrapAccessor(allDayAccessor),
-        tooltip: wrapAccessor(tooltipAccessor),
-        title: wrapAccessor(titleAccessor),
-      },
     };
   }
 
@@ -209,7 +187,7 @@ class Scheduler extends React.Component {
     current = current || getNow();
 
     const View = this.getView();
-    const { accessors, components, localizer, viewNames } = this.state.context;
+    const { components, localizer, viewNames } = this.state.context;
 
     const CalToolbar = components.toolbar || Toolbar;
     const label = View.title(current, { localizer, length });
@@ -239,7 +217,6 @@ class Scheduler extends React.Component {
           length={length}
           localizer={localizer}
           components={components}
-          accessors={accessors}
           showMultiDayTimes={showMultiDayTimes}
           getDrilldownView={this.getDrilldownView}
           onNavigate={this.handleNavigate}
@@ -297,9 +274,6 @@ Scheduler.propTypes = {
    *  - title
    *  - whether its an "all day" appointment or not
    *
-   * Each of these properties can be customized or generated dynamically by
-   * setting the various "accessor" props. Without any configuration the default
-   * appointment should look like:
    *
    * ```js
    * Appointment {
@@ -313,72 +287,13 @@ Scheduler.propTypes = {
   appointments: PropTypes.arrayOf(PropTypes.object),
 
   /**
-   * Accessor for the appointment title, used to display appointment information. Should
-   * resolve to a `renderable` value.
-   *
-   * ```js
-   * string | (appointment: Object) => string
-   * ```
-   *
-   * @type {(func|string)}
-   */
-  titleAccessor: accessor,
-
-  /**
-   * Accessor for the appointment tooltip. Should
-   * resolve to a `renderable` value. Removes the tooltip if null.
-   *
-   * ```js
-   * string | (appointment: Object) => string
-   * ```
-   *
-   * @type {(func|string)}
-   */
-  tooltipAccessor: accessor,
-
-  /**
-   * Determines whether the appointment should be considered an "all day" appointment and ignore time.
-   * Must resolve to a `boolean` value.
-   *
-   * ```js
-   * string | (appointment: Object) => boolean
-   * ```
-   *
-   * @type {(func|string)}
-   */
-  allDayAccessor: accessor,
-
-  /**
-   * The start date/time of the appointment. Must resolve to a JavaScript `Date` object.
-   *
-   * ```js
-   * string | (appointment: Object) => Date
-   * ```
-   *
-   * @type {(func|string)}
-   */
-  startAccessor: accessor,
-
-  /**
-   * The end date/time of the appointment. Must resolve to a JavaScript `Date` object.
-   *
-   * ```js
-   * string | (appointment: Object) => Date
-   * ```
-   *
-   * @type {(func|string)}
-   */
-  endAccessor: accessor,
-
-  /**
    * Determines the current date/time which is highlighted in the views.
    *
    * The value affects which day is shaded and which time is shown as
    * the current time. It also affects the date used by the Today button in
    * the toolbar.
    *
-   * Providing a value here can be useful when you are implementing time zones
-   * using the `startAccessor` and `endAccessor` properties.
+   * Providing a value here can be useful when you are implementing time zones.
    *
    * @type {func}
    * @default () => new Date()
@@ -824,7 +739,7 @@ Scheduler.propTypes = {
    * A day appointment layout(arrangement) algorithm.
    * `overlap` allows appointments to be overlapped.
    * `no-overlap` resizes appointments to avoid overlap.
-   * or custom `Function(appointments, minimumStartDifference, slotMetrics, accessors)`
+   * or custom `Function(appointments, minimumStartDifference, slotMetrics)`
    */
   dayLayoutAlgorithm: DayLayoutAlgorithmPropType,
 };
@@ -838,12 +753,6 @@ Scheduler.defaultProps = {
   length: 30,
 
   drilldownView: views.DAY,
-
-  titleAccessor: 'title',
-  tooltipAccessor: 'title',
-  allDayAccessor: 'allDay',
-  startAccessor: 'start',
-  endAccessor: 'end',
 
   longPressThreshold: 250,
   getNow: () => new Date(),

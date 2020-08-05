@@ -143,7 +143,7 @@ storiesOf('Basic Usage', module)
       components={{
         week: {
           // eslint-disable-next-line react/prop-types
-          toolbar: ({ children }) => <span>{children} - xablau</span>,
+          toolbar: () => <span>custom toolbar</span>,
         },
       }}
     />
@@ -155,7 +155,7 @@ storiesOf('Basic Usage', module)
       <Scheduler
         appointments={fakeAppointments}
         onSelectAppointments={action('appointment selected')}
-        defaultDate={new Date(2015, 3, 1)}
+        defaultDate={new Date(2015, 3, 12)}
         defaultView="week"
         views={['week', 'day']}
         components={{

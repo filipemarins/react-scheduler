@@ -9,11 +9,10 @@ const DefaultAlgorithms = {
   'no-overlap': noOverlap,
 };
 
-export function getStyledAppointments({
+function getAppointmentsDayStyled({
   appointments,
   minimumStartDifference,
   slotMetrics,
-  accessors,
   dayLayoutAlgorithm, // one of DefaultAlgorithms keys
   // or custom function
 }) {
@@ -28,3 +27,5 @@ export function getStyledAppointments({
 
   return algorithm.apply(this, arguments);
 }
+
+export default getAppointmentsDayStyled;

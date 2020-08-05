@@ -1,33 +1,37 @@
 import overlap from './overlap';
 
 function getMaxIdxDFS(node, maxIdx, visited) {
-  for (let i = 0; i < node.friends.length; ++i) {
-    if (visited.indexOf(node.friends[i]) > -1) continue;
-    maxIdx = maxIdx > node.friends[i].idx ? maxIdx : node.friends[i].idx;
-    // TODO : trace it by not object but kinda index or something for performance
-    visited.push(node.friends[i]);
-    const newIdx = getMaxIdxDFS(node.friends[i], maxIdx, visited);
-    maxIdx = maxIdx > newIdx ? maxIdx : newIdx;
+  let maxIndex = maxIdx;
+  for (let i = 0; i < node.friends.length; i += 1) {
+    if (visited.indexOf(node.friends[i]) > -1) {
+      maxIndex = maxIdx > node.friends[i].idx ? maxIdx : node.friends[i].idx;
+      // TODO : trace it by not object but kinda index or something for performance
+      visited.push(node.friends[i]);
+      const newIdx = getMaxIdxDFS(node.friends[i], maxIdx, visited);
+      maxIndex = maxIdx > newIdx ? maxIdx : newIdx;
+    }
   }
-  return maxIdx;
+  return maxIndex;
 }
 
-export default function ({ appointments, minimumStartDifference, slotMetrics, accessors }) {
+const noOverlap = ({ appointments, minimumStartDifference, slotMetrics }) => {
   const styledAppointments = overlap({
     appointments,
     minimumStartDifference,
     slotMetrics,
-    accessors,
   });
 
   styledAppointments.sort((a, b) => {
-    a = a.style;
-    b = b.style;
-    if (a.top !== b.top) return a.top > b.top ? 1 : -1;
-    return a.top + a.height < b.top + b.height ? 1 : -1;
+    const { style: aStyle } = a;
+    const { style: bStyle } = b;
+    if (aStyle.top !== bStyle.top) {
+      return aStyle.top > bStyle.top ? 1 : -1;
+    }
+
+    return aStyle.top + aStyle.height < bStyle.top + bStyle.height ? 1 : -1;
   });
 
-  for (let i = 0; i < styledAppointments.length; ++i) {
+  for (let i = 0; i < styledAppointments.length; i += 1) {
     styledAppointments[i].friends = [];
     delete styledAppointments[i].style.left;
     delete styledAppointments[i].style.left;
@@ -35,12 +39,12 @@ export default function ({ appointments, minimumStartDifference, slotMetrics, ac
     delete styledAppointments[i].size;
   }
 
-  for (let i = 0; i < styledAppointments.length - 1; ++i) {
+  for (let i = 0; i < styledAppointments.length - 1; i += 1) {
     const se1 = styledAppointments[i];
     const y1 = se1.style.top;
     const y2 = se1.style.top + se1.style.height;
 
-    for (let j = i + 1; j < styledAppointments.length; ++j) {
+    for (let j = i + 1; j < styledAppointments.length; j += 1) {
       const se2 = styledAppointments[j];
       const y3 = se2.style.top;
       const y4 = se2.style.top + se2.style.height;
@@ -54,37 +58,42 @@ export default function ({ appointments, minimumStartDifference, slotMetrics, ac
     }
   }
 
-  for (let i = 0; i < styledAppointments.length; ++i) {
+  for (let i = 0; i < styledAppointments.length; i += 1) {
     const se = styledAppointments[i];
     const bitmap = [];
-    for (let j = 0; j < 100; ++j) bitmap.push(1); // 1 means available
+    for (let j = 0; j < 100; j += 1) {
+      bitmap.push(1); // 1 means available
+    }
 
-    for (let j = 0; j < se.friends.length; ++j)
+    for (let j = 0; j < se.friends.length; j += 1) {
       if (se.friends[j].idx !== undefined) bitmap[se.friends[j].idx] = 0; // 0 means reserved
+    }
 
     se.idx = bitmap.indexOf(1);
   }
 
-  for (let i = 0; i < styledAppointments.length; ++i) {
+  for (let i = 0; i < styledAppointments.length; i += 1) {
     let size = 0;
 
-    if (styledAppointments[i].size) continue;
+    if (styledAppointments[i].size) {
+      const allFriends = [];
+      const maxIdx = getMaxIdxDFS(styledAppointments[i], 0, allFriends);
+      size = 100 / (maxIdx + 1);
+      styledAppointments[i].size = size;
 
-    const allFriends = [];
-    const maxIdx = getMaxIdxDFS(styledAppointments[i], 0, allFriends);
-    size = 100 / (maxIdx + 1);
-    styledAppointments[i].size = size;
-
-    for (let j = 0; j < allFriends.length; ++j) allFriends[j].size = size;
+      for (let j = 0; j < allFriends.length; j += 1) {
+        allFriends[j].size = size;
+      }
+    }
   }
 
-  for (let i = 0; i < styledAppointments.length; ++i) {
+  for (let i = 0; i < styledAppointments.length; i += 1) {
     const e = styledAppointments[i];
     e.style.left = e.idx * e.size;
 
     // stretch to maximum
     let maxIdx = 0;
-    for (let j = 0; j < e.friends.length; ++j) {
+    for (let j = 0; j < e.friends.length; j += 1) {
       const idx = e.friends[j];
       maxIdx = maxIdx > idx ? maxIdx : idx;
     }
@@ -100,4 +109,6 @@ export default function ({ appointments, minimumStartDifference, slotMetrics, ac
   }
 
   return styledAppointments;
-}
+};
+
+export default noOverlap;
