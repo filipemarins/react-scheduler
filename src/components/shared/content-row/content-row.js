@@ -108,7 +108,6 @@ class ContentRow extends React.Component {
       onSelectStart,
       onSelectEnd,
       onDoubleClick,
-      longPressThreshold,
       isAllDay,
     } = this.props;
 
@@ -141,7 +140,6 @@ class ContentRow extends React.Component {
           onSelectEnd={onSelectEnd}
           onSelectSlot={this.handleSelectSlot}
           components={components}
-          longPressThreshold={longPressThreshold}
         />
 
         <div className="rbc-row-content">
@@ -180,7 +178,6 @@ ContentRow.propTypes = {
   container: PropTypes.func,
   selected: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
-  longPressThreshold: PropTypes.number,
 
   onShowMore: PropTypes.func,
   onSelectSlot: PropTypes.func,

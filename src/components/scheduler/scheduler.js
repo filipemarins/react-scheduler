@@ -493,16 +493,6 @@ Scheduler.propTypes = {
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
 
   /**
-   * Specifies the number of miliseconds the user must press and hold on the screen for a touch
-   * to be considered a "long press." Long presses are used for time slot selection on touch
-   * devices.
-   *
-   * @type {number}
-   * @default 250
-   */
-  longPressThreshold: PropTypes.number,
-
-  /**
    * Determines the selectable time increments in week and day views, in minutes.
    */
   step: PropTypes.number,
@@ -741,7 +731,6 @@ Scheduler.defaultProps = {
 
   drilldownView: views.DAY,
 
-  longPressThreshold: 250,
   getNow: () => new Date(),
 };
 

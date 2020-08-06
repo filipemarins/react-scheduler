@@ -186,7 +186,6 @@ export default class TimeView extends Component {
       min,
       max,
       showMultiDayTimes,
-      longPressThreshold,
     } = this.props;
 
     width = width || this.state.gutterWidth;
@@ -231,7 +230,6 @@ export default class TimeView extends Component {
           components={components}
           scrollRef={this.scrollRef}
           isOverflowing={this.state.isOverflowing}
-          longPressThreshold={longPressThreshold}
           onSelectSlot={this.handleSelectAllDaySlot}
           onSelectAppointment={this.handleSelectAlldayAppointment}
           onDoubleClickAppointment={this.props.onDoubleClickAppointment}
@@ -279,7 +277,6 @@ TimeView.propTypes = {
 
   selected: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
-  longPressThreshold: PropTypes.number,
 
   onNavigate: PropTypes.func,
   onSelectSlot: PropTypes.func,

@@ -67,7 +67,6 @@ class Header extends React.Component {
         onSelect={this.props.onSelectAppointment}
         onDoubleClick={this.props.onDoubleClickAppointment}
         onSelectSlot={this.props.onSelectSlot}
-        longPressThreshold={this.props.longPressThreshold}
       />
     );
   };
@@ -128,7 +127,6 @@ class Header extends React.Component {
             onSelect={this.props.onSelectAppointment}
             onDoubleClick={this.props.onDoubleClickAppointment}
             onSelectSlot={this.props.onSelectSlot}
-            longPressThreshold={this.props.longPressThreshold}
           />
         </div>
       </div>
@@ -150,7 +148,6 @@ Header.propTypes = {
 
   selected: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
-  longPressThreshold: PropTypes.number,
 
   onSelectSlot: PropTypes.func,
   onSelectAppointment: PropTypes.func,

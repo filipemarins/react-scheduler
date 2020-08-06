@@ -150,16 +150,7 @@ class Month extends React.Component {
   }
 
   renderWeek = (week, weekIdx) => {
-    let {
-      appointments,
-      components,
-      selectable,
-      getNow,
-      selected,
-      date,
-      localizer,
-      longPressThreshold,
-    } = this.props;
+    let { appointments, components, selectable, getNow, selected, date, localizer } = this.props;
 
     const { needLimitMeasure, rowLimit } = this.state;
 
@@ -188,7 +179,6 @@ class Month extends React.Component {
         onSelect={this.handleSelectAppointment}
         onDoubleClick={this.handleDoubleClickAppointment}
         onSelectSlot={this.handleSelectSlot}
-        longPressThreshold={longPressThreshold}
         rtl={this.props.rtl}
       />
     );
@@ -242,7 +232,6 @@ Month.propTypes = {
 
   selected: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
-  longPressThreshold: PropTypes.number,
 
   onNavigate: PropTypes.func,
   onSelectSlot: PropTypes.func,

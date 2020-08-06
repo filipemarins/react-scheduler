@@ -33,9 +33,7 @@ class BackgroundCells extends React.Component {
 
   _selectable() {
     const node = findDOMNode(this);
-    const selector = (this._selector = new Selection(this.props.container, {
-      longPressThreshold: this.props.longPressThreshold,
-    }));
+    const selector = (this._selector = new Selection(this.props.container));
 
     const selectorClicksHandler = (point, actionType) => {
       if (!isAppointment(findDOMNode(this), point)) {
@@ -160,7 +158,6 @@ BackgroundCells.propTypes = {
 
   container: PropTypes.func,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
-  longPressThreshold: PropTypes.number,
 
   onSelectSlot: PropTypes.func.isRequired,
   onSelectEnd: PropTypes.func,

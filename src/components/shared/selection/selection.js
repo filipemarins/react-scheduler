@@ -20,11 +20,7 @@ export function isAppointment(node, bounds) {
 }
 
 function getEventCoordinates(e) {
-  let target = e;
-
-  if (e.touches && e.touches.length) {
-    target = e.touches[0];
-  }
+  const target = e;
 
   return {
     clientX: target.clientX,
@@ -104,11 +100,10 @@ const clickTolerance = 5;
 const clickInterval = 250;
 
 class Selection {
-  constructor(node, { global = false, longPressThreshold = 250 } = {}) {
+  constructor(node) {
     this.isDetached = false;
     this.container = node;
-    this.globalMouse = !node || global;
-    this.longPressThreshold = longPressThreshold;
+    this.globalMouse = !node;
 
     this._listeners = Object.create(null);
 
@@ -121,7 +116,6 @@ class Selection {
 
     // Fixes an iOS 10 bug where scrolling could not be prevented on the window.
     // https://github.com/metafizzy/flickity/issues/457#issuecomment-254501356
-    this._removeTouchMoveWindowListener = addEventListener('touchmove', () => {}, window);
     this._removeKeyDownListener = addEventListener('keydown', this._keyListener);
     this._removeKeyUpListener = addEventListener('keyup', this._keyListener);
     this._removeDropFromOutsideListener = addEventListener('drop', this._dropFromOutsideListener);
@@ -154,7 +148,6 @@ class Selection {
   teardown() {
     this.isDetached = true;
     this.listeners = Object.create(null);
-    this._removeTouchMoveWindowListener && this._removeTouchMoveWindowListener();
     this._removeInitialEventListener && this._removeInitialEventListener();
     this._removeEndListener && this._removeEndListener();
     this._onEscListener && this._onEscListener();
@@ -181,47 +174,6 @@ class Selection {
     return items.filter(this.isSelected, this);
   }
 
-  // Adds a listener that will call the handler only after the user has pressed on the screen
-  // without moving their finger for 250ms.
-  _addLongPressListener(handler, initialEvent) {
-    let timer = null;
-    let removeTouchMoveListener = null;
-    let removeTouchEndListener = null;
-    const handleTouchStart = (initialEvent) => {
-      timer = setTimeout(() => {
-        cleanup();
-        handler(initialEvent);
-      }, this.longPressThreshold);
-      removeTouchMoveListener = addEventListener('touchmove', () => cleanup());
-      removeTouchEndListener = addEventListener('touchend', () => cleanup());
-    };
-    const removeTouchStartListener = addEventListener('touchstart', handleTouchStart);
-    const cleanup = () => {
-      if (timer) {
-        clearTimeout(timer);
-      }
-      if (removeTouchMoveListener) {
-        removeTouchMoveListener();
-      }
-      if (removeTouchEndListener) {
-        removeTouchEndListener();
-      }
-
-      timer = null;
-      removeTouchMoveListener = null;
-      removeTouchEndListener = null;
-    };
-
-    if (initialEvent) {
-      handleTouchStart(initialEvent);
-    }
-
-    return () => {
-      cleanup();
-      removeTouchStartListener();
-    };
-  }
-
   // Listen for mousedown and touchstart events. When one is received, disable the other and setup
   // future event handling based on the type of event.
   _addInitialEventListener() {
@@ -230,14 +182,9 @@ class Selection {
       this._handleInitialEvent(e);
       this._removeInitialEventListener = addEventListener('mousedown', this._handleInitialEvent);
     });
-    const removeTouchStartListener = addEventListener('touchstart', (e) => {
-      this._removeInitialEventListener();
-      this._removeInitialEventListener = this._addLongPressListener(this._handleInitialEvent, e);
-    });
 
     this._removeInitialEventListener = () => {
       removeMouseDownListener();
-      removeTouchStartListener();
     };
   }
 
@@ -301,7 +248,6 @@ class Selection {
     const result = this.emit(
       'beforeSelect',
       (this._initialEventData = {
-        isTouch: /^touch/.test(e.type),
         x: pageX,
         y: pageY,
         clientX,
@@ -316,11 +262,6 @@ class Selection {
         this._removeEndListener = addEventListener('mouseup', this._handleTerminatingEvent);
         this._onEscListener = addEventListener('keydown', this._handleTerminatingEvent);
         this._removeMoveListener = addEventListener('mousemove', this._handleMoveEvent);
-        break;
-      case 'touchstart':
-        this._handleMoveEvent(e);
-        this._removeEndListener = addEventListener('touchend', this._handleTerminatingEvent);
-        this._removeMoveListener = addEventListener('touchmove', this._handleMoveEvent);
         break;
       default:
         break;
@@ -430,10 +371,8 @@ class Selection {
   }
 
   isClick(pageX, pageY) {
-    const { x, y, isTouch } = this._initialEventData;
-    return (
-      !isTouch && Math.abs(pageX - x) <= clickTolerance && Math.abs(pageY - y) <= clickTolerance
-    );
+    const { x, y } = this._initialEventData;
+    return Math.abs(pageX - x) <= clickTolerance && Math.abs(pageY - y) <= clickTolerance;
   }
 }
 

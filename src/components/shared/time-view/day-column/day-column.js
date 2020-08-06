@@ -151,9 +151,7 @@ class DayColumn extends React.Component {
 
   _selectable = () => {
     const node = findDOMNode(this);
-    const selector = (this._selector = new Selection(() => findDOMNode(this), {
-      longPressThreshold: this.props.longPressThreshold,
-    }));
+    const selector = (this._selector = new Selection(() => findDOMNode(this)));
 
     const maybeSelect = (box) => {
       const { onSelecting } = this.props;
@@ -354,7 +352,6 @@ DayColumn.propTypes = {
   selected: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
   appointmentOffset: PropTypes.number,
-  longPressThreshold: PropTypes.number,
 
   onSelecting: PropTypes.func,
   onSelectSlot: PropTypes.func.isRequired,
