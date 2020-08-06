@@ -5,12 +5,7 @@ import { uncontrollable } from 'uncontrollable';
 import clsx from 'clsx';
 import { omit, defaults, transform, mapValues } from 'lodash-es';
 
-import {
-  dateFormat,
-  dateRangeFormat,
-  DayLayoutAlgorithmPropType,
-  views as componentViews,
-} from 'utils/prop-types';
+import { dateFormat, dateRangeFormat, views as componentViews } from 'utils/prop-types';
 import { notify } from 'utils/helpers';
 import { navigate, views } from 'utils/constants';
 import { mergeWithDefaults } from 'utils/localizer';
@@ -734,14 +729,6 @@ Scheduler.propTypes = {
     noAppointmentsInRange: PropTypes.node,
     showMore: PropTypes.func,
   }),
-
-  /**
-   * A day appointment layout(arrangement) algorithm.
-   * `overlap` allows appointments to be overlapped.
-   * `no-overlap` resizes appointments to avoid overlap.
-   * or custom `Function(appointments, minimumStartDifference, slotMetrics)`
-   */
-  dayLayoutAlgorithm: DayLayoutAlgorithmPropType,
 };
 
 Scheduler.defaultProps = {
@@ -756,7 +743,6 @@ Scheduler.defaultProps = {
 
   longPressThreshold: 250,
   getNow: () => new Date(),
-  dayLayoutAlgorithm: 'overlap',
 };
 
 export default uncontrollable(Scheduler, {

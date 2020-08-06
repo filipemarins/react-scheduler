@@ -7,7 +7,6 @@ describe('getAppointmentsDayStyled', () => {
   const min = dates.startOf(d(), 'day');
   const max = dates.endOf(d(), 'day');
   const slotMetrics = getTimeSlotMetrics({ min, max, step: 30, timeslots: 4 });
-  const dayLayoutAlgorithm = 'overlap';
 
   describe('matrix', () => {
     function compare(title, appointments, expectedResults) {
@@ -16,7 +15,6 @@ describe('getAppointmentsDayStyled', () => {
           appointments,
           slotMetrics,
           minimumStartDifference: 10,
-          dayLayoutAlgorithm,
         });
         const results = styledAppointments.map((result) => ({
           width: Math.floor(result.style.width),

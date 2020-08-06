@@ -5,7 +5,6 @@ import * as animationFrame from 'dom-helpers/animationFrame';
 import getWidth from 'dom-helpers/width';
 import { findDOMNode } from 'react-dom';
 
-import { DayLayoutAlgorithmPropType } from 'utils/prop-types';
 import * as dates from 'utils/dates';
 import { notify } from 'utils/helpers';
 import { inRange, sortAppointments } from 'utils/appointment-levels';
@@ -152,7 +151,7 @@ export default class TimeView extends Component {
   };
 
   renderAppointments(range, appointments, now) {
-    const { min, max, components, localizer, dayLayoutAlgorithm } = this.props;
+    const { min, max, components, localizer } = this.props;
 
     return range.map((date) => {
       const daysAppointments = appointments.filter((appointment) =>
@@ -169,7 +168,6 @@ export default class TimeView extends Component {
           key={date}
           date={date}
           appointments={daysAppointments}
-          dayLayoutAlgorithm={dayLayoutAlgorithm}
         />
       );
     });
@@ -291,8 +289,6 @@ TimeView.propTypes = {
   onDoubleClickAppointment: PropTypes.func,
   onDrillDown: PropTypes.func,
   getDrilldownView: PropTypes.func.isRequired,
-
-  dayLayoutAlgorithm: DayLayoutAlgorithmPropType,
 };
 
 TimeView.defaultProps = {

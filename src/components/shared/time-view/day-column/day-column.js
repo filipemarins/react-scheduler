@@ -7,7 +7,6 @@ import * as dates from 'utils/dates';
 import getTimeSlotMetrics from 'utils/get-time-slot-metrics';
 import { isSelected } from 'utils/selection';
 import { notify } from 'utils/helpers';
-import { DayLayoutAlgorithmPropType } from 'utils/prop-types';
 import getAppointmentsDayStyled from 'utils/get-appointments-day-styled';
 
 import Selection, { getBoundsForNode, isAppointment } from 'components/shared/selection';
@@ -103,16 +102,7 @@ class DayColumn extends React.Component {
   }
 
   renderAppointments = () => {
-    const {
-      appointments,
-      rtl,
-      selected,
-      localizer,
-      components,
-      step,
-      timeslots,
-      dayLayoutAlgorithm,
-    } = this.props;
+    const { appointments, rtl, selected, localizer, components, step, timeslots } = this.props;
 
     const { slotMetrics } = this;
     const { messages } = localizer;
@@ -121,7 +111,6 @@ class DayColumn extends React.Component {
       appointments,
       slotMetrics,
       minimumStartDifference: Math.ceil((step * timeslots) / 2),
-      dayLayoutAlgorithm,
     });
 
     return styledAppointments.map(({ appointment, style }, idx) => {
@@ -374,8 +363,6 @@ DayColumn.propTypes = {
 
   className: PropTypes.string,
   dragThroughAppointments: PropTypes.bool,
-
-  dayLayoutAlgorithm: DayLayoutAlgorithmPropType,
 };
 
 DayColumn.defaultProps = {

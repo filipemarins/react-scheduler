@@ -35,8 +35,3 @@ export const views = PropTypes.oneOfType([
     return PropTypes.elementType(prop, key, ...args);
   }),
 ]);
-
-export const DayLayoutAlgorithmPropType = PropTypes.oneOfType([
-  PropTypes.oneOf(['overlap', 'no-overlap']),
-  PropTypes.func,
-]);
