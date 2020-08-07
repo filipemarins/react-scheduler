@@ -80,16 +80,6 @@ class Scheduler extends React.Component {
     return views[this.props.view];
   };
 
-  getDrilldownView = (date) => {
-    const { view, drilldownView, getDrilldownView } = this.props;
-
-    if (!getDrilldownView) {
-      return drilldownView;
-    }
-
-    return getDrilldownView(date, view, Object.keys(this.getViews()));
-  };
-
   /**
    *
    * @param date
@@ -148,13 +138,13 @@ class Scheduler extends React.Component {
     notify(this.props.onSelectSlot, slotInfo);
   };
 
-  handleDrillDown = (date, view) => {
-    const { onDrillDown } = this.props;
-    if (onDrillDown) {
-      onDrillDown(date, view, this.drilldownView);
+  handleDayClick = (date) => {
+    const { onDayClick } = this.props;
+    if (onDayClick) {
+      onDayClick(date, views.DAY);
       return;
     }
-    if (view) this.handleViewChange(view);
+    if (views.DAY) this.handleViewChange(views.DAY);
 
     this.handleNavigate(navigate.DATE, date);
   };
@@ -213,9 +203,8 @@ class Scheduler extends React.Component {
           localizer={localizer}
           components={components}
           showMultiDayTimes={showMultiDayTimes}
-          getDrilldownView={this.getDrilldownView}
           onNavigate={this.handleNavigate}
-          onDrillDown={this.handleDrillDown}
+          onDayClick={this.handleDayClick}
           onSelectAppointment={this.handleSelectAppointment}
           onDoubleClickAppointment={this.handleDoubleClickAppointment}
           onSelectSlot={this.handleSelectSlot}
@@ -313,7 +302,7 @@ Scheduler.propTypes = {
    * Callback fired when date header, or the truncated appointments links are clicked
    *
    */
-  onDrillDown: PropTypes.func,
+  onDayClick: PropTypes.func,
 
   /**
    *
@@ -436,41 +425,6 @@ Scheduler.propTypes = {
    ['month', 'week', 'day', 'agenda']
    */
   views: componentViews,
-
-  /**
-   * The string name of the destination view for drill-down actions, such
-   * as clicking a date header, or the truncated appointments links. If
-   * `getDrilldownView` is also specified it will be used instead.
-   *
-   * Set to `null` to disable drill-down actions.
-   *
-   * ```js
-   * <Scheduler
-   *   drilldownView="agenda"
-   * />
-   * ```
-   */
-  drilldownView: PropTypes.string,
-
-  /**
-   * Functionally equivalent to `drilldownView`, but accepts a function
-   * that can return a view name. It's useful for customizing the drill-down
-   * actions depending on the target date and triggering view.
-   *
-   * Return `null` to disable drill-down actions.
-   *
-   * ```js
-   * <Scheduler
-   *   getDrilldownView={(targetDate, currentViewName, configuredViewNames) =>
-   *     if (currentViewName === 'month' && configuredViewNames.includes('week'))
-   *       return 'week'
-   *
-   *     return null;
-   *   }}
-   * />
-   * ```
-   */
-  getDrilldownView: PropTypes.func,
 
   /**
    * Determines the end date from date prop in the agenda view
@@ -728,8 +682,6 @@ Scheduler.defaultProps = {
   views: [views.MONTH, views.WEEK, views.DAY, views.AGENDA],
   step: 30,
   length: 30,
-
-  drilldownView: views.DAY,
 
   getNow: () => new Date(),
 };

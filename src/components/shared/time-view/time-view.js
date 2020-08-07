@@ -233,8 +233,7 @@ export default class TimeView extends Component {
           onSelectSlot={this.handleSelectAllDaySlot}
           onSelectAppointment={this.handleSelectAlldayAppointment}
           onDoubleClickAppointment={this.props.onDoubleClickAppointment}
-          onDrillDown={this.props.onDrillDown}
-          getDrilldownView={this.props.getDrilldownView}
+          onDayClick={this.props.onDayClick}
         />
         <div ref={this.contentRef} className="rbc-time-content" onScroll={this.handleScroll}>
           <TimeScale
@@ -284,8 +283,7 @@ TimeView.propTypes = {
   onSelectStart: PropTypes.func,
   onSelectAppointment: PropTypes.func,
   onDoubleClickAppointment: PropTypes.func,
-  onDrillDown: PropTypes.func,
-  getDrilldownView: PropTypes.func.isRequired,
+  onDayClick: PropTypes.func,
 };
 
 TimeView.defaultProps = {

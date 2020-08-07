@@ -71,10 +71,10 @@ class Month extends React.Component {
     this._selectTimer = setTimeout(() => this.selectDates(slotInfo));
   };
 
-  handleHeadingClick = (date, view, e) => {
+  handleHeadingClick = (e, date) => {
     e.preventDefault();
     this.clearSelection();
-    notify(this.props.onDrillDown, [date, view]);
+    notify(this.props.onDayClick, [date]);
   };
 
   handleSelectAppointment = (...args) => {
@@ -88,21 +88,20 @@ class Month extends React.Component {
   };
 
   handleShowMore = (appointments, date, cell, slot) => {
-    const { onDrillDown, onShowMore, getDrilldownView } = this.props;
+    const { onDayClick, onShowMore } = this.props;
     // cancel any pending selections so only the appointment click goes through.
     this.clearSelection();
 
-    notify(onDrillDown, [date, getDrilldownView(date) || views.DAY]);
+    notify(onDayClick, [date]);
 
     notify(onShowMore, [appointments, date, slot]);
   };
 
   readerDateHeading = ({ date, className, ...props }) => {
-    const { date: currentDate, getDrilldownView, localizer } = this.props;
+    const { date: currentDate, localizer } = this.props;
 
     const isOffRange = dates.month(date) !== dates.month(currentDate);
     const isCurrent = dates.eq(date, currentDate, 'day');
-    const drilldownView = getDrilldownView(date);
     const label = localizer.format(date, 'dateFormat');
     const DateHeaderComponent = this.props.components.dateHeader || NoopWrapper;
 
@@ -112,8 +111,8 @@ class Month extends React.Component {
         role="link"
         tabIndex="0"
         className={clsx(className, isOffRange && 'rbc-off-range', isCurrent && 'rbc-current')}
-        onClick={(e) => this.handleHeadingClick(date, drilldownView, e)}
-        onKeyPress={(e) => this.handleHeadingClick(date, drilldownView, e)}
+        onClick={(e) => this.handleHeadingClick(e, date)}
+        onKeyPress={(e) => this.handleHeadingClick(e, date)}
       >
         <DateHeaderComponent>{label}</DateHeaderComponent>
       </div>
@@ -238,8 +237,7 @@ Month.propTypes = {
   onSelectAppointment: PropTypes.func,
   onDoubleClickAppointment: PropTypes.func,
   onShowMore: PropTypes.func,
-  onDrillDown: PropTypes.func,
-  getDrilldownView: PropTypes.func.isRequired,
+  onDayClick: PropTypes.func,
 };
 
 Month.range = (date, { localizer }) => {

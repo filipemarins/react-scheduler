@@ -9,15 +9,14 @@ import NoopWrapper from 'components/shared/noop-wrapper';
 import { notify } from 'utils/helpers';
 
 class Header extends React.Component {
-  handleHeaderClick = (date, view, e) => {
+  handleHeaderClick = (e, date) => {
     e.preventDefault();
-    notify(this.props.onDrillDown, [date, view]);
+    notify(this.props.onDayClick, [date]);
   };
 
   renderHeaderCells(range) {
     const {
       localizer,
-      getDrilldownView,
       getNow,
       components: { header: HeaderComponent = NoopWrapper },
     } = this.props;
@@ -25,7 +24,6 @@ class Header extends React.Component {
     const today = getNow();
 
     return range.map((date, i) => {
-      const drilldownView = getDrilldownView(date);
       const label = localizer.format(date, 'dayFormat');
 
       const header = (
@@ -37,8 +35,8 @@ class Header extends React.Component {
       return (
         <div key={i} className={clsx('rbc-header', dates.eq(date, today, 'day') && 'rbc-today')}>
           <span
-            onClick={(e) => this.handleHeaderClick(date, drilldownView, e)}
-            onKeyPress={(e) => this.handleHeadingClick(date, drilldownView, e)}
+            onClick={(e) => this.handleHeaderClick(e, date)}
+            onKeyPress={(e) => this.handleHeadingClick(e, date)}
             role="link"
             tabIndex="0"
           >
@@ -152,8 +150,7 @@ Header.propTypes = {
   onSelectSlot: PropTypes.func,
   onSelectAppointment: PropTypes.func,
   onDoubleClickAppointment: PropTypes.func,
-  onDrillDown: PropTypes.func,
-  getDrilldownView: PropTypes.func.isRequired,
+  onDayClick: PropTypes.func,
   scrollRef: PropTypes.any,
 };
 
