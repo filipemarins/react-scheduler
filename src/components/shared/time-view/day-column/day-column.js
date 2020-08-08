@@ -6,7 +6,6 @@ import clsx from 'clsx';
 import * as dates from 'utils/dates';
 import getTimeSlotMetrics from 'utils/get-time-slot-metrics';
 import { isSelected } from 'utils/selection';
-import { notify } from 'utils/helpers';
 import getAppointmentsDayStyled from 'utils/get-appointments-day-styled';
 
 import Selection, { getBoundsForNode, isAppointment } from 'components/shared/selection';
@@ -260,7 +259,7 @@ class DayColumn extends React.Component {
       current = new Date(+current + this.props.step * 60 * 1000); // using Date ensures not to create an endless loop the day DST begins
     }
 
-    notify(this.props.onSelectSlot, {
+    this.props.onSelectSlot({
       slots,
       start: startDate,
       end: endDate,
@@ -270,12 +269,12 @@ class DayColumn extends React.Component {
     });
   };
 
-  _select = (...args) => {
-    notify(this.props.onSelectAppointment, args);
+  _select = (args) => {
+    this.props.onSelectAppointment(args);
   };
 
-  _doubleClick = (...args) => {
-    notify(this.props.onDoubleClickAppointment, args);
+  _doubleClick = (args) => {
+    this.props.onDoubleClickAppointment(args);
   };
 
   render() {

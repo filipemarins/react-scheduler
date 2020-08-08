@@ -26,7 +26,7 @@ storiesOf('Basic Usage', module)
   .add('demo', () => (
     <Scheduler
       appointments={fakeAppointments}
-      onSelectAppointments={action('appointment selected')}
+      onSelectAppointment={action('appointment selected')}
       defaultDate={new Date(2015, 3, 1)}
     />
   ))
@@ -36,7 +36,7 @@ storiesOf('Basic Usage', module)
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
       appointments={appointmentsWithCustomSize}
-      onSelectAppointments={action('appointment selected')}
+      onSelectAppointment={action('appointment selected')}
       defaultDate={new Date()}
     />
   ))
@@ -47,7 +47,7 @@ storiesOf('Basic Usage', module)
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
       appointments={appointmentsWithCustomSize}
-      onSelectAppointments={action('appointment selected')}
+      onSelectAppointment={action('appointment selected')}
       onSelectSlot={action('slot selected')}
       defaultDate={new Date()}
     />
@@ -107,7 +107,7 @@ storiesOf('Basic Usage', module)
         min={moment('12:00am', 'h:mma').toDate()}
         max={moment('11:59pm', 'h:mma').toDate()}
         appointments={appointmentsWithCustomSize}
-        onSelectAppointments={action('appointment selected')}
+        onSelectAppointment={action('appointment selected')}
         defaultDate={new Date()}
       />
     );
@@ -154,7 +154,7 @@ storiesOf('Basic Usage', module)
     return (
       <Scheduler
         appointments={fakeAppointments}
-        onSelectAppointments={action('appointment selected')}
+        onSelectAppointment={action('appointment selected')}
         defaultDate={new Date(2015, 3, 12)}
         defaultView="week"
         views={['week', 'day']}
@@ -429,7 +429,7 @@ storiesOf('Timeslots', module)
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
       appointments={appointmentsWithCustomSize}
-      onSelectAppointments={action('appointment selected')}
+      onSelectAppointment={action('appointment selected')}
       onSelectSlot={action('slot selected')}
       defaultDate={new Date()}
     />
@@ -443,7 +443,7 @@ storiesOf('Timeslots', module)
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
       appointments={appointmentsWithCustomSize}
-      onSelectAppointments={action('appointment selected')}
+      onSelectAppointment={action('appointment selected')}
       onSelectSlot={action('slot selected')}
       defaultDate={new Date()}
     />
@@ -457,7 +457,7 @@ storiesOf('Timeslots', module)
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
       appointments={appointmentsWithCustomSize}
-      onSelectAppointments={action('appointment selected')}
+      onSelectAppointment={action('appointment selected')}
       onSelectSlot={action('slot selected')}
       defaultDate={new Date()}
     />
@@ -471,7 +471,7 @@ storiesOf('Timeslots', module)
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
       appointments={appointmentsWithCustomSize}
-      onSelectAppointments={action('appointment selected')}
+      onSelectAppointment={action('appointment selected')}
       onSelectSlot={action('slot selected')}
       defaultDate={new Date()}
     />

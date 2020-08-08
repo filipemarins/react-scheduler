@@ -4,7 +4,6 @@ import { findDOMNode } from 'react-dom';
 import clsx from 'clsx';
 
 import * as dates from 'utils/dates';
-import { notify } from 'utils/helpers';
 import { dateCellSelection, getSlotAtX, pointInBox } from 'utils/selection';
 import Selection, { getBoundsForNode, isAppointment } from 'components/shared/selection';
 
@@ -63,7 +62,7 @@ class BackgroundCells extends React.Component {
       let endIdx = -1;
 
       if (!this.state.selecting) {
-        notify(this.props.onSelectStart, [box]);
+        this.props.onSelectStart(box);
         this._initial = { x: box.x, y: box.y };
       }
       if (selector.isSelected(node)) {
@@ -92,7 +91,7 @@ class BackgroundCells extends React.Component {
       this._selectSlot({ ...this.state, action: 'select', bounds });
       this._initial = {};
       this.setState({ selecting: false });
-      notify(this.props.onSelectEnd, [this.state]);
+      this.props.onSelectEnd(this.state);
     });
   }
 

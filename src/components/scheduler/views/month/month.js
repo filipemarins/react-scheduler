@@ -6,8 +6,7 @@ import * as animationFrame from 'dom-helpers/animationFrame';
 import { chunk } from 'lodash-es';
 
 import * as dates from 'utils/dates';
-import { navigate, views } from 'utils/constants';
-import { notify } from 'utils/helpers';
+import { navigate } from 'utils/constants';
 import { inRange, sortAppointments } from 'utils/appointment-levels';
 import ContentRow from 'components/shared/content-row';
 import NoopWrapper from 'components/shared/noop-wrapper';
@@ -74,17 +73,17 @@ class Month extends React.Component {
   handleHeadingClick = (e, date) => {
     e.preventDefault();
     this.clearSelection();
-    notify(this.props.onDayClick, [date]);
+    this.props.onDayClick(date);
   };
 
-  handleSelectAppointment = (...args) => {
+  handleSelectAppointment = (args) => {
     this.clearSelection();
-    notify(this.props.onSelectAppointment, args);
+    this.props.onSelectAppointment(args);
   };
 
-  handleDoubleClickAppointment = (...args) => {
+  handleDoubleClickAppointment = (args) => {
     this.clearSelection();
-    notify(this.props.onDoubleClickAppointment, args);
+    this.props.onDoubleClickAppointment(args);
   };
 
   handleShowMore = (appointments, date, cell, slot) => {
@@ -92,9 +91,9 @@ class Month extends React.Component {
     // cancel any pending selections so only the appointment click goes through.
     this.clearSelection();
 
-    notify(onDayClick, [date]);
+    onDayClick(date);
 
-    notify(onShowMore, [appointments, date, slot]);
+    onShowMore(appointments, date, slot);
   };
 
   readerDateHeading = ({ date, className, ...props }) => {
@@ -126,7 +125,7 @@ class Month extends React.Component {
 
     slots.sort((a, b) => +a - +b);
 
-    notify(this.props.onSelectSlot, {
+    this.props.onSelectSlot({
       slots,
       start: slots[0],
       end: slots[slots.length - 1],

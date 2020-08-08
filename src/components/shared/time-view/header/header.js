@@ -6,12 +6,11 @@ import scrollbarSize from 'dom-helpers/scrollbarSize';
 import * as dates from 'utils/dates';
 import ContentRow from 'components/shared/content-row';
 import NoopWrapper from 'components/shared/noop-wrapper';
-import { notify } from 'utils/helpers';
 
 class Header extends React.Component {
   handleHeaderClick = (e, date) => {
     e.preventDefault();
-    notify(this.props.onDayClick, [date]);
+    this.props.onDayClick(date);
   };
 
   renderHeaderCells(range) {

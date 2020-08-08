@@ -6,7 +6,6 @@ import clsx from 'clsx';
 import { omit, defaults, transform, mapValues } from 'lodash-es';
 
 import { dateFormat, dateRangeFormat, views as componentViews } from 'utils/prop-types';
-import { notify } from 'utils/helpers';
 import { navigate, views } from 'utils/constants';
 import { mergeWithDefaults } from 'utils/localizer';
 import message from 'utils/messages';
@@ -119,23 +118,23 @@ class Scheduler extends React.Component {
 
   handleViewChange = (view) => {
     if (view !== this.props.view && isValidView(view, this.props)) {
-      this.props.onView(view);
+      this.props.onChangeView(view);
     }
 
     const views = this.getViews();
     this.handleRangeChange(this.props.date || this.props.getNow(), views[view], view);
   };
 
-  handleSelectAppointment = (...args) => {
-    notify(this.props.onSelectAppointment, args);
+  handleSelectAppointment = (args) => {
+    this.props.onSelectAppointment(args);
   };
 
-  handleDoubleClickAppointment = (...args) => {
-    notify(this.props.onDoubleClickAppointment, args);
+  handleDoubleClickAppointment = (args) => {
+    this.props.onDoubleClickAppointment(args);
   };
 
   handleSelectSlot = (slotInfo) => {
-    notify(this.props.onSelectSlot, slotInfo);
+    this.props.onSelectSlot(slotInfo);
   };
 
   handleDayClick = (date) => {
@@ -189,7 +188,7 @@ class Scheduler extends React.Component {
             view={view}
             views={viewNames}
             label={label}
-            onView={this.handleViewChange}
+            onChangeView={this.handleViewChange}
             onNavigate={this.handleNavigate}
             localizer={localizer}
           />
@@ -237,7 +236,7 @@ Scheduler.propTypes = {
    * The current view of the scheduler.
    *
    * @default 'month'
-   * @controllable onView
+   * @controllable onChangeView
    */
   view: PropTypes.string,
 
@@ -296,7 +295,7 @@ Scheduler.propTypes = {
    *
    * @controllable view
    */
-  onView: PropTypes.func,
+  onChangeView: PropTypes.func,
 
   /**
    * Callback fired when date header, or the truncated appointments links are clicked
@@ -683,11 +682,21 @@ Scheduler.defaultProps = {
   step: 30,
   length: 30,
 
+  onNavigate: () => {},
+  onChangeView: () => {},
+  onDayClick: () => {},
+  onRangeChange: () => {},
+  onSelectSlot: () => {},
+  onSelectAppointment: () => {},
+  onDoubleClickAppointment: () => {},
+  onSelecting: () => {},
+  onShowMore: () => {},
+
   getNow: () => new Date(),
 };
 
 export default uncontrollable(Scheduler, {
-  view: 'onView',
+  view: 'onChangeView',
   date: 'onNavigate',
   selected: 'onSelectAppointment',
 });

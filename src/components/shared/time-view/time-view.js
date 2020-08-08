@@ -6,7 +6,6 @@ import getWidth from 'dom-helpers/width';
 import { findDOMNode } from 'react-dom';
 
 import * as dates from 'utils/dates';
-import { notify } from 'utils/helpers';
 import { inRange, sortAppointments } from 'utils/appointment-levels';
 import DayColumn from './day-column';
 import TimeViewHeader from './header';
@@ -84,15 +83,15 @@ export default class TimeView extends Component {
     this.gutter = ref && findDOMNode(ref);
   };
 
-  handleSelectAlldayAppointment = (...args) => {
+  handleSelectAlldayAppointment = (args) => {
     // cancel any pending selections so only the appointment click goes through.
     this.clearSelection();
-    notify(this.props.onSelectAppointment, args);
+    this.props.onSelectAppointment(args);
   };
 
   handleSelectAllDaySlot = (slots, slotInfo) => {
     const { onSelectSlot } = this.props;
-    notify(onSelectSlot, {
+    onSelectSlot({
       slots,
       start: slots[0],
       end: slots[slots.length - 1],
