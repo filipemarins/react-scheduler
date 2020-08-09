@@ -14,6 +14,7 @@ import moveDate from 'utils/move';
 import NoopWrapper from 'components/shared/noop-wrapper';
 import VIEWS from './views';
 import Toolbar from './toolbar';
+import SchedulerContext from './scheduler-context';
 
 function viewNames(_views) {
   return !Array.isArray(_views) ? Object.keys(_views) : _views;
@@ -79,7 +80,6 @@ const Scheduler = ({
   };
 
   const handleRangeChange = (date, ViewComponent) => {
-    console.log('ViewComponent', ViewComponent);
     if (ViewComponent.range) {
       onRangeChange(ViewComponent.range(date, { localizer }), view);
     } else if (process.env.NODE_ENV !== 'production') {
@@ -87,7 +87,7 @@ const Scheduler = ({
     }
   };
 
-  const handleNavigate = (action, newDate) => {
+  const handleCurrentDayChange = (action, newDate) => {
     const ViewComponent = getView();
     const today = currentDate;
 
@@ -96,8 +96,6 @@ const Scheduler = ({
       date: newDate || currentDate,
       today,
     });
-
-    console.log('handleNavigate', movedDate, action);
 
     onCurrentDateChange(movedDate, view, action);
     handleRangeChange(movedDate, ViewComponent);
@@ -134,7 +132,7 @@ const Scheduler = ({
       handleViewChange(views.DAY);
     }
 
-    handleNavigate(navigate.DATE, nextDate);
+    handleCurrentDayChange(navigate.DATE, nextDate);
   };
 
   const normalizeLocalizer = mergeWithDefaults(localizer, culture, formats, message(messages));
@@ -145,34 +143,58 @@ const Scheduler = ({
   const SchedulerToolbar = components?.toolbar || Toolbar;
   const label = View.title(currentDate, { localizer: normalizeLocalizer, length });
 
-  // const { components, localizer, viewNames } = getContext();
-  // console.log(getContext());
+  // Now is provider but it will be replaced for custom hooks later
+  const schedulerContext = {
+    appointments,
+    components,
+    culture,
+    currentDate,
+    defaultView,
+    formats,
+    length,
+    localizer: normalizeLocalizer,
+    max,
+    messages,
+    min,
+    onChangeView,
+    onCurrentDateChange: handleCurrentDayChange,
+    onDayClick: handleDayClick,
+    onDoubleClickAppointment: handleDoubleClickAppointment,
+    onRangeChange,
+    onSelectAppointment: handleSelectAppointment,
+    onSelectSlot: handleSelectSlot,
+    onSelecting,
+    onShowMore,
+    rtl,
+    selectable,
+    selectedAppointment,
+    showMultiDayTimes,
+    step,
+    timeslots,
+    view,
+    views: normalizeViews,
+  };
 
   return (
-    <div className={clsx('rbc-calendar', rtl && 'rbc-rtl')}>
-      <SchedulerToolbar
-        view={view}
-        views={normalizeViews}
-        label={label}
-        onChangeView={handleViewChange}
-        onCurrentDateChange={handleNavigate}
-        localizer={normalizeLocalizer}
-      />
-      <View
-        appointments={appointments}
-        currentDate={currentDate}
-        length={length}
-        localizer={normalizeLocalizer}
-        components={components}
-        showMultiDayTimes={showMultiDayTimes}
-        onCurrentDateChange={handleNavigate}
-        onDayClick={handleDayClick}
-        onSelectAppointment={handleSelectAppointment}
-        onDoubleClickAppointment={handleDoubleClickAppointment}
-        onSelectSlot={handleSelectSlot}
-        onShowMore={onShowMore}
-      />
-    </div>
+    <SchedulerContext.Provider value={schedulerContext}>
+      <div className={clsx('rbc-calendar', rtl && 'rbc-rtl')}>
+        <SchedulerToolbar label={label} />
+        <View
+          appointments={appointments}
+          currentDate={currentDate}
+          length={length}
+          localizer={normalizeLocalizer}
+          components={components}
+          showMultiDayTimes={showMultiDayTimes}
+          onCurrentDateChange={handleCurrentDayChange}
+          onDayClick={handleDayClick}
+          onSelectAppointment={handleSelectAppointment}
+          onDoubleClickAppointment={handleDoubleClickAppointment}
+          onSelectSlot={handleSelectSlot}
+          onShowMore={onShowMore}
+        />
+      </div>
+    </SchedulerContext.Provider>
   );
 };
 

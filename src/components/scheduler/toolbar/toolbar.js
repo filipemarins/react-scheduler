@@ -1,71 +1,67 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
+import SchedulerContext from 'components/scheduler/scheduler-context';
+
 import { navigate } from 'utils/constants';
 
-class Toolbar extends React.Component {
-  navigate = (action) => {
-    this.props.onCurrentDateChange(action);
+const Toolbar = ({ label }) => {
+  const {
+    views: viewNames,
+    view,
+    onCurrentDateChange,
+    onChangeView,
+    localizer: { messages },
+  } = useContext(SchedulerContext);
+
+  const handleCurrentDateChange = (action) => {
+    onCurrentDateChange(action);
   };
 
-  view = (view) => {
-    this.props.onChangeView(view);
+  const handleChangeView = (nextView) => {
+    onChangeView(nextView);
   };
 
-  viewNamesGroup(messages) {
-    const viewNames = this.props.views;
-    const { view } = this.props;
-
+  const viewNamesGroup = () => {
     if (viewNames.length > 1) {
       return viewNames.map((name) => (
         <button
           type="button"
           key={name}
           className={clsx({ 'rbc-active': view === name })}
-          onClick={this.view.bind(null, name)}
+          onClick={handleChangeView.bind(null, name)}
         >
           {messages[name]}
         </button>
       ));
     }
-  }
+    return false;
+  };
 
-  render() {
-    const {
-      localizer: { messages },
-      label,
-    } = this.props;
+  return (
+    <div className="rbc-toolbar">
+      <span className="rbc-btn-group">
+        <button type="button" onClick={handleCurrentDateChange.bind(null, navigate.TODAY)}>
+          {messages.today}
+        </button>
+        <button type="button" onClick={handleCurrentDateChange.bind(null, navigate.PREVIOUS)}>
+          {messages.previous}
+        </button>
+        <button type="button" onClick={handleCurrentDateChange.bind(null, navigate.NEXT)}>
+          {messages.next}
+        </button>
+      </span>
 
-    return (
-      <div className="rbc-toolbar">
-        <span className="rbc-btn-group">
-          <button type="button" onClick={this.navigate.bind(null, navigate.TODAY)}>
-            {messages.today}
-          </button>
-          <button type="button" onClick={this.navigate.bind(null, navigate.PREVIOUS)}>
-            {messages.previous}
-          </button>
-          <button type="button" onClick={this.navigate.bind(null, navigate.NEXT)}>
-            {messages.next}
-          </button>
-        </span>
+      <span className="rbc-toolbar-label">{label}</span>
 
-        <span className="rbc-toolbar-label">{label}</span>
-
-        <span className="rbc-btn-group">{this.viewNamesGroup(messages)}</span>
-      </div>
-    );
-  }
-}
+      <span className="rbc-btn-group">{viewNamesGroup()}</span>
+    </div>
+  );
+};
 
 Toolbar.propTypes = {
-  view: PropTypes.string.isRequired,
-  views: PropTypes.arrayOf(PropTypes.string).isRequired,
   label: PropTypes.node.isRequired,
-  localizer: PropTypes.object,
-  onCurrentDateChange: PropTypes.func.isRequired,
-  onChangeView: PropTypes.func.isRequired,
 };
 
 export default Toolbar;

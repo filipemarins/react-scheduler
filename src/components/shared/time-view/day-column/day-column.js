@@ -326,7 +326,7 @@ class DayColumn extends React.Component {
             <span>{localizer.format(selectDates, 'selectRangeFormat')}</span>
           </div>
         )}
-        {console.log(isNow, this.intervalTriggered)}
+
         {isNow && this.intervalTriggered && (
           <div
             className="rbc-current-time-indicator"
