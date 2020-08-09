@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { uncontrollable } from 'uncontrollable';
 import clsx from 'clsx';
-import { omit, defaults, transform, mapValues } from 'lodash-es';
+import { transform, mapValues } from 'lodash-es';
 
 import { dateFormat, dateRangeFormat, views as componentViews } from 'utils/prop-types';
 import { navigate, views } from 'utils/constants';
@@ -24,38 +24,37 @@ function isValidView(view, { views: _views }) {
   return names.indexOf(view) !== -1;
 }
 
-class Scheduler extends React.Component {
-  constructor(...args) {
-    super(...args);
-    this.state = {
-      context: this.getContext(this.props),
-    };
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({ context: this.getContext(nextProps) });
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getContext({ view, views, localizer, culture, messages = {}, components = {}, formats = {} }) {
-    const names = viewNames(views);
-    const msgs = message(messages);
-    return {
-      viewNames: names,
-      localizer: mergeWithDefaults(localizer, culture, formats, msgs),
-      components: defaults(components[view] || {}, omit(components, names), {
-        appointmentWrapper: NoopWrapper,
-        appointmentContainerWrapper: NoopWrapper,
-        dateCellWrapper: NoopWrapper,
-        weekWrapper: NoopWrapper,
-        timeSlotWrapper: NoopWrapper,
-      }),
-    };
-  }
-
-  getViews = () => {
-    const { views } = this.props;
-
+const Scheduler = ({
+  appointments,
+  components,
+  culture,
+  currentDate,
+  defaultView,
+  formats,
+  length,
+  localizer,
+  max,
+  messages,
+  min,
+  onChangeView,
+  onCurrentDateChange,
+  onDayClick,
+  onDoubleClickAppointment,
+  onRangeChange,
+  onSelectAppointment,
+  onSelectSlot,
+  onSelecting,
+  onShowMore,
+  rtl,
+  selectable,
+  selectedAppointment,
+  showMultiDayTimes,
+  step,
+  timeslots,
+  view,
+  views,
+}) => {
+  const getViews = () => {
     if (Array.isArray(views)) {
       return transform(views, (obj, name) => (obj[name] = VIEWS[name]), {});
     }
@@ -73,133 +72,109 @@ class Scheduler extends React.Component {
     return VIEWS;
   };
 
-  getView = () => {
-    const views = this.getViews();
+  const getView = () => {
+    const currentView = getViews();
 
-    return views[this.props.view];
+    return currentView[view];
   };
 
-  /**
-   *
-   * @param date
-   * @param viewComponent
-   * @param {'month'|'week'|'work_week'|'day'|'agenda'} [view] - optional
-   * parameter. It appears when range change on view changing. It could be handy
-   * when you need to have both: range and view type at once, i.e. for manage rbc
-   * state via url
-   */
-  handleRangeChange = (date, viewComponent, view) => {
-    const { onRangeChange, localizer } = this.props;
-
-    if (onRangeChange) {
-      if (viewComponent.range) {
-        onRangeChange(viewComponent.range(date, { localizer }), view);
-      } else if (process.env.NODE_ENV !== 'production') {
-        console.error('onRangeChange prop not supported for this view');
-      }
+  const handleRangeChange = (date, ViewComponent) => {
+    console.log('ViewComponent', ViewComponent);
+    if (ViewComponent.range) {
+      onRangeChange(ViewComponent.range(date, { localizer }), view);
+    } else if (process.env.NODE_ENV !== 'production') {
+      console.error('onRangeChange prop not supported for this view');
     }
   };
 
-  handleNavigate = (action, newDate) => {
-    const { view, currentDate, onCurrentDateChange, ...props } = this.props;
-    const ViewComponent = this.getView();
+  const handleNavigate = (action, newDate) => {
+    const ViewComponent = getView();
     const today = currentDate;
 
     const movedDate = moveDate(ViewComponent, {
-      ...props,
       action,
       date: newDate || currentDate,
       today,
     });
 
+    console.log('handleNavigate', movedDate, action);
+
     onCurrentDateChange(movedDate, view, action);
-    this.handleRangeChange(movedDate, ViewComponent);
+    handleRangeChange(movedDate, ViewComponent);
   };
 
-  handleViewChange = (view) => {
-    if (view !== this.props.view && isValidView(view, this.props)) {
-      this.props.onChangeView(view);
+  const handleViewChange = (nextView) => {
+    const ViewComponent = getView();
+
+    if (nextView !== view && isValidView(view, { views })) {
+      onChangeView(nextView);
     }
 
-    const views = this.getViews();
-    this.handleRangeChange(this.props.currentDate, views[view], view);
+    handleRangeChange(currentDate, ViewComponent);
   };
 
-  handleSelectAppointment = (args) => {
-    this.props.onSelectAppointment(args);
+  const handleSelectAppointment = (args) => {
+    onSelectAppointment(args);
   };
 
-  handleDoubleClickAppointment = (args) => {
-    this.props.onDoubleClickAppointment(args);
+  const handleDoubleClickAppointment = (args) => {
+    onDoubleClickAppointment(args);
   };
 
-  handleSelectSlot = (slotInfo) => {
-    this.props.onSelectSlot(slotInfo);
+  const handleSelectSlot = (slotInfo) => {
+    onSelectSlot(slotInfo);
   };
 
-  handleDayClick = (date) => {
-    const { onDayClick } = this.props;
+  const handleDayClick = (nextDate) => {
     if (onDayClick) {
-      onDayClick(date, views.DAY);
+      onDayClick(nextDate, views.DAY);
       return;
     }
-    if (views.DAY) this.handleViewChange(views.DAY);
+    if (views.DAY) {
+      handleViewChange(views.DAY);
+    }
 
-    this.handleNavigate(navigate.DATE, date);
+    handleNavigate(navigate.DATE, nextDate);
   };
 
-  render() {
-    const {
-      view,
-      appointments,
-      className,
-      currentDate,
-      length,
-      showMultiDayTimes,
-      onShowMore,
-      components: _0,
-      formats: _1,
-      messages: _2,
-      culture: _3,
-      ...props
-    } = this.props;
+  const normalizeLocalizer = mergeWithDefaults(localizer, culture, formats, message(messages));
+  const normalizeViews = viewNames(views);
 
-    const View = this.getView();
-    const { components, localizer, viewNames } = this.state.context;
+  const View = getView();
 
-    const SchedulerToolbar = components.toolbar || Toolbar;
-    const label = View.title(currentDate, { localizer, length });
+  const SchedulerToolbar = components?.toolbar || Toolbar;
+  const label = View.title(currentDate, { localizer: normalizeLocalizer, length });
 
-    return (
-      <div className={clsx(className, 'rbc-calendar', props.rtl && 'rbc-rtl')}>
-        <SchedulerToolbar
-          date={currentDate}
-          view={view}
-          views={viewNames}
-          label={label}
-          onChangeView={this.handleViewChange}
-          onCurrentDateChange={this.handleNavigate}
-          localizer={localizer}
-        />
-        <View
-          {...props}
-          appointments={appointments}
-          currentDate={currentDate}
-          length={length}
-          localizer={localizer}
-          components={components}
-          showMultiDayTimes={showMultiDayTimes}
-          onCurrentDateChange={this.handleNavigate}
-          onDayClick={this.handleDayClick}
-          onSelectAppointment={this.handleSelectAppointment}
-          onDoubleClickAppointment={this.handleDoubleClickAppointment}
-          onSelectSlot={this.handleSelectSlot}
-          onShowMore={onShowMore}
-        />
-      </div>
-    );
-  }
-}
+  // const { components, localizer, viewNames } = getContext();
+  // console.log(getContext());
+
+  return (
+    <div className={clsx('rbc-calendar', rtl && 'rbc-rtl')}>
+      <SchedulerToolbar
+        view={view}
+        views={normalizeViews}
+        label={label}
+        onChangeView={handleViewChange}
+        onCurrentDateChange={handleNavigate}
+        localizer={normalizeLocalizer}
+      />
+      <View
+        appointments={appointments}
+        currentDate={currentDate}
+        length={length}
+        localizer={normalizeLocalizer}
+        components={components}
+        showMultiDayTimes={showMultiDayTimes}
+        onCurrentDateChange={handleNavigate}
+        onDayClick={handleDayClick}
+        onSelectAppointment={handleSelectAppointment}
+        onDoubleClickAppointment={handleDoubleClickAppointment}
+        onSelectSlot={handleSelectSlot}
+        onShowMore={onShowMore}
+      />
+    </div>
+  );
+};
 
 Scheduler.propTypes = {
   localizer: PropTypes.shape({}).isRequired,
@@ -646,6 +621,14 @@ Scheduler.defaultProps = {
   onDoubleClickAppointment: () => {},
   onSelecting: () => {},
   onShowMore: () => {},
+
+  components: {
+    appointmentWrapper: NoopWrapper,
+    appointmentContainerWrapper: NoopWrapper,
+    dateCellWrapper: NoopWrapper,
+    weekWrapper: NoopWrapper,
+    timeSlotWrapper: NoopWrapper,
+  },
 
   currentDate: new Date(),
 };
