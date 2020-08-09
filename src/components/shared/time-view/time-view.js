@@ -22,10 +22,6 @@ export default class TimeView extends Component {
     this._scrollRatio = null;
   }
 
-  UNSAFE_componentWillMount() {
-    this.calculateScroll();
-  }
-
   componentDidMount() {
     this.checkOverflow();
 
@@ -66,17 +62,6 @@ export default class TimeView extends Component {
 
     this.applyScroll();
     // this.checkOverflow()
-  }
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const { range, scrollToTime } = this.props;
-    // When paginating, reset scroll
-    if (
-      !dates.eq(nextProps.range[0], range[0], 'minute') ||
-      !dates.eq(nextProps.scrollToTime, scrollToTime, 'minute')
-    ) {
-      this.calculateScroll(nextProps);
-    }
   }
 
   gutterRef = (ref) => {
@@ -124,15 +109,6 @@ export default class TimeView extends Component {
       // Only do this once
       this._scrollRatio = null;
     }
-  }
-
-  calculateScroll(props = this.props) {
-    const { min, max, scrollToTime } = props;
-
-    const diffMillis = scrollToTime - dates.startOf(scrollToTime, 'day');
-    const totalMillis = dates.diff(max, min);
-
-    this._scrollRatio = diffMillis / totalMillis;
   }
 
   checkOverflow = () => {
@@ -264,7 +240,6 @@ TimeView.propTypes = {
   max: PropTypes.instanceOf(Date),
   currentDate: PropTypes.instanceOf(Date),
 
-  scrollToTime: PropTypes.instanceOf(Date),
   showMultiDayTimes: PropTypes.bool,
 
   rtl: PropTypes.bool,
@@ -289,5 +264,4 @@ TimeView.defaultProps = {
   timeslots: 2,
   min: dates.startOf(new Date(), 'day'),
   max: dates.endOf(new Date(), 'day'),
-  scrollToTime: dates.startOf(new Date(), 'day'),
 };
