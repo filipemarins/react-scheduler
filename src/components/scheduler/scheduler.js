@@ -152,7 +152,6 @@ class Scheduler extends React.Component {
     const {
       view,
       appointments,
-      style,
       className,
       currentDate,
       length,
@@ -172,7 +171,7 @@ class Scheduler extends React.Component {
     const label = View.title(currentDate, { localizer, length });
 
     return (
-      <div className={clsx(className, 'rbc-calendar', props.rtl && 'rbc-rtl')} style={style}>
+      <div className={clsx(className, 'rbc-calendar', props.rtl && 'rbc-rtl')}>
         <SchedulerToolbar
           date={currentDate}
           view={view}
@@ -442,11 +441,6 @@ Scheduler.propTypes = {
    * Constrains the maximum _time_ of the Day and Week views.
    */
   max: PropTypes.instanceOf(Date),
-
-  /**
-   * Determines how far down the scroll pane is initially scrolled down.
-   */
-  scrollToTime: PropTypes.instanceOf(Date),
 
   /**
    * Specify a specific culture code for the scheduler.
