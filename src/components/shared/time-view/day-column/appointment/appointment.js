@@ -12,7 +12,7 @@ const Appointment = (props) => {
     className,
     appointment,
     rtl,
-    selected,
+    selectedAppointment,
     label,
     continuesEarlier,
     continuesLater,
@@ -48,7 +48,7 @@ const Appointment = (props) => {
         }}
         title={tooltip ? (typeof label === 'string' ? `${label}: ` : '') + tooltip : undefined}
         className={clsx('rbc-appointment', className, {
-          'rbc-selected': selected,
+          'rbc-selected': selectedAppointment,
           'rbc-appointment-continues-earlier': continuesEarlier,
           'rbc-appointment-continues-later': continuesLater,
         })}

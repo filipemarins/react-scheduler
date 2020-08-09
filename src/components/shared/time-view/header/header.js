@@ -16,11 +16,11 @@ class Header extends React.Component {
   renderHeaderCells(range) {
     const {
       localizer,
-      getNow,
+      currentDate,
       components: { header: HeaderComponent = NoopWrapper },
     } = this.props;
 
-    const today = getNow();
+    const today = currentDate;
 
     return range.map((date, i) => {
       const label = localizer.format(date, 'dayFormat');
@@ -47,18 +47,18 @@ class Header extends React.Component {
   }
 
   renderRow = () => {
-    const { appointments, rtl, selectable, getNow, range, localizer, components } = this.props;
+    const { appointments, rtl, selectable, currentDate, range, localizer, components } = this.props;
 
     return (
       <ContentRow
         isAllDay
         rtl={rtl}
-        getNow={getNow}
+        currentDate={currentDate}
         minRows={2}
         range={range}
         className="rbc-allday-cell"
         selectable={selectable}
-        selected={this.props.selected}
+        selectedAppointment={this.props.selectedAppointment}
         components={components}
         localizer={localizer}
         onSelect={this.props.onSelectAppointment}
@@ -74,7 +74,7 @@ class Header extends React.Component {
       rtl,
       range,
       appointments,
-      getNow,
+      currentDate,
       selectable,
       components,
       scrollRef,
@@ -112,13 +112,13 @@ class Header extends React.Component {
           <ContentRow
             isAllDay
             rtl={rtl}
-            getNow={getNow}
+            currentDate={currentDate}
             minRows={2}
             range={range}
             appointments={[]}
             className="rbc-allday-cell"
             selectable={selectable}
-            selected={this.props.selected}
+            selectedAppointment={this.props.selectedAppointment}
             components={components}
             localizer={localizer}
             onSelect={this.props.onSelectAppointment}
@@ -134,7 +134,7 @@ class Header extends React.Component {
 Header.propTypes = {
   range: PropTypes.array.isRequired,
   appointments: PropTypes.array.isRequired,
-  getNow: PropTypes.func.isRequired,
+  currentDate: PropTypes.instanceOf(Date),
   isOverflowing: PropTypes.bool,
 
   rtl: PropTypes.bool,
@@ -143,7 +143,7 @@ Header.propTypes = {
   localizer: PropTypes.object.isRequired,
   components: PropTypes.object.isRequired,
 
-  selected: PropTypes.object,
+  selectedAppointment: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
 
   onSelectSlot: PropTypes.func,

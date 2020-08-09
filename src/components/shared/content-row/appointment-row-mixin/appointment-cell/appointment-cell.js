@@ -10,7 +10,7 @@ class AppointmentCell extends React.Component {
       style,
       className,
       appointment,
-      selected,
+      selectedAppointment,
       isAllDay,
       onSelect,
       onDoubleClick,
@@ -53,7 +53,7 @@ class AppointmentCell extends React.Component {
           tabIndex={0}
           style={{ ...style }}
           className={clsx('rbc-appointment', {
-            'rbc-selected': selected,
+            'rbc-selected': selectedAppointment,
             'rbc-appointment-allday': showAsAllDay,
             'rbc-appointment-continues-prior': continuesPrior,
             'rbc-appointment-continues-after': continuesAfter,
@@ -73,7 +73,7 @@ AppointmentCell.propTypes = {
   slotStart: PropTypes.instanceOf(Date),
   slotEnd: PropTypes.instanceOf(Date),
 
-  selected: PropTypes.bool,
+  selectedAppointment: PropTypes.bool,
   isAllDay: PropTypes.bool,
   continuesPrior: PropTypes.bool,
   continuesAfter: PropTypes.bool,

@@ -6,7 +6,7 @@ import { navigate } from 'utils/constants';
 
 class Toolbar extends React.Component {
   navigate = (action) => {
-    this.props.onNavigate(action);
+    this.props.onCurrentDateChange(action);
   };
 
   view = (view) => {
@@ -64,7 +64,7 @@ Toolbar.propTypes = {
   views: PropTypes.arrayOf(PropTypes.string).isRequired,
   label: PropTypes.node.isRequired,
   localizer: PropTypes.object,
-  onNavigate: PropTypes.func.isRequired,
+  onCurrentDateChange: PropTypes.func.isRequired,
   onChangeView: PropTypes.func.isRequired,
 };
 

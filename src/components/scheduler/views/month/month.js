@@ -97,7 +97,7 @@ class Month extends React.Component {
   };
 
   readerDateHeading = ({ date, className, ...props }) => {
-    const { date: currentDate, localizer } = this.props;
+    const { currentDate, localizer } = this.props;
 
     const isOffRange = dates.month(date) !== dates.month(currentDate);
     const isCurrent = dates.eq(date, currentDate, 'day');
@@ -148,7 +148,14 @@ class Month extends React.Component {
   }
 
   renderWeek = (week, weekIdx) => {
-    let { appointments, components, selectable, getNow, selected, date, localizer } = this.props;
+    let {
+      appointments,
+      components,
+      selectable,
+      currentDate,
+      selectedAppointment,
+      localizer,
+    } = this.props;
 
     const { needLimitMeasure, rowLimit } = this.state;
 
@@ -162,12 +169,11 @@ class Month extends React.Component {
         ref={weekIdx === 0 ? this.slotRowRef : undefined}
         container={this.getContainer}
         className="rbc-month-row"
-        getNow={getNow}
-        date={date}
+        currentDate={currentDate}
         range={week}
         appointments={appointments}
         maxRows={rowLimit}
-        selected={selected}
+        selectedAppointment={selectedAppointment}
         selectable={selectable}
         components={components}
         localizer={localizer}
@@ -198,8 +204,8 @@ class Month extends React.Component {
   }
 
   render() {
-    const { date, localizer, className } = this.props;
-    const month = dates.visibleDays(date, localizer);
+    const { currentDate, localizer, className } = this.props;
+    const month = dates.visibleDays(currentDate, localizer);
     const weeks = chunk(month, 7);
 
     return (
@@ -213,13 +219,12 @@ class Month extends React.Component {
 
 Month.propTypes = {
   appointments: PropTypes.array.isRequired,
-  date: PropTypes.instanceOf(Date),
 
   min: PropTypes.instanceOf(Date),
   max: PropTypes.instanceOf(Date),
 
   step: PropTypes.number,
-  getNow: PropTypes.func.isRequired,
+  currentDate: PropTypes.instanceOf(Date),
 
   scrollToTime: PropTypes.instanceOf(Date),
   rtl: PropTypes.bool,
@@ -228,10 +233,9 @@ Month.propTypes = {
   components: PropTypes.object.isRequired,
   localizer: PropTypes.object.isRequired,
 
-  selected: PropTypes.object,
+  selectedAppointment: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
 
-  onNavigate: PropTypes.func,
   onSelectSlot: PropTypes.func,
   onSelectAppointment: PropTypes.func,
   onDoubleClickAppointment: PropTypes.func,

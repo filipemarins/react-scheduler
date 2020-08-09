@@ -9,7 +9,7 @@ import * as dates from 'utils/dates';
 import { navigate } from 'utils/constants';
 import { inRange } from 'utils/appointment-levels';
 
-const Agenda = ({ localizer, components, length, date, appointments }) => {
+const Agenda = ({ localizer, components, length, currentDate, appointments }) => {
   const headerRef = useRef(null);
   const dateColRef = useRef(null);
   const timeColRef = useRef(null);
@@ -48,7 +48,7 @@ const Agenda = ({ localizer, components, length, date, appointments }) => {
   });
 
   const renderDay = (day, appointments, dayKey) => {
-    const { appointment: Appointment, date: AgendaDate } = components;
+    const { appointment: Appointment, currentDate: AgendaDate } = components;
 
     appointments = appointments.filter((e) =>
       inRange(e, dates.startOf(day, 'day'), dates.endOf(day, 'day'))
@@ -113,11 +113,11 @@ const Agenda = ({ localizer, components, length, date, appointments }) => {
   };
 
   const { messages } = localizer;
-  const end = dates.add(date, length, 'day');
+  const end = dates.add(currentDate, length, 'day');
 
-  const range = dates.range(date, end, 'day');
+  const range = dates.range(currentDate, end, 'day');
 
-  appointments = appointments.filter((appointment) => inRange(appointment, date, end));
+  appointments = appointments.filter((appointment) => inRange(appointment, currentDate, end));
 
   appointments.sort((a, b) => +a.start - +b.start);
 
@@ -155,7 +155,7 @@ const Agenda = ({ localizer, components, length, date, appointments }) => {
 
 Agenda.propTypes = {
   appointments: PropTypes.array,
-  date: PropTypes.instanceOf(Date),
+  currentDate: PropTypes.instanceOf(Date),
   length: PropTypes.number.isRequired,
 
   components: PropTypes.object.isRequired,

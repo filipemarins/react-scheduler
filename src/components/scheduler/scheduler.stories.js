@@ -27,7 +27,7 @@ storiesOf('Basic Usage', module)
     <Scheduler
       appointments={fakeAppointments}
       onSelectAppointment={action('appointment selected')}
-      defaultDate={new Date(2015, 3, 1)}
+      defaultCurrentDate={new Date(2015, 3, 1)}
     />
   ))
   .add('default view', () => (
@@ -37,7 +37,7 @@ storiesOf('Basic Usage', module)
       max={moment('11:59pm', 'h:mma').toDate()}
       appointments={appointmentsWithCustomSize}
       onSelectAppointment={action('appointment selected')}
-      defaultDate={new Date()}
+      defaultCurrentDate={new Date()}
     />
   ))
   .add('selectable', () => (
@@ -49,12 +49,12 @@ storiesOf('Basic Usage', module)
       appointments={appointmentsWithCustomSize}
       onSelectAppointment={action('appointment selected')}
       onSelectSlot={action('slot selected')}
-      defaultDate={new Date()}
+      defaultCurrentDate={new Date()}
     />
   ))
   .add('complex day view layout', () => (
     <Scheduler
-      defaultDate={new Date()}
+      defaultCurrentDate={new Date()}
       defaultView={views.DAY}
       appointments={createAppointments(1)}
       step={30}
@@ -63,7 +63,7 @@ storiesOf('Basic Usage', module)
   .add('multi-day', () => (
     <Scheduler
       showMultiDayTimes
-      defaultDate={new Date(2016, 11, 4)}
+      defaultCurrentDate={new Date(2016, 11, 4)}
       max={moment().endOf('day').add(-1, 'hours').toDate()}
       appointments={[
         {
@@ -103,12 +103,11 @@ storiesOf('Basic Usage', module)
     return (
       <Scheduler
         defaultView={views.WEEK}
-        getNow={customNow}
         min={moment('12:00am', 'h:mma').toDate()}
         max={moment('11:59pm', 'h:mma').toDate()}
         appointments={appointmentsWithCustomSize}
         onSelectAppointment={action('appointment selected')}
-        defaultDate={new Date()}
+        defaultCurrentDate={customNow()}
       />
     );
   })
@@ -155,7 +154,7 @@ storiesOf('Basic Usage', module)
       <Scheduler
         appointments={fakeAppointments}
         onSelectAppointment={action('appointment selected')}
-        defaultDate={new Date(2015, 3, 12)}
+        defaultCurrentDate={new Date(2015, 3, 12)}
         defaultView="week"
         views={['week', 'day']}
         components={{
@@ -227,7 +226,7 @@ storiesOf('Appointment Durations', module)
           allDay: false,
         },
       ]}
-      defaultDate={new Date(2017, 2, 12)}
+      defaultCurrentDate={new Date(2017, 2, 12)}
     />
   ))
   .add('Daylight savings ends', () => (
@@ -255,7 +254,7 @@ storiesOf('Appointment Durations', module)
           allDay: false,
         },
       ]}
-      defaultDate={new Date(2017, 10, 5)}
+      defaultCurrentDate={new Date(2017, 10, 5)}
     />
   ))
   .add('Daylight savings starts, after 2am', () => (
@@ -271,7 +270,7 @@ storiesOf('Appointment Durations', module)
           allDay: false,
         },
       ]}
-      defaultDate={new Date(2017, 2, 12)}
+      defaultCurrentDate={new Date(2017, 2, 12)}
     />
   ))
   .add('Daylight savings ends, after 2am', () => (
@@ -287,7 +286,7 @@ storiesOf('Appointment Durations', module)
           allDay: false,
         },
       ]}
-      defaultDate={new Date(2017, 10, 5)}
+      defaultCurrentDate={new Date(2017, 10, 5)}
     />
   ));
 
@@ -295,14 +294,14 @@ storiesOf('Layout Issues', module)
   .add('appointment layout', () => (
     <Scheduler
       defaultView={views.DAY}
-      defaultDate={new Date()}
+      defaultCurrentDate={new Date()}
       timeslots={4}
       appointments={createAppointments(1)}
     />
   ))
   .add('first of the week all-day appointment', () => (
     <Scheduler
-      defaultDate={new Date(2016, 11, 4)}
+      defaultCurrentDate={new Date(2016, 11, 4)}
       appointments={[
         {
           allDay: true,
@@ -315,7 +314,7 @@ storiesOf('Layout Issues', module)
   ))
   .add('end of the week all-day appointment', () => (
     <Scheduler
-      defaultDate={new Date(2016, 11, 3)}
+      defaultCurrentDate={new Date(2016, 11, 3)}
       appointments={[
         {
           allDay: true,
@@ -328,7 +327,7 @@ storiesOf('Layout Issues', module)
   ))
   .add('appointment at end of week', () => (
     <Scheduler
-      defaultDate={new Date(2016, 11, 3)}
+      defaultCurrentDate={new Date(2016, 11, 3)}
       appointments={[
         {
           title: 'has time',
@@ -340,7 +339,7 @@ storiesOf('Layout Issues', module)
   ))
   .add('appointment at start of week', () => (
     <Scheduler
-      defaultDate={new Date(2016, 11, 4)}
+      defaultCurrentDate={new Date(2016, 11, 4)}
       appointments={[
         {
           title: 'has time',
@@ -361,7 +360,7 @@ storiesOf('Layout Issues', module)
   .add('no duration', () => (
     /* should display all three appointments */
     <Scheduler
-      defaultDate={new Date(2016, 11, 4)}
+      defaultCurrentDate={new Date(2016, 11, 4)}
       appointments={[
         {
           title: 'start of the week',
@@ -383,7 +382,7 @@ storiesOf('Layout Issues', module)
   ))
   .add('Single days should only span one slot, multi-days multiple', () => (
     <Scheduler
-      defaultDate={new Date(2015, 3, 1)}
+      defaultCurrentDate={new Date(2015, 3, 1)}
       appointments={[
         {
           title: 'SingleDay 1',
@@ -431,7 +430,7 @@ storiesOf('Timeslots', module)
       appointments={appointmentsWithCustomSize}
       onSelectAppointment={action('appointment selected')}
       onSelectSlot={action('slot selected')}
-      defaultDate={new Date()}
+      defaultCurrentDate={new Date()}
     />
   ))
   .add('selectable, step 10, 6 timeslots', () => (
@@ -445,7 +444,7 @@ storiesOf('Timeslots', module)
       appointments={appointmentsWithCustomSize}
       onSelectAppointment={action('appointment selected')}
       onSelectSlot={action('slot selected')}
-      defaultDate={new Date()}
+      defaultCurrentDate={new Date()}
     />
   ))
   .add('selectable, step 5, 6 timeslots', () => (
@@ -459,7 +458,7 @@ storiesOf('Timeslots', module)
       appointments={appointmentsWithCustomSize}
       onSelectAppointment={action('appointment selected')}
       onSelectSlot={action('slot selected')}
-      defaultDate={new Date()}
+      defaultCurrentDate={new Date()}
     />
   ))
   .add('selectable, 3 timeslots', () => (
@@ -467,12 +466,11 @@ storiesOf('Timeslots', module)
       defaultView={views.WEEK}
       selectable
       timeslots={3}
-      getNow={() => moment('9:30am', 'h:mma').toDate()}
       min={moment('12:00am', 'h:mma').toDate()}
       max={moment('11:59pm', 'h:mma').toDate()}
       appointments={appointmentsWithCustomSize}
       onSelectAppointment={action('appointment selected')}
       onSelectSlot={action('slot selected')}
-      defaultDate={new Date()}
+      defaultCurrentDate={new Date()}
     />
   ));

@@ -101,19 +101,19 @@ class Scheduler extends React.Component {
   };
 
   handleNavigate = (action, newDate) => {
-    let { view, date, getNow, onNavigate, ...props } = this.props;
+    const { view, currentDate, onCurrentDateChange, ...props } = this.props;
     const ViewComponent = this.getView();
-    const today = getNow();
+    const today = currentDate;
 
-    date = moveDate(ViewComponent, {
+    const movedDate = moveDate(ViewComponent, {
       ...props,
       action,
-      date: newDate || date || today,
+      date: newDate || currentDate,
       today,
     });
 
-    onNavigate(date, view, action);
-    this.handleRangeChange(date, ViewComponent);
+    onCurrentDateChange(movedDate, view, action);
+    this.handleRangeChange(movedDate, ViewComponent);
   };
 
   handleViewChange = (view) => {
@@ -122,7 +122,7 @@ class Scheduler extends React.Component {
     }
 
     const views = this.getViews();
-    this.handleRangeChange(this.props.date || this.props.getNow(), views[view], view);
+    this.handleRangeChange(this.props.currentDate, views[view], view);
   };
 
   handleSelectAppointment = (args) => {
@@ -149,15 +149,12 @@ class Scheduler extends React.Component {
   };
 
   render() {
-    let {
+    const {
       view,
-      toolbar,
       appointments,
       style,
       className,
-      elementProps,
-      date: current,
-      getNow,
+      currentDate,
       length,
       showMultiDayTimes,
       onShowMore,
@@ -168,41 +165,32 @@ class Scheduler extends React.Component {
       ...props
     } = this.props;
 
-    current = current || getNow();
-
     const View = this.getView();
     const { components, localizer, viewNames } = this.state.context;
 
-    const CalToolbar = components.toolbar || Toolbar;
-    const label = View.title(current, { localizer, length });
+    const SchedulerToolbar = components.toolbar || Toolbar;
+    const label = View.title(currentDate, { localizer, length });
 
     return (
-      <div
-        {...elementProps}
-        className={clsx(className, 'rbc-calendar', props.rtl && 'rbc-rtl')}
-        style={style}
-      >
-        {toolbar && (
-          <CalToolbar
-            date={current}
-            view={view}
-            views={viewNames}
-            label={label}
-            onChangeView={this.handleViewChange}
-            onNavigate={this.handleNavigate}
-            localizer={localizer}
-          />
-        )}
+      <div className={clsx(className, 'rbc-calendar', props.rtl && 'rbc-rtl')} style={style}>
+        <SchedulerToolbar
+          date={currentDate}
+          view={view}
+          views={viewNames}
+          label={label}
+          onChangeView={this.handleViewChange}
+          onCurrentDateChange={this.handleNavigate}
+          localizer={localizer}
+        />
         <View
           {...props}
           appointments={appointments}
-          date={current}
-          getNow={getNow}
+          currentDate={currentDate}
           length={length}
           localizer={localizer}
           components={components}
           showMultiDayTimes={showMultiDayTimes}
-          onNavigate={this.handleNavigate}
+          onCurrentDateChange={this.handleNavigate}
           onDayClick={this.handleDayClick}
           onSelectAppointment={this.handleSelectAppointment}
           onDoubleClickAppointment={this.handleDoubleClickAppointment}
@@ -218,19 +206,13 @@ Scheduler.propTypes = {
   localizer: PropTypes.shape({}).isRequired,
 
   /**
-   * Props passed to main scheduler `<div>`.
-   *
-   */
-  elementProps: PropTypes.shape({}),
-
-  /**
    * The current date value of the scheduler. Determines the visible view range.
-   * If `date` is omitted then the result of `getNow` is used; otherwise the
+   * If `date` is omitted then the result of now is used; otherwise the
    * current date is used.
    *
-   * @controllable onNavigate
+   * @controllable onCurrentDateChange
    */
-  date: PropTypes.instanceOf(Date),
+  currentDate: PropTypes.instanceOf(Date),
 
   /**
    * The current view of the scheduler.
@@ -270,25 +252,11 @@ Scheduler.propTypes = {
   appointments: PropTypes.arrayOf(PropTypes.object),
 
   /**
-   * Determines the current date/time which is highlighted in the views.
-   *
-   * The value affects which day is shaded and which time is shown as
-   * the current time. It also affects the date used by the Today button in
-   * the toolbar.
-   *
-   * Providing a value here can be useful when you are implementing time zones.
-   *
-   * @type {func}
-   * @default () => new Date()
-   */
-  getNow: PropTypes.func,
-
-  /**
    * Callback fired when the `date` value changes.
    *
    * @controllable date
    */
-  onNavigate: PropTypes.func,
+  onCurrentDateChange: PropTypes.func,
 
   /**
    * Callback fired when the `view` value changes.
@@ -354,7 +322,7 @@ Scheduler.propTypes = {
    * (appointment: Object, e: SyntheticAppointment) => any
    * ```
    *
-   * @controllable selected
+   * @controllable selectedAppointment
    */
   onSelectAppointment: PropTypes.func,
 
@@ -390,7 +358,7 @@ Scheduler.propTypes = {
   /**
    * The selected appointment, if any.
    */
-  selected: PropTypes.object,
+  selectedAppointment: PropTypes.object,
 
   /**
    * An array of built-in view names to allow the scheduler to display.
@@ -430,11 +398,6 @@ Scheduler.propTypes = {
    * date prop + length (in number of days) = end date
    */
   length: PropTypes.number,
-
-  /**
-   * Determines whether the toolbar is displayed
-   */
-  toolbar: PropTypes.bool,
 
   /**
    * Allows mouse selection of ranges of dates/times.
@@ -675,14 +638,12 @@ Scheduler.propTypes = {
 };
 
 Scheduler.defaultProps = {
-  elementProps: {},
-  toolbar: true,
   view: views.MONTH,
   views: [views.MONTH, views.WEEK, views.DAY, views.AGENDA],
   step: 30,
   length: 30,
 
-  onNavigate: () => {},
+  onCurrentDateChange: () => {},
   onChangeView: () => {},
   onDayClick: () => {},
   onRangeChange: () => {},
@@ -692,11 +653,11 @@ Scheduler.defaultProps = {
   onSelecting: () => {},
   onShowMore: () => {},
 
-  getNow: () => new Date(),
+  currentDate: new Date(),
 };
 
 export default uncontrollable(Scheduler, {
   view: 'onChangeView',
-  date: 'onNavigate',
-  selected: 'onSelectAppointment',
+  currentDate: 'onCurrentDateChange',
+  selectedAppointment: 'onSelectAppointment',
 });

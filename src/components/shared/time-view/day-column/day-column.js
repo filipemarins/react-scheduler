@@ -39,14 +39,14 @@ class DayColumn extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const getNowChanged = !dates.eq(prevProps.getNow(), this.props.getNow(), 'minutes');
+    const currentDateChanged = !dates.eq(prevProps.currentDate, this.props.currentDate, 'minutes');
 
-    if (prevProps.isNow !== this.props.isNow || getNowChanged) {
+    if (prevProps.isNow !== this.props.isNow || currentDateChanged) {
       this.clearTimeIndicatorInterval();
 
       if (this.props.isNow) {
         const tail =
-          !getNowChanged &&
+          !currentDateChanged &&
           dates.eq(prevProps.date, this.props.date, 'minutes') &&
           prevState.timeIndicatorPosition === this.state.timeIndicatorPosition;
 
@@ -88,11 +88,10 @@ class DayColumn extends React.Component {
   }
 
   positionTimeIndicator() {
-    const { min, max, getNow } = this.props;
-    const current = getNow();
+    const { min, max, currentDateChanged } = this.props;
 
-    if (current >= min && current <= max) {
-      const top = this.slotMetrics.getCurrentTimePosition(current);
+    if (currentDateChanged >= min && currentDateChanged <= max) {
+      const top = this.slotMetrics.getCurrentTimePosition(currentDateChanged);
       this.intervalTriggered = true;
       this.setState({ timeIndicatorPosition: top });
     } else {
@@ -101,7 +100,15 @@ class DayColumn extends React.Component {
   }
 
   renderAppointments = () => {
-    const { appointments, rtl, selected, localizer, components, step, timeslots } = this.props;
+    const {
+      appointments,
+      rtl,
+      selectedAppointment,
+      localizer,
+      components,
+      step,
+      timeslots,
+    } = this.props;
 
     const { slotMetrics } = this;
     const { messages } = localizer;
@@ -140,7 +147,7 @@ class DayColumn extends React.Component {
           components={components}
           continuesEarlier={continuesEarlier}
           continuesLater={continuesLater}
-          selected={isSelected(appointment, selected)}
+          selectedAppointment={isSelected(appointment, selectedAppointment)}
           onClick={(e) => this._select(appointment, e)}
           onDoubleClick={(e) => this._doubleClick(appointment, e)}
         />
@@ -336,7 +343,7 @@ DayColumn.propTypes = {
   date: PropTypes.instanceOf(Date).isRequired,
   min: PropTypes.instanceOf(Date).isRequired,
   max: PropTypes.instanceOf(Date).isRequired,
-  getNow: PropTypes.func.isRequired,
+  currentDate: PropTypes.instanceOf(Date).isRequired,
   isNow: PropTypes.bool,
 
   rtl: PropTypes.bool,
@@ -348,7 +355,7 @@ DayColumn.propTypes = {
   culture: PropTypes.string,
   timeslots: PropTypes.number,
 
-  selected: PropTypes.object,
+  selectedAppointment: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
   appointmentOffset: PropTypes.number,
 

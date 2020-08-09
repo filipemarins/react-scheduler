@@ -10,7 +10,7 @@ export default {
   propTypes: {
     slotMetrics: PropTypes.object.isRequired,
 
-    selected: PropTypes.object,
+    selectedAppointment: PropTypes.object,
     isAllDay: PropTypes.bool,
 
     localizer: PropTypes.object.isRequired,
@@ -22,12 +22,12 @@ export default {
 
   defaultProps: {
     segments: [],
-    selected: {},
+    selectedAppointment: {},
   },
 
   renderAppointment(props, appointment) {
     const {
-      selected,
+      selectedAppointment,
       isAllDay: _,
       onSelect,
       onDoubleClick,
@@ -50,7 +50,7 @@ export default {
         continuesAfter={continuesAfter}
         slotStart={slotMetrics.first}
         slotEnd={slotMetrics.last}
-        selected={isSelected(appointment, selected)}
+        selectedAppointment={isSelected(appointment, selectedAppointment)}
       />
     );
   },

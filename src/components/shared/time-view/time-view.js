@@ -178,8 +178,8 @@ export default class TimeView extends Component {
       range,
       width,
       rtl,
-      selected,
-      getNow,
+      selectedAppointment,
+      currentDate,
       components,
       localizer,
       min,
@@ -222,9 +222,9 @@ export default class TimeView extends Component {
           appointments={allDayAppointments}
           width={width}
           rtl={rtl}
-          getNow={getNow}
+          currentDate={currentDate}
           localizer={localizer}
-          selected={selected}
+          selectedAppointment={selectedAppointment}
           selectable={this.props.selectable}
           components={components}
           scrollRef={this.scrollRef}
@@ -242,12 +242,12 @@ export default class TimeView extends Component {
             min={dates.merge(start, min)}
             max={dates.merge(start, max)}
             step={this.props.step}
-            getNow={this.props.getNow}
+            currentDate={this.props.currentDate}
             timeslots={this.props.timeslots}
             components={components}
             className="rbc-time-gutter"
           />
-          {this.renderAppointments(range, rangeAppointments, getNow())}
+          {this.renderAppointments(range, rangeAppointments, currentDate)}
         </div>
       </div>
     );
@@ -262,7 +262,7 @@ TimeView.propTypes = {
   range: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
   min: PropTypes.instanceOf(Date),
   max: PropTypes.instanceOf(Date),
-  getNow: PropTypes.func.isRequired,
+  currentDate: PropTypes.instanceOf(Date),
 
   scrollToTime: PropTypes.instanceOf(Date),
   showMultiDayTimes: PropTypes.bool,
@@ -273,10 +273,9 @@ TimeView.propTypes = {
   components: PropTypes.object.isRequired,
   localizer: PropTypes.object.isRequired,
 
-  selected: PropTypes.object,
+  selectedAppointment: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
 
-  onNavigate: PropTypes.func,
   onSelectSlot: PropTypes.func,
   onSelectEnd: PropTypes.func,
   onSelectStart: PropTypes.func,

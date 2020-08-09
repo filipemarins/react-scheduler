@@ -58,12 +58,12 @@ class ContentRow extends React.Component {
   };
 
   renderHeadingCell = (date, index) => {
-    const { renderHeader, getNow } = this.props;
+    const { renderHeader, currentDate } = this.props;
 
     return renderHeader({
       date,
       key: `header_${index}`,
-      className: clsx('rbc-date-cell', dates.eq(date, getNow(), 'day') && 'rbc-now'),
+      className: clsx('rbc-date-cell', dates.eq(date, currentDate, 'day') && 'rbc-now'),
     });
   };
 
@@ -91,17 +91,16 @@ class ContentRow extends React.Component {
 
   render() {
     const {
-      date,
       rtl,
       range,
       className,
-      selected,
+      selectedAppointment,
       selectable,
       renderForMeasure,
 
       components,
 
-      getNow,
+      currentDate,
       renderHeader,
       onSelect,
       localizer,
@@ -119,7 +118,7 @@ class ContentRow extends React.Component {
     const WeekWrapper = components.weekWrapper;
 
     const appointmentRowProps = {
-      selected,
+      selectedAppointment,
       localizer,
       components,
       onSelect,
@@ -130,8 +129,7 @@ class ContentRow extends React.Component {
     return (
       <div className={className}>
         <Cells
-          date={date}
-          getNow={getNow}
+          currentDate={currentDate}
           rtl={rtl}
           range={range}
           selectable={selectable}
@@ -167,7 +165,7 @@ class ContentRow extends React.Component {
 }
 
 ContentRow.propTypes = {
-  date: PropTypes.instanceOf(Date),
+  currentDate: PropTypes.instanceOf(Date).isRequired,
   appointments: PropTypes.array.isRequired,
   range: PropTypes.array.isRequired,
 
@@ -176,7 +174,7 @@ ContentRow.propTypes = {
   renderHeader: PropTypes.func,
 
   container: PropTypes.func,
-  selected: PropTypes.object,
+  selectedAppointment: PropTypes.object,
   selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
 
   onShowMore: PropTypes.func,
@@ -186,7 +184,6 @@ ContentRow.propTypes = {
   onSelectStart: PropTypes.func,
   onDoubleClick: PropTypes.func,
 
-  getNow: PropTypes.func.isRequired,
   isAllDay: PropTypes.bool,
 
   components: PropTypes.object.isRequired,

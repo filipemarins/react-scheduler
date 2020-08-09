@@ -10,15 +10,15 @@ function workWeekRange(date, options) {
 
 class WorkWeek extends React.Component {
   render() {
-    const { date, ...props } = this.props;
-    const range = workWeekRange(date, this.props);
+    const { currentDate, ...props } = this.props;
+    const range = workWeekRange(currentDate, this.props);
 
-    return <TimeView {...props} range={range} appointmentOffset={15} />;
+    return <TimeView {...props} currentDate={currentDate} range={range} appointmentOffset={15} />;
   }
 }
 
 WorkWeek.propTypes = {
-  date: PropTypes.instanceOf(Date).isRequired,
+  currentDate: PropTypes.instanceOf(Date).isRequired,
 };
 
 WorkWeek.defaultProps = TimeView.defaultProps;

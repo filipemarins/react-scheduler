@@ -7,15 +7,15 @@ import TimeView from 'components/shared/time-view';
 
 class Day extends React.Component {
   render() {
-    const { date, ...props } = this.props;
-    const range = Day.range(date);
+    const { currentDate, ...props } = this.props;
+    const range = Day.range(currentDate);
 
-    return <TimeView {...props} range={range} appointmentOffset={10} />;
+    return <TimeView {...props} currentDate={currentDate} range={range} appointmentOffset={10} />;
   }
 }
 
 Day.propTypes = {
-  date: PropTypes.instanceOf(Date).isRequired,
+  currentDate: PropTypes.instanceOf(Date).isRequired,
 };
 
 Day.range = (date) => {

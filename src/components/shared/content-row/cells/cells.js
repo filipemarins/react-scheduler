@@ -117,12 +117,10 @@ class BackgroundCells extends React.Component {
   render() {
     const {
       range,
-      getNow,
-      date: currentDate,
+      currentDate,
       components: { dateCellWrapper: Wrapper },
     } = this.props;
     const { selecting, startIdx, endIdx } = this.state;
-    const current = getNow();
 
     return (
       <div className="rbc-row-bg">
@@ -135,7 +133,7 @@ class BackgroundCells extends React.Component {
                 className={clsx(
                   'rbc-day-bg',
                   selected && 'rbc-selected-cell',
-                  dates.eq(date, current, 'day') && 'rbc-today',
+                  dates.eq(date, currentDate, 'day') && 'rbc-today',
                   currentDate &&
                     dates.month(currentDate) !== dates.month(date) &&
                     'rbc-off-range-bg'
@@ -150,8 +148,7 @@ class BackgroundCells extends React.Component {
 }
 
 BackgroundCells.propTypes = {
-  date: PropTypes.instanceOf(Date),
-  getNow: PropTypes.func.isRequired,
+  currentDate: PropTypes.instanceOf(Date).isRequired,
 
   components: PropTypes.object.isRequired,
 

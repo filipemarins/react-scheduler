@@ -25,9 +25,9 @@ export default class TimeGutter extends Component {
 
   renderSlot = (value, idx) => {
     if (idx !== 0) return null;
-    const { localizer, getNow } = this.props;
+    const { localizer, currentDate } = this.props;
 
-    const isNow = this.slotMetrics.dateIsInGroup(getNow(), idx);
+    const isNow = this.slotMetrics.dateIsInGroup(currentDate, idx);
     return (
       <span className={clsx('rbc-label', isNow && 'rbc-now')}>
         {localizer.format(value, 'timeGutterFormat')}
@@ -55,7 +55,8 @@ TimeGutter.propTypes = {
   max: PropTypes.instanceOf(Date).isRequired,
   timeslots: PropTypes.number.isRequired,
   step: PropTypes.number.isRequired,
-  getNow: PropTypes.func.isRequired,
+
+  currentDate: PropTypes.instanceOf(Date).isRequired,
   components: PropTypes.object.isRequired,
 
   localizer: PropTypes.object.isRequired,
