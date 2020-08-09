@@ -88,10 +88,10 @@ class DayColumn extends React.Component {
   }
 
   positionTimeIndicator() {
-    const { min, max, currentDateChanged } = this.props;
+    const { min, max, currentDate } = this.props;
 
-    if (currentDateChanged >= min && currentDateChanged <= max) {
-      const top = this.slotMetrics.getCurrentTimePosition(currentDateChanged);
+    if (currentDate >= min && currentDate <= max) {
+      const top = this.slotMetrics.getCurrentTimePosition(currentDate);
       this.intervalTriggered = true;
       this.setState({ timeIndicatorPosition: top });
     } else {
@@ -326,6 +326,7 @@ class DayColumn extends React.Component {
             <span>{localizer.format(selectDates, 'selectRangeFormat')}</span>
           </div>
         )}
+        {console.log(isNow, this.intervalTriggered)}
         {isNow && this.intervalTriggered && (
           <div
             className="rbc-current-time-indicator"
