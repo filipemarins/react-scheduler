@@ -214,7 +214,6 @@ DayColumn.propTypes = {
   localizer: PropTypes.object.isRequired,
 
   showMultiDayTimes: PropTypes.bool,
-  culture: PropTypes.string,
 
   selectedAppointment: PropTypes.object,
   appointmentOffset: PropTypes.number,
@@ -223,11 +222,8 @@ DayColumn.propTypes = {
   onDoubleClickAppointment: PropTypes.func.isRequired,
 
   className: PropTypes.string,
-  dragThroughAppointments: PropTypes.bool,
 };
 
-DayColumn.defaultProps = {
-  dragThroughAppointments: true,
-};
+DayColumn.defaultProps = {};
 
 export default DayColumn;
