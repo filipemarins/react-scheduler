@@ -2,10 +2,10 @@ import * as dates from './dates';
 
 const getDstOffset = (start, end) => start.getTimezoneOffset() - end.getTimezoneOffset();
 
-const getKey = (min, max, step = 30, slots) =>
+const getKey = (min, max, step = 60, slots) =>
   `${+dates.startOf(min, 'minutes')}` + `${+dates.startOf(max, 'minutes')}` + `${step}-${slots}`;
 
-const getTimeSlotMetrics = ({ min: start, max: end, step = 30, timeslots = 1 }) => {
+const getTimeSlotMetrics = ({ min: start, max: end, step = 60, timeslots = 1 }) => {
   const key = getKey(start, end, step, timeslots);
 
   // if the start is on a DST-changing day but *after* the moment of DST
