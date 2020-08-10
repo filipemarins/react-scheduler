@@ -16,21 +16,20 @@ import NoopWrapper from 'components/shared/noop-wrapper';
 import VIEWS from './views';
 import Toolbar from './toolbar';
 
-function viewNames(_views) {
+const viewNames = (_views) => {
   return !Array.isArray(_views) ? Object.keys(_views) : _views;
-}
+};
 
-function isValidView(view, { views: _views }) {
+const isValidView = (view, { views: _views }) => {
   const names = viewNames(_views);
   return names.indexOf(view) !== -1;
-}
+};
 
 const Scheduler = ({
   appointments,
   components,
   culture,
   currentDate,
-  defaultView,
   formats,
   length,
   localizer,
