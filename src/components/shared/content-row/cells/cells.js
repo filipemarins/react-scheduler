@@ -7,7 +7,7 @@ import * as dates from 'utils/dates';
 import { dateCellSelection, getSlotAtX, pointInBox } from 'utils/selection';
 import Selection, { getBoundsForNode, isAppointment } from 'components/shared/selection';
 
-class BackgroundCells extends React.Component {
+class Cells extends React.Component {
   constructor(props, context) {
     super(props, context);
 
@@ -147,7 +147,7 @@ class BackgroundCells extends React.Component {
   }
 }
 
-BackgroundCells.propTypes = {
+Cells.propTypes = {
   currentDate: PropTypes.instanceOf(Date).isRequired,
 
   components: PropTypes.object.isRequired,
@@ -164,4 +164,4 @@ BackgroundCells.propTypes = {
   type: PropTypes.string,
 };
 
-export default BackgroundCells;
+export default Cells;

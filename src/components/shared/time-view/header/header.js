@@ -24,7 +24,6 @@ class Header extends React.Component {
 
     return range.map((date, i) => {
       const label = localizer.format(date, 'dayFormat');
-
       const header = (
         <HeaderComponent date={date} localizer={localizer}>
           {label}
@@ -47,7 +46,7 @@ class Header extends React.Component {
   }
 
   renderRow = () => {
-    const { appointments, rtl, selectable, currentDate, range, localizer, components } = this.props;
+    const { rtl, selectable, currentDate, range, localizer, components } = this.props;
 
     return (
       <ContentRow
@@ -73,7 +72,6 @@ class Header extends React.Component {
       width,
       rtl,
       range,
-      appointments,
       currentDate,
       selectable,
       components,
@@ -133,7 +131,6 @@ class Header extends React.Component {
 
 Header.propTypes = {
   range: PropTypes.array.isRequired,
-  appointments: PropTypes.array.isRequired,
   currentDate: PropTypes.instanceOf(Date),
   isOverflowing: PropTypes.bool,
 

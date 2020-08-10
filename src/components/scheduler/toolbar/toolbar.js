@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 
-import SchedulerContext from 'components/scheduler/scheduler-context';
+import { SchedulerContext } from 'utils/scheduler-context';
 
 import { navigate } from 'utils/constants';
 

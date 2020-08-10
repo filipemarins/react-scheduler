@@ -10,11 +10,11 @@ import { navigate, views } from 'utils/constants';
 import { mergeWithDefaults } from 'utils/localizer';
 import message from 'utils/messages';
 import moveDate from 'utils/move';
-
+import { SchedulerProvider } from 'utils/scheduler-context';
 import NoopWrapper from 'components/shared/noop-wrapper';
+
 import VIEWS from './views';
 import Toolbar from './toolbar';
-import SchedulerContext from './scheduler-context';
 
 function viewNames(_views) {
   return !Array.isArray(_views) ? Object.keys(_views) : _views;
@@ -143,24 +143,29 @@ const Scheduler = ({
   const SchedulerToolbar = components?.toolbar || Toolbar;
   const label = View.title(currentDate, { localizer: normalizeLocalizer, length });
 
+  const defaultComponents = {
+    appointmentWrapper: NoopWrapper,
+    appointmentContainerWrapper: NoopWrapper,
+    dateCellWrapper: NoopWrapper,
+    weekWrapper: NoopWrapper,
+    timeSlotWrapper: NoopWrapper,
+    ...components,
+  };
+
   // Now is provider but it will be replaced for custom hooks later
   const schedulerContext = {
     appointments,
-    components,
+    components: defaultComponents,
     culture,
     currentDate,
-    defaultView,
-    formats,
     length,
     localizer: normalizeLocalizer,
     max,
-    messages,
     min,
     onChangeView,
     onCurrentDateChange: handleCurrentDayChange,
     onDayClick: handleDayClick,
     onDoubleClickAppointment: handleDoubleClickAppointment,
-    onRangeChange,
     onSelectAppointment: handleSelectAppointment,
     onSelectSlot: handleSelectSlot,
     onSelecting,
@@ -171,12 +176,11 @@ const Scheduler = ({
     showMultiDayTimes,
     step,
     timeslots,
-    view,
     views: normalizeViews,
   };
 
   return (
-    <SchedulerContext.Provider value={schedulerContext}>
+    <SchedulerProvider value={schedulerContext}>
       <div className={clsx('rbc-calendar', rtl && 'rbc-rtl')}>
         <SchedulerToolbar label={label} />
         <View
@@ -184,7 +188,7 @@ const Scheduler = ({
           currentDate={currentDate}
           length={length}
           localizer={normalizeLocalizer}
-          components={components}
+          components={defaultComponents}
           showMultiDayTimes={showMultiDayTimes}
           onCurrentDateChange={handleCurrentDayChange}
           onDayClick={handleDayClick}
@@ -194,7 +198,7 @@ const Scheduler = ({
           onShowMore={onShowMore}
         />
       </div>
-    </SchedulerContext.Provider>
+    </SchedulerProvider>
   );
 };
 
