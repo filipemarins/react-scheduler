@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
+import { node } from 'prop-types';
 import clsx from 'clsx';
 
 import { SchedulerContext } from 'utils/scheduler-context';
@@ -61,7 +61,7 @@ const Toolbar = ({ label }) => {
 };
 
 Toolbar.propTypes = {
-  label: PropTypes.node.isRequired,
+  label: node.isRequired,
 };
 
 export default Toolbar;
