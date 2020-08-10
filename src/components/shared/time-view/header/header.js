@@ -46,7 +46,7 @@ class Header extends React.Component {
   }
 
   renderRow = () => {
-    const { rtl, selectable, currentDate, range, localizer, components } = this.props;
+    const { rtl, currentDate, range, localizer, components } = this.props;
 
     return (
       <ContentRow
@@ -56,13 +56,11 @@ class Header extends React.Component {
         minRows={2}
         range={range}
         className="rbc-allday-cell"
-        selectable={selectable}
         selectedAppointment={this.props.selectedAppointment}
         components={components}
         localizer={localizer}
         onSelect={this.props.onSelectAppointment}
         onDoubleClick={this.props.onDoubleClickAppointment}
-        onSelectSlot={this.props.onSelectSlot}
       />
     );
   };
@@ -73,7 +71,6 @@ class Header extends React.Component {
       rtl,
       range,
       currentDate,
-      selectable,
       components,
       scrollRef,
       localizer,
@@ -115,13 +112,11 @@ class Header extends React.Component {
             range={range}
             appointments={[]}
             className="rbc-allday-cell"
-            selectable={selectable}
             selectedAppointment={this.props.selectedAppointment}
             components={components}
             localizer={localizer}
             onSelect={this.props.onSelectAppointment}
             onDoubleClick={this.props.onDoubleClickAppointment}
-            onSelectSlot={this.props.onSelectSlot}
           />
         </div>
       </div>
@@ -141,9 +136,7 @@ Header.propTypes = {
   components: PropTypes.object.isRequired,
 
   selectedAppointment: PropTypes.object,
-  selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
 
-  onSelectSlot: PropTypes.func,
   onSelectAppointment: PropTypes.func,
   onDoubleClickAppointment: PropTypes.func,
   onDayClick: PropTypes.func,

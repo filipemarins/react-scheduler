@@ -124,15 +124,6 @@ class Month extends React.Component {
     this._pendingSelection = [];
 
     slots.sort((a, b) => +a - +b);
-
-    this.props.onSelectSlot({
-      slots,
-      start: slots[0],
-      end: slots[slots.length - 1],
-      action: slotInfo.action,
-      bounds: slotInfo.bounds,
-      box: slotInfo.box,
-    });
   }
 
   clearSelection() {
@@ -148,14 +139,7 @@ class Month extends React.Component {
   }
 
   renderWeek = (week, weekIdx) => {
-    let {
-      appointments,
-      components,
-      selectable,
-      currentDate,
-      selectedAppointment,
-      localizer,
-    } = this.props;
+    let { appointments, components, currentDate, selectedAppointment, localizer } = this.props;
 
     const { needLimitMeasure, rowLimit } = this.state;
 
@@ -174,7 +158,6 @@ class Month extends React.Component {
         appointments={appointments}
         maxRows={rowLimit}
         selectedAppointment={selectedAppointment}
-        selectable={selectable}
         components={components}
         localizer={localizer}
         renderHeader={this.readerDateHeading}
@@ -182,7 +165,6 @@ class Month extends React.Component {
         onShowMore={this.handleShowMore}
         onSelect={this.handleSelectAppointment}
         onDoubleClick={this.handleDoubleClickAppointment}
-        onSelectSlot={this.handleSelectSlot}
         rtl={this.props.rtl}
       />
     );
@@ -223,7 +205,6 @@ Month.propTypes = {
   min: PropTypes.instanceOf(Date),
   max: PropTypes.instanceOf(Date),
 
-  step: PropTypes.number,
   currentDate: PropTypes.instanceOf(Date),
 
   scrollToTime: PropTypes.instanceOf(Date),
@@ -234,7 +215,6 @@ Month.propTypes = {
   localizer: PropTypes.object.isRequired,
 
   selectedAppointment: PropTypes.object,
-  selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
 
   onSelectSlot: PropTypes.func,
   onSelectAppointment: PropTypes.func,

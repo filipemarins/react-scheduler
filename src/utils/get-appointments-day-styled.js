@@ -126,7 +126,7 @@ function sortByRender(appointments) {
 
 export default function getStyledAppointments({
   appointments,
-  minimumStartDifference,
+  minimumStartDifference = 10,
   slotMetrics,
 }) {
   // Create proxy appointments and order them so that we don't have

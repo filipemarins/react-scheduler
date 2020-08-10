@@ -51,12 +51,6 @@ class ContentRow extends React.Component {
     return container ? container() : findDOMNode(this);
   };
 
-  handleSelectSlot = (slot) => {
-    const { range, onSelectSlot } = this.props;
-
-    onSelectSlot(range.slice(slot.start, slot.end + 1), slot);
-  };
-
   renderHeadingCell = (date, index) => {
     const { renderHeader, currentDate } = this.props;
 
@@ -95,7 +89,6 @@ class ContentRow extends React.Component {
       range,
       className,
       selectedAppointment,
-      selectable,
       renderForMeasure,
 
       components,
@@ -132,11 +125,9 @@ class ContentRow extends React.Component {
           currentDate={currentDate}
           rtl={rtl}
           range={range}
-          selectable={selectable}
           container={this.getContainer}
           onSelectStart={onSelectStart}
           onSelectEnd={onSelectEnd}
-          onSelectSlot={this.handleSelectSlot}
           components={components}
         />
 
@@ -175,10 +166,8 @@ ContentRow.propTypes = {
 
   container: PropTypes.func,
   selectedAppointment: PropTypes.object,
-  selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
 
   onShowMore: PropTypes.func,
-  onSelectSlot: PropTypes.func,
   onSelect: PropTypes.func,
   onSelectEnd: PropTypes.func,
   onSelectStart: PropTypes.func,

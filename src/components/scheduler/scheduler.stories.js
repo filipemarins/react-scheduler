@@ -40,24 +40,11 @@ storiesOf('Basic Usage', module)
       defaultCurrentDate={new Date()}
     />
   ))
-  .add('selectable', () => (
-    <Scheduler
-      selectable
-      defaultView={views.WEEK}
-      min={moment('12:00am', 'h:mma').toDate()}
-      max={moment('11:59pm', 'h:mma').toDate()}
-      appointments={appointmentsWithCustomSize}
-      onSelectAppointment={action('appointment selected')}
-      onSelectSlot={action('slot selected')}
-      defaultCurrentDate={new Date()}
-    />
-  ))
   .add('complex day view layout', () => (
     <Scheduler
       defaultCurrentDate={new Date()}
       defaultView={views.DAY}
       appointments={createAppointments(1)}
-      step={30}
     />
   ))
   .add('multi-day', () => (
@@ -295,7 +282,6 @@ storiesOf('Layout Issues', module)
     <Scheduler
       defaultView={views.DAY}
       defaultCurrentDate={new Date()}
-      timeslots={4}
       appointments={createAppointments(1)}
     />
   ))
@@ -415,62 +401,5 @@ storiesOf('Layout Issues', module)
           end: new Date(2015, 3, 26, 1, 0, 0, 0),
         },
       ]}
-    />
-  ));
-
-storiesOf('Timeslots', module)
-  .add('selectable, step 15, 4 timeslots', () => (
-    <Scheduler
-      defaultView={views.WEEK}
-      selectable
-      timeslots={4}
-      step={15}
-      min={moment('12:00am', 'h:mma').toDate()}
-      max={moment('11:59pm', 'h:mma').toDate()}
-      appointments={appointmentsWithCustomSize}
-      onSelectAppointment={action('appointment selected')}
-      onSelectSlot={action('slot selected')}
-      defaultCurrentDate={new Date()}
-    />
-  ))
-  .add('selectable, step 10, 6 timeslots', () => (
-    <Scheduler
-      selectable
-      defaultView={views.WEEK}
-      timeslots={6}
-      step={10}
-      min={moment('12:00am', 'h:mma').toDate()}
-      max={moment('11:59pm', 'h:mma').toDate()}
-      appointments={appointmentsWithCustomSize}
-      onSelectAppointment={action('appointment selected')}
-      onSelectSlot={action('slot selected')}
-      defaultCurrentDate={new Date()}
-    />
-  ))
-  .add('selectable, step 5, 6 timeslots', () => (
-    <Scheduler
-      selectable
-      defaultView={views.WEEK}
-      timeslots={6}
-      step={5}
-      min={moment('12:00am', 'h:mma').toDate()}
-      max={moment('11:59pm', 'h:mma').toDate()}
-      appointments={appointmentsWithCustomSize}
-      onSelectAppointment={action('appointment selected')}
-      onSelectSlot={action('slot selected')}
-      defaultCurrentDate={new Date()}
-    />
-  ))
-  .add('selectable, 3 timeslots', () => (
-    <Scheduler
-      defaultView={views.WEEK}
-      selectable
-      timeslots={3}
-      min={moment('12:00am', 'h:mma').toDate()}
-      max={moment('11:59pm', 'h:mma').toDate()}
-      appointments={appointmentsWithCustomSize}
-      onSelectAppointment={action('appointment selected')}
-      onSelectSlot={action('slot selected')}
-      defaultCurrentDate={new Date()}
     />
   ));

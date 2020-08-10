@@ -43,15 +43,10 @@ const Scheduler = ({
   onDoubleClickAppointment,
   onRangeChange,
   onSelectAppointment,
-  onSelectSlot,
-  onSelecting,
   onShowMore,
   rtl,
-  selectable,
   selectedAppointment,
   showMultiDayTimes,
-  step,
-  timeslots,
   view,
   views,
 }) => {
@@ -119,10 +114,6 @@ const Scheduler = ({
     onDoubleClickAppointment(args);
   };
 
-  const handleSelectSlot = (slotInfo) => {
-    onSelectSlot(slotInfo);
-  };
-
   const handleDayClick = (nextDate) => {
     if (onDayClick) {
       onDayClick(nextDate, views.DAY);
@@ -167,15 +158,10 @@ const Scheduler = ({
     onDayClick: handleDayClick,
     onDoubleClickAppointment: handleDoubleClickAppointment,
     onSelectAppointment: handleSelectAppointment,
-    onSelectSlot: handleSelectSlot,
-    onSelecting,
     onShowMore,
     rtl,
-    selectable,
     selectedAppointment,
     showMultiDayTimes,
-    step,
-    timeslots,
     views: normalizeViews,
   };
 
@@ -194,7 +180,6 @@ const Scheduler = ({
           onDayClick={handleDayClick}
           onSelectAppointment={handleSelectAppointment}
           onDoubleClickAppointment={handleDoubleClickAppointment}
-          onSelectSlot={handleSelectSlot}
           onShowMore={onShowMore}
         />
       </div>
@@ -286,36 +271,6 @@ Scheduler.propTypes = {
   onRangeChange: PropTypes.func,
 
   /**
-   * A callback fired when a date selection is made. Only fires when `selectable` is `true`.
-   *
-   * ```js
-   * (
-   *   slotInfo: {
-   *     start: Date,
-   *     end: Date,
-   *     slots: Array<Date>,
-   *     action: "select" | "click" | "doubleClick",
-   *     bounds: ?{ // For "select" action
-   *       x: number,
-   *       y: number,
-   *       top: number,
-   *       right: number,
-   *       left: number,
-   *       bottom: number,
-   *     },
-   *     box: ?{ // For "click" or "doubleClick" actions
-   *       clientX: number,
-   *       clientY: number,
-   *       x: number,
-   *       y: number,
-   *     },
-   *   }
-   * ) => any
-   * ```
-   */
-  onSelectSlot: PropTypes.func,
-
-  /**
    * Callback fired when a scheduler appointment is selected.
    *
    * ```js
@@ -334,17 +289,6 @@ Scheduler.propTypes = {
    * ```
    */
   onDoubleClickAppointment: PropTypes.func,
-
-  /**
-   * Callback fired when dragging a selection in the Time views.
-   *
-   * Returning `false` from the handler will prevent a selection.
-   *
-   * ```js
-   * (range: { start: Date, end: Date }) => ?boolean
-   * ```
-   */
-  onSelecting: PropTypes.func,
 
   /**
    * Callback fired when a +{count} more is clicked
@@ -398,26 +342,6 @@ Scheduler.propTypes = {
    * date prop + length (in number of days) = end date
    */
   length: PropTypes.number,
-
-  /**
-   * Allows mouse selection of ranges of dates/times.
-   *
-   * The 'ignoreAppointments' option prevents selection code from running when a
-   * drag begins over an appointment. Useful when you want custom appointment click or drag
-   * logic
-   */
-  selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
-
-  /**
-   * Determines the selectable time increments in week and day views, in minutes.
-   */
-  step: PropTypes.number,
-
-  /**
-   * The number of slots per "section" in the time grid views. Adjust with `step`
-   * to change the default of 1 hour long groups, with 30 minute slots.
-   */
-  timeslots: PropTypes.number,
 
   /**
    *Switch the scheduler to a `right-to-left` read direction.
@@ -635,17 +559,14 @@ Scheduler.propTypes = {
 Scheduler.defaultProps = {
   view: views.MONTH,
   views: [views.MONTH, views.WEEK, views.DAY, views.AGENDA],
-  step: 30,
   length: 30,
 
   onCurrentDateChange: () => {},
   onChangeView: () => {},
   onDayClick: () => {},
   onRangeChange: () => {},
-  onSelectSlot: () => {},
   onSelectAppointment: () => {},
   onDoubleClickAppointment: () => {},
-  onSelecting: () => {},
   onShowMore: () => {},
 
   components: {

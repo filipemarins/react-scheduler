@@ -2,10 +2,10 @@ import * as dates from './dates';
 
 const getDstOffset = (start, end) => start.getTimezoneOffset() - end.getTimezoneOffset();
 
-const getKey = (min, max, step, slots) =>
+const getKey = (min, max, step = 30, slots) =>
   `${+dates.startOf(min, 'minutes')}` + `${+dates.startOf(max, 'minutes')}` + `${step}-${slots}`;
 
-const getTimeSlotMetrics = ({ min: start, max: end, step, timeslots }) => {
+const getTimeSlotMetrics = ({ min: start, max: end, step = 30, timeslots = 1 }) => {
   const key = getKey(start, end, step, timeslots);
 
   // if the start is on a DST-changing day but *after* the moment of DST
@@ -16,7 +16,6 @@ const getTimeSlotMetrics = ({ min: start, max: end, step, timeslots }) => {
   const minutesFromMidnight = dates.diff(daystart, start, 'minutes') + daystartdstoffset;
   const numGroups = Math.ceil(totalMin / (step * timeslots));
   const numSlots = numGroups * timeslots;
-
   const groups = new Array(numGroups);
   const slots = new Array(numSlots);
   // Each slot date is created from "zero", instead of adding `step` to

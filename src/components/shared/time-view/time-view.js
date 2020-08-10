@@ -74,16 +74,6 @@ export default class TimeView extends Component {
     this.props.onSelectAppointment(args);
   };
 
-  handleSelectAllDaySlot = (slots, slotInfo) => {
-    const { onSelectSlot } = this.props;
-    onSelectSlot({
-      slots,
-      start: slots[0],
-      end: slots[slots.length - 1],
-      action: slotInfo.action,
-    });
-  };
-
   clearSelection() {
     clearTimeout(this._selectTimer);
     this._pendingSelection = [];
@@ -201,11 +191,9 @@ export default class TimeView extends Component {
           currentDate={currentDate}
           localizer={localizer}
           selectedAppointment={selectedAppointment}
-          selectable={this.props.selectable}
           components={components}
           scrollRef={this.scrollRef}
           isOverflowing={this.state.isOverflowing}
-          onSelectSlot={this.handleSelectAllDaySlot}
           onSelectAppointment={this.handleSelectAlldayAppointment}
           onDoubleClickAppointment={this.props.onDoubleClickAppointment}
           onDayClick={this.props.onDayClick}
@@ -217,9 +205,7 @@ export default class TimeView extends Component {
             localizer={localizer}
             min={dates.merge(start, min)}
             max={dates.merge(start, max)}
-            step={this.props.step}
             currentDate={this.props.currentDate}
-            timeslots={this.props.timeslots}
             components={components}
             className="rbc-time-gutter"
           />
@@ -233,8 +219,6 @@ export default class TimeView extends Component {
 TimeView.propTypes = {
   appointments: PropTypes.array.isRequired,
 
-  step: PropTypes.number,
-  timeslots: PropTypes.number,
   range: PropTypes.arrayOf(PropTypes.instanceOf(Date)),
   min: PropTypes.instanceOf(Date),
   max: PropTypes.instanceOf(Date),
@@ -249,9 +233,7 @@ TimeView.propTypes = {
   localizer: PropTypes.object.isRequired,
 
   selectedAppointment: PropTypes.object,
-  selectable: PropTypes.oneOf([true, false, 'ignoreAppointments']),
 
-  onSelectSlot: PropTypes.func,
   onSelectEnd: PropTypes.func,
   onSelectStart: PropTypes.func,
   onSelectAppointment: PropTypes.func,
@@ -260,8 +242,6 @@ TimeView.propTypes = {
 };
 
 TimeView.defaultProps = {
-  step: 30,
-  timeslots: 2,
   min: dates.startOf(new Date(), 'day'),
   max: dates.endOf(new Date(), 'day'),
 };

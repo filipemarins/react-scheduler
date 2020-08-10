@@ -9,18 +9,16 @@ export default class TimeGutter extends Component {
   constructor(...args) {
     super(...args);
 
-    const { min, max, timeslots, step } = this.props;
+    const { min, max } = this.props;
     this.slotMetrics = getTimeSlotMetrics({
       min,
       max,
-      timeslots,
-      step,
     });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { min, max, timeslots, step } = nextProps;
-    this.slotMetrics = this.slotMetrics.update({ min, max, timeslots, step });
+    const { min, max } = nextProps;
+    this.slotMetrics = this.slotMetrics.update({ min, max });
   }
 
   renderSlot = (value, idx) => {
@@ -53,8 +51,6 @@ export default class TimeGutter extends Component {
 TimeGutter.propTypes = {
   min: PropTypes.instanceOf(Date).isRequired,
   max: PropTypes.instanceOf(Date).isRequired,
-  timeslots: PropTypes.number.isRequired,
-  step: PropTypes.number.isRequired,
 
   currentDate: PropTypes.instanceOf(Date).isRequired,
   components: PropTypes.object.isRequired,
