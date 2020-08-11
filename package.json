@@ -88,7 +88,7 @@
     "font-awesome": "^4.7.0",
     "globalize": "^0.1.1",
     "husky": "^4.2.5",
-    "jest": "^26.2.2",
+    "jest": "^26.3.0",
     "lint-staged": "^10.2.11",
     "moment": "^2.27.0",
     "node-sass": "4.14.1",
@@ -96,7 +96,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.23.0",
+    "rollup": "^2.23.1",
     "rollup-plugin-auto-external": "^2.0.0",
     "rollup-plugin-size-snapshot": "^0.12.0",
     "rollup-plugin-terser": "^6.1.0",
@@ -104,7 +104,7 @@
     "webpack-atoms": "^13.1.0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.11.0",
+    "@babel/runtime": "^7.11.2",
     "clsx": "^1.1.1",
     "date-arithmetic": "^4.1.0",
     "dom-helpers": "^5.1.4",
