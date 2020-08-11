@@ -45,26 +45,6 @@ class Header extends React.Component {
     });
   }
 
-  renderRow = () => {
-    const { rtl, currentDate, range, localizer, components } = this.props;
-
-    return (
-      <ContentRow
-        isAllDay
-        rtl={rtl}
-        currentDate={currentDate}
-        minRows={2}
-        range={range}
-        className="rbc-allday-cell"
-        selectedAppointment={this.props.selectedAppointment}
-        components={components}
-        localizer={localizer}
-        onSelect={this.props.onSelectAppointment}
-        onDoubleClick={this.props.onDoubleClickAppointment}
-      />
-    );
-  };
-
   render() {
     const {
       width,
@@ -115,7 +95,7 @@ class Header extends React.Component {
             selectedAppointment={this.props.selectedAppointment}
             components={components}
             localizer={localizer}
-            onSelect={this.props.onSelectAppointment}
+            onSelectAppointment={this.props.onSelectAppointment}
             onDoubleClick={this.props.onDoubleClickAppointment}
           />
         </div>

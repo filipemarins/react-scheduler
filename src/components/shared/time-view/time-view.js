@@ -234,8 +234,6 @@ TimeView.propTypes = {
 
   selectedAppointment: PropTypes.object,
 
-  onSelectEnd: PropTypes.func,
-  onSelectStart: PropTypes.func,
   onSelectAppointment: PropTypes.func,
   onDoubleClickAppointment: PropTypes.func,
   onDayClick: PropTypes.func,

@@ -95,10 +95,8 @@ class ContentRow extends React.Component {
 
       currentDate,
       renderHeader,
-      onSelect,
       localizer,
-      onSelectStart,
-      onSelectEnd,
+      onSelectAppointment,
       onDoubleClick,
       isAllDay,
     } = this.props;
@@ -114,7 +112,7 @@ class ContentRow extends React.Component {
       selectedAppointment,
       localizer,
       components,
-      onSelect,
+      onSelectAppointment,
       onDoubleClick,
       slotMetrics: metrics,
     };
@@ -126,8 +124,7 @@ class ContentRow extends React.Component {
           rtl={rtl}
           range={range}
           container={this.getContainer}
-          onSelectStart={onSelectStart}
-          onSelectEnd={onSelectEnd}
+          onSelectAppointment={onSelectAppointment}
           components={components}
         />
 
@@ -168,9 +165,7 @@ ContentRow.propTypes = {
   selectedAppointment: PropTypes.object,
 
   onShowMore: PropTypes.func,
-  onSelect: PropTypes.func,
-  onSelectEnd: PropTypes.func,
-  onSelectStart: PropTypes.func,
+  onSelectAppointment: PropTypes.func,
   onDoubleClick: PropTypes.func,
 
   isAllDay: PropTypes.bool,

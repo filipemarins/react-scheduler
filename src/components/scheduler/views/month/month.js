@@ -163,7 +163,7 @@ class Month extends React.Component {
         renderHeader={this.readerDateHeading}
         renderForMeasure={needLimitMeasure}
         onShowMore={this.handleShowMore}
-        onSelect={this.handleSelectAppointment}
+        onSelectAppointment={this.handleSelectAppointment}
         onDoubleClick={this.handleDoubleClickAppointment}
         rtl={this.props.rtl}
       />

@@ -12,7 +12,7 @@ class AppointmentCell extends React.Component {
       appointment,
       selectedAppointment,
       isAllDay,
-      onSelect,
+      onSelectAppointment,
       onDoubleClick,
       localizer,
       continuesPrior,
@@ -58,7 +58,7 @@ class AppointmentCell extends React.Component {
             'rbc-appointment-continues-prior': continuesPrior,
             'rbc-appointment-continues-after': continuesAfter,
           })}
-          onClick={(e) => onSelect && onSelect(appointment, e)}
+          onClick={(e) => onSelectAppointment && onSelectAppointment(appointment, e)}
           onDoubleClick={(e) => onDoubleClick && onDoubleClick(appointment, e)}
         >
           {typeof children === 'function' ? children(content) : content}
@@ -81,7 +81,7 @@ AppointmentCell.propTypes = {
   components: PropTypes.object.isRequired,
   localizer: PropTypes.object,
 
-  onSelect: PropTypes.func,
+  onSelectAppointment: PropTypes.func,
   onDoubleClick: PropTypes.func,
 };
 

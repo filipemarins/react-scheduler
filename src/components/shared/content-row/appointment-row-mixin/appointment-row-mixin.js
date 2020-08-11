@@ -16,7 +16,7 @@ export default {
     localizer: PropTypes.object.isRequired,
     components: PropTypes.object.isRequired,
 
-    onSelect: PropTypes.func,
+    onSelectAppointment: PropTypes.func,
     onDoubleClick: PropTypes.func,
   },
 
@@ -29,7 +29,7 @@ export default {
     const {
       selectedAppointment,
       isAllDay: _,
-      onSelect,
+      onSelectAppointment,
       onDoubleClick,
       localizer,
       slotMetrics,
@@ -44,7 +44,7 @@ export default {
         appointment={appointment}
         localizer={localizer}
         components={components}
-        onSelect={onSelect}
+        onSelectAppointment={onSelectAppointment}
         onDoubleClick={onDoubleClick}
         continuesPrior={continuesPrior}
         continuesAfter={continuesAfter}
