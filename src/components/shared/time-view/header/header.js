@@ -47,6 +47,7 @@ class Header extends React.Component {
 
   render() {
     const {
+      appointments,
       width,
       rtl,
       range,
@@ -90,7 +91,7 @@ class Header extends React.Component {
             currentDate={currentDate}
             minRows={2}
             range={range}
-            appointments={[]}
+            appointments={appointments}
             className="rbc-allday-cell"
             selectedAppointment={this.props.selectedAppointment}
             components={components}
@@ -105,6 +106,7 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
+  appointments: PropTypes.array,
   range: PropTypes.array.isRequired,
   currentDate: PropTypes.instanceOf(Date),
   isOverflowing: PropTypes.bool,
