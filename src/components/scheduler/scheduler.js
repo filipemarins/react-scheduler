@@ -51,7 +51,6 @@ const Scheduler = ({
   onDoubleClickAppointment,
   onRangeChange,
   onSelectAppointment,
-  onShowMore,
   rtl,
   selectedAppointment,
   showMultiDayTimes,
@@ -169,7 +168,6 @@ const Scheduler = ({
     onDayClick: handleDayClick,
     onDoubleClickAppointment: handleDoubleClickAppointment,
     onSelectAppointment: handleSelectAppointment,
-    onShowMore,
     rtl,
     selectedAppointment,
     showMultiDayTimes,
@@ -191,7 +189,6 @@ const Scheduler = ({
           onDayClick={handleDayClick}
           onSelectAppointment={handleSelectAppointment}
           onDoubleClickAppointment={handleDoubleClickAppointment}
-          onShowMore={onShowMore}
         />
       </div>
     </SchedulerProvider>
@@ -260,7 +257,6 @@ Scheduler.propTypes = {
   onDoubleClickAppointment: func,
   onRangeChange: func,
   onSelectAppointment: func,
-  onShowMore: func,
   rtl: bool,
   selectedAppointment: shape({}),
   showMultiDayTimes: bool,
@@ -278,15 +274,12 @@ Scheduler.defaultProps = {
   rtl: false,
   selectedAppointment: {},
   showMultiDayTimes: true,
-
   onCurrentDateChange: () => {},
   onChangeView: () => {},
   onDayClick: () => {},
   onRangeChange: () => {},
   onSelectAppointment: () => {},
   onDoubleClickAppointment: () => {},
-  onShowMore: () => {},
-
   components: {
     appointmentWrapper: NoopWrapper,
     appointmentContainerWrapper: NoopWrapper,
@@ -294,7 +287,6 @@ Scheduler.defaultProps = {
     weekWrapper: NoopWrapper,
     timeSlotWrapper: NoopWrapper,
   },
-
   currentDate: new Date(),
   messages: defaultMessages,
 };

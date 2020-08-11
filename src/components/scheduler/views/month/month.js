@@ -86,16 +86,6 @@ class Month extends React.Component {
     this.props.onDoubleClickAppointment(args);
   };
 
-  handleShowMore = (appointments, date, cell, slot) => {
-    const { onDayClick, onShowMore } = this.props;
-    // cancel any pending selections so only the appointment click goes through.
-    this.clearSelection();
-
-    onDayClick(date);
-
-    onShowMore(appointments, date, slot);
-  };
-
   readerDateHeading = ({ date, className, ...props }) => {
     const { currentDate, localizer } = this.props;
 
@@ -162,7 +152,6 @@ class Month extends React.Component {
         localizer={localizer}
         renderHeader={this.readerDateHeading}
         renderForMeasure={needLimitMeasure}
-        onShowMore={this.handleShowMore}
         onSelectAppointment={this.handleSelectAppointment}
         onDoubleClick={this.handleDoubleClickAppointment}
         rtl={this.props.rtl}
@@ -219,7 +208,6 @@ Month.propTypes = {
   onSelectSlot: PropTypes.func,
   onSelectAppointment: PropTypes.func,
   onDoubleClickAppointment: PropTypes.func,
-  onShowMore: PropTypes.func,
   onDayClick: PropTypes.func,
 };
 

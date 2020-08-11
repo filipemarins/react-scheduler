@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import getHeight from 'dom-helpers/height';
-import qsa from 'dom-helpers/querySelectorAll';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { findDOMNode } from 'react-dom';
@@ -25,18 +24,6 @@ class ContentRow extends React.Component {
 
     return Math.max(Math.floor(appointmentSpace / appointmentHeight), 1);
   }
-
-  handleShowMore = (slot, target) => {
-    const { range, onShowMore } = this.props;
-    const metrics = this.slotMetrics(this.props);
-    const row = qsa(findDOMNode(this), '.rbc-row-bg')[0];
-
-    let cell;
-    if (row) cell = row.children[slot - 1];
-
-    const appointments = metrics.getAppointmentsForSlot(slot);
-    onShowMore(appointments, range[slot - 1], cell, slot, target);
-  };
 
   createHeadingRef = (r) => {
     this.headingRow = r;
@@ -138,13 +125,7 @@ class ContentRow extends React.Component {
             {levels.map((segs, idx) => (
               <AppointmentRow key={idx} segments={segs} {...appointmentRowProps} />
             ))}
-            {!!extra.length && (
-              <AppointmentEndingRow
-                segments={extra}
-                onShowMore={this.handleShowMore}
-                {...appointmentRowProps}
-              />
-            )}
+            {!!extra.length && <AppointmentEndingRow segments={extra} {...appointmentRowProps} />}
           </WeekWrapper>
         </div>
       </div>
@@ -164,7 +145,6 @@ ContentRow.propTypes = {
   container: PropTypes.func,
   selectedAppointment: PropTypes.object,
 
-  onShowMore: PropTypes.func,
   onSelectAppointment: PropTypes.func,
   onDoubleClick: PropTypes.func,
 

@@ -74,30 +74,13 @@ class AppointmentEndingRow extends React.Component {
     const { localizer } = this.props;
     const count = appointmentsInSlot(segments, slot);
 
-    return count ? (
-      <a
-        key={`sm_${slot}`}
-        href="#"
-        className="rbc-show-more"
-        onClick={(e) => this.showMore(slot, e)}
-      >
-        {localizer.messages.showMore(count)}
-      </a>
-    ) : (
-      false
-    );
-  }
-
-  showMore(slot, e) {
-    e.preventDefault();
-    this.props.onShowMore(slot, e.target);
+    return count ? localizer.messages.showMore(count) : false;
   }
 }
 
 AppointmentEndingRow.propTypes = {
   segments: PropTypes.array,
   slots: PropTypes.number,
-  onShowMore: PropTypes.func,
   ...AppointmentRowMixin.propTypes,
 };
 
