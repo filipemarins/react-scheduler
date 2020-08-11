@@ -33,11 +33,6 @@ class ContentRow extends React.Component {
     this.appointmentRow = r;
   };
 
-  getContainer = () => {
-    const { container } = this.props;
-    return container ? container() : findDOMNode(this);
-  };
-
   renderHeadingCell = (date, index) => {
     const { renderHeader, currentDate } = this.props;
 
@@ -106,18 +101,11 @@ class ContentRow extends React.Component {
 
     return (
       <div className={className}>
-        <Cells
-          currentDate={currentDate}
-          rtl={rtl}
-          range={range}
-          container={this.getContainer}
-          onSelectAppointment={onSelectAppointment}
-          components={components}
-        />
+        <Cells range={range} />
 
         <div className="rbc-row-content">
           {renderHeader && (
-            <div className="rbc-row " ref={this.createHeadingRef}>
+            <div className="rbc-row" ref={this.createHeadingRef}>
               {range.map(this.renderHeadingCell)}
             </div>
           )}
@@ -142,7 +130,6 @@ ContentRow.propTypes = {
   renderForMeasure: PropTypes.bool,
   renderHeader: PropTypes.func,
 
-  container: PropTypes.func,
   selectedAppointment: PropTypes.object,
 
   onSelectAppointment: PropTypes.func,

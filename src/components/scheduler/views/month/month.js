@@ -59,10 +59,6 @@ class Month extends React.Component {
     window.removeEventListener('resize', this._resizeListener, false);
   }
 
-  getContainer = () => {
-    return findDOMNode(this);
-  };
-
   handleSelectSlot = (range, slotInfo) => {
     this._pendingSelection = this._pendingSelection.concat(range);
 
@@ -141,7 +137,6 @@ class Month extends React.Component {
       <ContentRow
         key={weekIdx}
         ref={weekIdx === 0 ? this.slotRowRef : undefined}
-        container={this.getContainer}
         className="rbc-month-row"
         currentDate={currentDate}
         range={week}
