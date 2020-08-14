@@ -87,17 +87,10 @@ class Header extends React.Component {
           </div>
           <ContentRow
             isAllDay
-            rtl={rtl}
-            currentDate={currentDate}
             minRows={2}
             range={range}
             appointments={appointments}
             className="rbc-allday-cell"
-            selectedAppointment={this.props.selectedAppointment}
-            components={components}
-            localizer={localizer}
-            onSelectAppointment={this.props.onSelectAppointment}
-            onDoubleClick={this.props.onDoubleClickAppointment}
           />
         </div>
       </div>

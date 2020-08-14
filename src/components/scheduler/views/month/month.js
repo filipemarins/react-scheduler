@@ -21,7 +21,7 @@ class Month extends React.Component {
     this._pendingSelection = [];
     this.slotRowRef = React.createRef();
     this.state = {
-      rowLimit: 5,
+      rowLimit: 3,
       needLimitMeasure: true,
     };
   }
@@ -120,7 +120,6 @@ class Month extends React.Component {
   measureRowLimit() {
     this.setState({
       needLimitMeasure: false,
-      rowLimit: this.slotRowRef.current.getRowLimit(),
     });
   }
 
@@ -138,18 +137,11 @@ class Month extends React.Component {
         key={weekIdx}
         ref={weekIdx === 0 ? this.slotRowRef : undefined}
         className="rbc-month-row"
-        currentDate={currentDate}
         range={week}
         appointments={appointments}
         maxRows={rowLimit}
-        selectedAppointment={selectedAppointment}
-        components={components}
-        localizer={localizer}
         renderHeader={this.readerDateHeading}
         renderForMeasure={needLimitMeasure}
-        onSelectAppointment={this.handleSelectAppointment}
-        onDoubleClick={this.handleDoubleClickAppointment}
-        rtl={this.props.rtl}
       />
     );
   };

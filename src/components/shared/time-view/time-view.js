@@ -160,9 +160,9 @@ export default class TimeView extends Component {
 
     this.slots = range.length;
 
+    // TODO: Move this to utils
     const allDayAppointments = [];
     const rangeAppointments = [];
-
     appointments.forEach((appointment) => {
       if (inRange(appointment, start, end)) {
         const appointmentStart = appointment.start;
