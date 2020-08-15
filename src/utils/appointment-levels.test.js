@@ -161,7 +161,6 @@ describe('appointmentLevels', () => {
       [segments[4], segments[3]],
     ];
     expect(result.levels).toEqual(expectedLevels);
-    expect(result.extra).toEqual([]);
   });
 
   test('it returns a single level if no appointments overlap', () => {
@@ -175,7 +174,6 @@ describe('appointmentLevels', () => {
 
     const expectedLevels = [[segments[0], segments[1], segments[2]]];
     expect(result.levels).toEqual(expectedLevels);
-    expect(result.extra).toEqual([]);
   });
 
   describe('with no specified limit', () => {
@@ -200,7 +198,6 @@ describe('appointmentLevels', () => {
         [segments[2], segments[5], segments[8]],
       ];
       expect(result.levels).toEqual(expectedLevels);
-      expect(result.extra).toEqual([]);
     });
   });
 
@@ -218,23 +215,6 @@ describe('appointmentLevels', () => {
 
       const expectedLevels = [[segments[0], segments[2]], [segments[1]]];
       expect(result.levels).toEqual(expectedLevels);
-      expect(result.extra).toEqual([]);
-    });
-
-    test('it adds segments to extra when there are more levels than allowed by the limit', () => {
-      const segments = [
-        { left: 1, right: 2 },
-        { left: 2, right: 2 },
-        { left: 2, right: 3 },
-        { left: 3, right: 3 },
-      ];
-
-      const result = appointmentLevels(segments, limit);
-
-      const expectedLevels = [[segments[0], segments[3]], [segments[1]]];
-      const expectedExtra = [segments[2]];
-      expect(result.levels).toEqual(expectedLevels);
-      expect(result.extra).toEqual(expectedExtra);
     });
   });
 });

@@ -36,25 +36,20 @@ export const appointmentLevels = (rowSegments, limit = Infinity) => {
   let j;
   let segment;
   const levels = [];
-  const extra = [];
 
   for (i = 0; i < rowSegments.length; i += 1) {
     segment = rowSegments[i];
 
     for (j = 0; j < levels.length; j += 1) if (!segmentsOverlap(segment, levels[j])) break;
 
-    if (j >= limit) {
-      extra.push(segment);
-    } else {
-      (levels[j] || (levels[j] = [])).push(segment);
-    }
+    (levels[j] || (levels[j] = [])).push(segment);
   }
 
   for (i = 0; i < levels.length; i += 1) {
     levels[i].sort((a, b) => a.left - b.left);
   }
 
-  return { levels, extra };
+  return { levels };
 };
 
 export const inRange = (appointment, start, end) => {
