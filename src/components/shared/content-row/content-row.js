@@ -6,7 +6,6 @@ import { SchedulerContext } from 'utils/scheduler-context';
 import * as dates from 'utils/dates';
 import getDateSlotMetrics from 'utils/get-date-slot-metrics';
 import AppointmentRow from './appointment-row';
-import AppointmentEndingRow from './appointment-ending-row';
 import Cells from './cells';
 
 const ContentRow = ({
@@ -29,7 +28,7 @@ const ContentRow = ({
   } = useContext(SchedulerContext);
 
   const metrics = getDateSlotMetrics()({ range, appointments, maxRows, minRows });
-  const { levels, extra } = metrics;
+  const { levels } = metrics;
 
   const WeekWrapper = components.weekWrapper;
 
@@ -84,7 +83,6 @@ const ContentRow = ({
           {levels.map((segs, idx) => (
             <AppointmentRow key={idx} segments={segs} {...appointmentRowProps} />
           ))}
-          {!!extra.length && <AppointmentEndingRow segments={extra} {...appointmentRowProps} />}
         </WeekWrapper>
       </div>
     </div>
