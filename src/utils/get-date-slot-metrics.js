@@ -13,7 +13,7 @@ const getDateSlotMetrics = () => {
 
     const segments = appointments.map((evt) => appointmentSegments(evt, range));
 
-    const { levels, extra } = appointmentLevels(segments, Math.max(maxRows - 1, 1));
+    const { levels } = appointmentLevels(segments, Math.max(maxRows - 1, 1));
     while (levels.length < minRows) levels.push([]);
 
     return {
@@ -21,7 +21,6 @@ const getDateSlotMetrics = () => {
       last,
 
       levels,
-      extra,
       range,
       slots: range.length,
 
