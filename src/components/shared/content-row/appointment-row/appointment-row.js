@@ -1,47 +1,58 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
+import React, { Fragment } from 'react';
+import { arrayOf, shape } from 'prop-types';
 
-import AppointmentRowMixin from '../appointment-row-mixin';
+import AppointmentCell from './appointment-cell';
 
-class AppointmentRow extends React.Component {
-  render() {
-    const {
-      segments,
-      slotMetrics: { slots },
-      className,
-    } = this.props;
+const AppointmentRow = ({ segments, slotMetrics }) => {
+  let lastEnd = 1;
+  return (
+    <div className="rbc-row">
+      {segments.map(({ appointment, left, right, span }, index) => {
+        const key = `_lvl_${index}`;
+        const gap = left - lastEnd;
 
-    let lastEnd = 1;
+        lastEnd = right + 1;
 
-    return (
-      <div className={clsx(className, 'rbc-row')}>
-        {segments.reduce((row, { appointment, left, right, span }, li) => {
-          const key = `_lvl_${li}`;
-          const gap = left - lastEnd;
+        const gapPer = `${(Math.abs(gap) / slotMetrics.slots) * 100}%`;
+        const spanPer = `${(Math.abs(span) / slotMetrics.slots) * 100}%`;
 
-          const content = AppointmentRowMixin.renderAppointment(this.props, appointment);
+        const continuesPrior = slotMetrics.continuesPrior(appointment);
+        const continuesAfter = slotMetrics.continuesAfter(appointment);
 
-          if (gap) row.push(AppointmentRowMixin.renderSpan(slots, gap, `${key}_gap`));
-
-          row.push(AppointmentRowMixin.renderSpan(slots, span, key, content));
-
-          lastEnd = right + 1;
-
-          return row;
-        }, [])}
-      </div>
-    );
-  }
-}
+        return (
+          <Fragment key={key}>
+            {!!gap && (
+              <div
+                className="rbc-row-segment"
+                style={{ WebkitFlexBasis: gapPer, flexBasis: gapPer, maxWidth: gapPer }}
+              />
+            )}
+            <div
+              className="rbc-row-segment"
+              style={{ WebkitFlexBasis: spanPer, flexBasis: spanPer, maxWidth: spanPer }}
+            >
+              <AppointmentCell
+                appointment={appointment}
+                continuesPrior={continuesPrior}
+                continuesAfter={continuesAfter}
+                slotStart={slotMetrics.first}
+                slotEnd={slotMetrics.last}
+              />
+            </div>
+          </Fragment>
+        );
+      })}
+    </div>
+  );
+};
 
 AppointmentRow.propTypes = {
-  segments: PropTypes.array,
-  ...AppointmentRowMixin.propTypes,
+  segments: arrayOf(shape({})),
+  slotMetrics: shape({}).isRequired,
 };
 
 AppointmentRow.defaultProps = {
-  ...AppointmentRowMixin.defaultProps,
+  segments: [],
 };
 
 export default AppointmentRow;

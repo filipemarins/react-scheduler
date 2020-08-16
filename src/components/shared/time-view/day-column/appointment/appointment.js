@@ -20,6 +20,7 @@ const Appointment = (props) => {
     onDoubleClick,
     components: { appointment: AppointmentComponent, appointmentWrapper: AppointmentWrapper },
   } = props;
+
   const { title, tooltip } = appointment;
   const { height, top, width, xOffset } = style;
   const inner = [
@@ -27,11 +28,7 @@ const Appointment = (props) => {
       {label}
     </div>,
     <div key="2" className="rbc-appointment-content">
-      {AppointmentComponent ? (
-        <AppointmentComponent appointment={appointment} title={title} />
-      ) : (
-        title
-      )}
+      <AppointmentComponent appointment={appointment}>{title}</AppointmentComponent>
     </div>,
   ];
 

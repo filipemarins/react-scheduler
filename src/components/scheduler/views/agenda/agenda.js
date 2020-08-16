@@ -72,7 +72,7 @@ const Agenda = ({ localizer, components, length, currentDate, appointments }) =>
           {first}
           <td className="rbc-agenda-time-cell">{timeRangeLabel(day, appointment)}</td>
           <td className="rbc-agenda-appointment-cell">
-            {Appointment ? <Appointment appointment={appointment} title={title} /> : title}
+            <Appointment appointment={appointment}>{title}</Appointment>
           </td>
         </tr>
       );

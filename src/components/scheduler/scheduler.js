@@ -145,6 +145,7 @@ const Scheduler = ({
   const label = View.title(currentDate, { localizer: normalizeLocalizer, length });
 
   const defaultComponents = {
+    appointment: NoopWrapper,
     appointmentWrapper: NoopWrapper,
     appointmentContainerWrapper: NoopWrapper,
     dateCellWrapper: NoopWrapper,
@@ -281,6 +282,7 @@ Scheduler.defaultProps = {
   onSelectAppointment: () => {},
   onDoubleClickAppointment: () => {},
   components: {
+    appointment: NoopWrapper,
     appointmentWrapper: NoopWrapper,
     appointmentContainerWrapper: NoopWrapper,
     dateCellWrapper: NoopWrapper,

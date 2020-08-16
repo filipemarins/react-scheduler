@@ -18,28 +18,12 @@ const ContentRow = ({
   minRows,
   appointments,
 }) => {
-  const {
-    currentDate,
-    components,
-    localizer,
-    onDoubleClick,
-    onSelectAppointment,
-    selectedAppointment,
-  } = useContext(SchedulerContext);
+  const { currentDate, components } = useContext(SchedulerContext);
 
   const metrics = getDateSlotMetrics()({ range, appointments, maxRows, minRows });
   const { levels } = metrics;
 
   const WeekWrapper = components.weekWrapper;
-
-  const appointmentRowProps = {
-    selectedAppointment,
-    localizer,
-    components,
-    onSelectAppointment,
-    onDoubleClick,
-    slotMetrics: metrics,
-  };
 
   return renderForMeasure ? (
     <div className={className}>
@@ -79,9 +63,9 @@ const ContentRow = ({
             )}
           </div>
         )}
-        <WeekWrapper isAllDay={isAllDay} {...appointmentRowProps}>
+        <WeekWrapper isAllDay={isAllDay} slotMetrics={metrics}>
           {levels.map((segs, idx) => (
-            <AppointmentRow key={idx} segments={segs} {...appointmentRowProps} />
+            <AppointmentRow key={idx} segments={segs} slotMetrics={metrics} />
           ))}
         </WeekWrapper>
       </div>
