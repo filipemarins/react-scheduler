@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import moment from 'moment';
 import { storiesOf, addDecorator } from '@storybook/react';
@@ -104,7 +105,6 @@ storiesOf('Basic Usage', module)
       appointments={appointmentsWithCustomSize}
       components={{
         month: {
-          // eslint-disable-next-line react/prop-types
           dateHeader: ({ children }) => <span>{children} - custom date header</span>,
         },
       }}
@@ -116,7 +116,6 @@ storiesOf('Basic Usage', module)
       appointments={appointmentsWithCustomSize}
       components={{
         week: {
-          // eslint-disable-next-line react/prop-types
           header: ({ children }) => <span>{children} - custom week header</span>,
         },
       }}
@@ -128,7 +127,6 @@ storiesOf('Basic Usage', module)
       appointments={appointmentsWithCustomSize}
       components={{
         week: {
-          // eslint-disable-next-line react/prop-types
           toolbar: () => <span>custom toolbar</span>,
         },
       }}
@@ -183,6 +181,15 @@ storiesOf('Basic Usage', module)
       appointments={appointmentsWithCustomSize}
       messages={{
         noAppointmentsInRange: 'There are no special appointments in this range [test message]',
+      }}
+    />
+  ))
+  .add('add custom appointment', () => (
+    <Scheduler
+      defaultView={views.WEEK}
+      appointments={appointmentsWithCustomSize}
+      components={{
+        appointment: ({ children }) => <span>{children} - custom appointment</span>,
       }}
     />
   ));
